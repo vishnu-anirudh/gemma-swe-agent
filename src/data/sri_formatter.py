@@ -183,6 +183,30 @@ class SRIFormatter:
                     new_lines = content_lines[:start_i] + cleaned_replace.splitlines() + content_lines[end_i:]
                     return "\n".join(new_lines), True, "Applied with fuzzy window matching."
 
+            # Fallback 6: Contiguous sub-chunk alignment matching
+            # Handles cases where model included an anchor line separated by docstrings
+            s_raw_lines = cleaned_search.splitlines()
+            r_raw_lines = cleaned_replace.splitlines()
+            best_chunk_match = None
+            if len(s_raw_lines) >= 2:
+                for s_start in range(len(s_raw_lines)):
+                    for s_end in range(len(s_raw_lines), s_start + 1, -1):
+                        sub_chunk = "\n".join(s_raw_lines[s_start:s_end])
+                        if len(sub_chunk.strip()) > 15 and norm_content.count(sub_chunk) == 1:
+                            best_chunk_match = (s_start, s_end, sub_chunk)
+                            break
+                    if best_chunk_match:
+                        break
+
+            if best_chunk_match:
+                s_start, s_end, sub_chunk = best_chunk_match
+                if r_raw_lines[:s_start] == s_raw_lines[:s_start]:
+                    sub_replace = "\n".join(r_raw_lines[s_start:])
+                else:
+                    sub_replace = cleaned_replace
+                new_content = norm_content.replace(sub_chunk, sub_replace, 1)
+                return new_content, True, "Applied with contiguous sub-chunk alignment matching."
+
             return original_content, False, "Search string not found in target file."
 
         return (

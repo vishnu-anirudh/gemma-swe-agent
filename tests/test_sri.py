@@ -77,3 +77,30 @@ def test_sri_apply_with_fuzzy_matching():
     assert success is True
     assert "# Fix applied" in new_content
 
+
+def test_sri_apply_with_sub_chunk_matching():
+    content = (
+        "def separability_matrix(transform):\n"
+        '    """Docstring explaining function."""\n'
+        "    separable_matrix = _separable(transform)\n"
+        "    is_separable = separable_matrix.sum(1)\n"
+        "    return is_separable\n"
+    )
+    # Search block has anchor header that is separated by docstring in target file
+    search = (
+        "def separability_matrix(transform):\n"
+        "    separable_matrix = _separable(transform)\n"
+        "    is_separable = separable_matrix.sum(1)"
+    )
+    replace = (
+        "def separability_matrix(transform):\n"
+        "    # Custom hook\n"
+        "    separable_matrix = _separable(transform)\n"
+        "    is_separable = separable_matrix.sum(1)"
+    )
+
+    new_content, success, msg = SRIFormatter.apply_to_content(content, search, replace)
+    assert success is True
+    assert "# Custom hook" in new_content
+
+
