@@ -290,6 +290,16 @@ def run_eval(
             has_sri = res.patch_applied
             format_type = res.format_type
             blocks = SRIFormatter.parse(runner.model_generate_fn(runner.format_instance_prompt(inst)))
+        elif agentic:
+            # Interactive multi-turn agent exploration with RepoTools
+            res = runner.evaluate_instance_agentic(
+                instance=inst,
+                repo_dir=".",
+                max_turns=cfg.get("agent", {}).get("max_turns", 4),
+            )
+            has_sri = res.patch_applied
+            format_type = res.format_type
+            blocks = [1] if has_sri else []
         else:
             prompt = runner.format_instance_prompt(inst)
             model_output = generate_fn(prompt)
