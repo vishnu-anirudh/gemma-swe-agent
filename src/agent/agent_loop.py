@@ -48,12 +48,16 @@ class MultiTurnAgent:
         "When you have identified the fix, submit it in Search-and-Replace Infilling (SRI) format:\n"
         "<submit_patch>\n"
         "<<<<<<< SEARCH: relative/path/to/file.py\n"
-        "<exact original code to search for>\n"
+        "<exact original lines to search for copied verbatim from view_file>\n"
         "=======\n"
         "<replacement code>\n"
         ">>>>>>> REPLACE\n"
         "</submit_patch>\n\n"
-        "Always inspect the relevant code first. Search blocks MUST match the actual file contents exactly."
+        "CRITICAL RULES for SEARCH block:\n"
+        "1. The SEARCH block MUST contain ONLY code that currently exists in the file, copied verbatim from view_file.\n"
+        "2. Do NOT add new comments, placeholder comments, or new code inside SEARCH.\n"
+        "3. Put ALL additions, new comments, and fixes in the REPLACE block only.\n"
+        "4. Search blocks MUST match the actual file contents exactly."
     )
 
     PATCH_PATTERN = re.compile(r"<submit_patch>(.*?)</submit_patch>", re.DOTALL)
@@ -176,6 +180,8 @@ class MultiTurnAgent:
                     )
                 )
                 console.print(f"  [bold green]Turn {turn}/{self.max_turns}:[/bold green] Patch submitted ({len(session.parsed_sri_blocks)} SRI blocks).")
+                for b in session.parsed_sri_blocks:
+                    console.print(f"    [dim cyan]-> File: {b.file_path} | Search: {repr(b.search_content[:80])} | Replace: {repr(b.replace_content[:80])}[/dim cyan]")
                 break
 
             # Or check if raw SRI blocks were emitted directly
@@ -191,6 +197,8 @@ class MultiTurnAgent:
                     )
                 )
                 console.print(f"  [bold green]Turn {turn}/{self.max_turns}:[/bold green] Direct SRI patch detected ({len(sri_blocks)} blocks).")
+                for b in session.parsed_sri_blocks:
+                    console.print(f"    [dim cyan]-> File: {b.file_path} | Search: {repr(b.search_content[:80])} | Replace: {repr(b.replace_content[:80])}[/dim cyan]")
                 break
 
             # 2. Check for tool calls using multi-format parser

@@ -207,6 +207,53 @@ class SRIFormatter:
                 new_content = norm_content.replace(sub_chunk, sub_replace, 1)
                 return new_content, True, "Applied with contiguous sub-chunk alignment matching."
 
+            # Fallback 7: Anchor function scope matching with keyword/comment relaxation
+            # If search begins with a function/class header, locate that entity's scope,
+            # and search for the core non-comment statement inside that scope.
+            non_comment_s = [
+                l for l in s_raw_lines if l.strip() and not l.strip().startswith("#")
+            ]
+            if len(non_comment_s) >= 2:
+                header_line = non_comment_s[0].strip()
+                header_match = re.search(r"^(?:def|class)\s+([a-zA-Z0-9_]+)", header_line)
+                if header_match:
+                    entity_name = header_match.group(1)
+                    entity_pattern = re.compile(
+                        rf"\b(?:def|class)\s+{re.escape(entity_name)}\s*[\(:]"
+                    )
+                    entity_found = entity_pattern.search(norm_content)
+                    if entity_found:
+                        start_pos = entity_found.start()
+                        scope_text = norm_content[start_pos : start_pos + 3000]
+
+                        target_statement = non_comment_s[1].strip()
+                        relaxed_statement = re.sub(
+                            r"^(?:elif|if)\s+", "", target_statement
+                        )
+
+                        if len(relaxed_statement) > 10 and scope_text.count(relaxed_statement) == 1:
+                            exact_target_line = None
+                            for line in scope_text.splitlines():
+                                if relaxed_statement in line:
+                                    exact_target_line = line
+                                    break
+
+                            if exact_target_line:
+                                r_body_lines = [
+                                    l
+                                    for l in r_raw_lines
+                                    if not l.strip().startswith(header_match.group(0))
+                                ]
+                                clean_sub_replace = "\n".join(r_body_lines)
+                                new_content = norm_content.replace(
+                                    exact_target_line, clean_sub_replace, 1
+                                )
+                                return (
+                                    new_content,
+                                    True,
+                                    f"Applied via anchor scope matching in {entity_name}.",
+                                )
+
             return original_content, False, "Search string not found in target file."
 
         return (

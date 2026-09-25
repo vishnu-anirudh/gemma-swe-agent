@@ -104,3 +104,35 @@ def test_sri_apply_with_sub_chunk_matching():
     assert "# Custom hook" in new_content
 
 
+def test_sri_apply_with_anchor_scope_matching():
+    content = (
+        "import numpy as np\n\n"
+        "def _separable(transform):\n"
+        '    """Docstring explaining function."""\n'
+        "    if transform_matrix is not NotImplemented:\n"
+        "        return transform_matrix\n"
+        "    elif isinstance(transform, CompoundModel):\n"
+        "        sepleft = _separable(transform.left)\n"
+        "        return sepleft\n"
+    )
+    # Search block has anchor header, comment, and 'if' instead of 'elif'
+    search = (
+        "def _separable(transform):\n"
+        "    if isinstance(transform, CompoundModel):\n"
+        "        # Handle nested CompoundModels here"
+    )
+    replace = (
+        "def _separable(transform):\n"
+        "    if isinstance(transform, CompoundModel):\n"
+        "        # Handle nested CompoundModels here\n"
+        "        sepleft = _separable(transform.left)\n"
+        "        sepright = _separable(transform.right)\n"
+        "        return _operators[transform.op](sepleft, sepright)"
+    )
+
+    new_content, success, msg = SRIFormatter.apply_to_content(content, search, replace)
+    assert success is True
+    assert "sepright = _separable(transform.right)" in new_content
+
+
+
