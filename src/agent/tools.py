@@ -54,7 +54,7 @@ class RepoTools:
 
     @classmethod
     def search_code(cls, repo_dir: str, query: str, max_results: int = 15) -> str:
-        """Search code files in the repository for a query string or regex."""
+        """Search code files in the repository for a query string or regex, ranking definitions and source files first."""
         try:
             cmd = ["grep", "-rnI", query, "."]
             proc = subprocess.run(
@@ -69,12 +69,38 @@ class RepoTools:
             if not lines:
                 return f"No matches found for '{query}'."
 
-            # Filter out tests and hidden files if too many
+            # Filter out hidden and virtualenv files
             filtered = [
                 line for line in lines if not any(x in line for x in [".git", "__pycache__", ".venv"])
             ]
-            limited = filtered[:max_results]
-            return "\n".join(limited) + (f"\n... ({len(filtered) - max_results} more matches truncated)" if len(filtered) > max_results else "")
+
+            def rank_match(line: str) -> int:
+                parts = line.split(":", 2)
+                path = parts[0] if len(parts) > 0 else ""
+                content = parts[2] if len(parts) > 2 else ""
+
+                score = 0
+                # Top priority: Function or class definitions
+                if any(kw in content for kw in ["def ", "class ", "__all__"]):
+                    score += 100
+                # High priority: Core python source code
+                if path.endswith(".py"):
+                    if "/tests/" not in path and not path.startswith("./tests"):
+                        score += 50
+                    else:
+                        score += 20
+                # Lower priority: Documentation and galleries
+                elif any(d in path for d in ["/docs/", ".rst", ".md", ".txt"]):
+                    score -= 30
+                return -score
+
+            sorted_lines = sorted(filtered, key=rank_match)
+            limited = sorted_lines[:max_results]
+            return "\n".join(limited) + (
+                f"\n... ({len(filtered) - max_results} more matches truncated)"
+                if len(filtered) > max_results
+                else ""
+            )
         except subprocess.TimeoutExpired:
             return "Search timed out."
         except Exception as e:
