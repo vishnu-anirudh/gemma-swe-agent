@@ -268,6 +268,7 @@ def run_eval(
     tts: bool = False,
     k: int = 4,
     use_docker: bool = False,
+    instance_filter: Optional[str] = None,
 ) -> None:
     """Execute SWE-bench Evaluation on Lite/Verified instances."""
     cfg = load_yaml(config_path)
@@ -280,7 +281,14 @@ def run_eval(
     console.print(
         f"[bold magenta]Starting SWE-bench Evaluation ({mode_label})[/bold magenta] on {dataset_name} (limit={limit})"
     )
-    instances = SWEBenchLoader.load_from_huggingface(dataset_name=dataset_name, limit=limit)
+    if instance_filter:
+        all_instances = SWEBenchLoader.load_from_huggingface(dataset_name=dataset_name, limit=100)
+        instances = [i for i in all_instances if instance_filter in i.instance_id]
+        if not instances:
+            console.print(f"[bold red]No instance matching '{instance_filter}' found.[/bold red]")
+            return
+    else:
+        instances = SWEBenchLoader.load_from_huggingface(dataset_name=dataset_name, limit=limit)
     console.print(f"Loaded {len(instances)} instances from {dataset_name}.")
 
     model, tokenizer = load_model_and_tokenizer(model_name, device)
@@ -525,6 +533,12 @@ def main() -> None:
         action="store_true",
         help="Resume SFT from existing checkpoint",
     )
+    parser.add_argument(
+        "--instance",
+        type=str,
+        default=None,
+        help="Target a specific SWE-bench instance ID or substring",
+    )
 
     args = parser.parse_args()
 
@@ -550,6 +564,7 @@ def main() -> None:
             tts=args.tts,
             k=args.k,
             use_docker=args.docker,
+            instance_filter=args.instance,
         )
 
 
