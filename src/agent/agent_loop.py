@@ -211,17 +211,27 @@ class MultiTurnAgent:
                 console.print(f"  [cyan]Turn {turn}/{self.max_turns}:[/cyan] Tool Call -> [bold]{tool_name}[/bold]({attrs})")
                 console.print(f"    [dim]-> Observation: {first_obs[:85]}[/dim]")
 
+                # Check for duplicate consecutive tool calls
+                is_duplicate = (len(session.trajectory_steps) > 1 and 
+                                session.trajectory_steps[-1].action_text == model_response)
+                
+                hint = ""
+                if is_duplicate:
+                    hint = "\n[SYSTEM NOTICE: You repeated the exact same tool call as the previous step. Do not repeat it. Inspect the files discovered using view_file or submit your patch.]"
+                elif tool_name == "search_code" and ":" in observation:
+                    hint = "\n[Tip: Use view_file path=\"...\" start_line=\"...\" end_line=\"...\" to inspect the surrounding code of the relevant match above before writing the patch.]"
+
                 # Record conversational turn
                 messages.append({"role": "model", "content": model_response})
                 if turn == self.max_turns - 1:
                     followup = (
-                        f"Tool Observation for {tool_name}:\n{observation}\n\n"
+                        f"Tool Observation for {tool_name}:\n{observation}{hint}\n\n"
                         f"Final Turn Notice: You have 1 turn remaining. Based on your code inspection above, "
                         f"please submit your final fix in Search-and-Replace (SRI) format wrapped inside <submit_patch>."
                     )
                 else:
                     followup = (
-                        f"Tool Observation for {tool_name}:\n{observation}\n\n"
+                        f"Tool Observation for {tool_name}:\n{observation}{hint}\n\n"
                         f"Continue exploring with another tool call, or submit your fix in Search-and-Replace (SRI) format wrapped inside <submit_patch>."
                     )
                 messages.append({"role": "user", "content": followup})
@@ -230,7 +240,7 @@ class MultiTurnAgent:
                 session.trajectory_steps.append(
                     TrajectoryStep(
                         action_text=model_response,
-                        observation_text="Notice: Please call a tool or submit a patch.",
+                        observation_text="Directive: Call a tool or submit a patch.",
                         is_error=True,
                     )
                 )
@@ -241,8 +251,12 @@ class MultiTurnAgent:
                     {
                         "role": "user",
                         "content": (
-                            "Notice: No tool call detected. Please call a tool (e.g. ```tool_call\nsearch_code query=\"...\"\n```) "
-                            "or submit your fix wrapped inside <submit_patch>."
+                            "SYSTEM DIRECTIVE: Do NOT write conversational apologies, explanations, or dialogue. "
+                            "You are an autonomous engineering agent. You must either execute a tool call:\n"
+                            "```tool_call\nsearch_code query=\"<symbol>\"\n```\n"
+                            "or view a file:\n"
+                            "```tool_call\nview_file path=\"<path>\" start_line=\"1\" end_line=\"60\"\n```\n"
+                            "or submit your fix inside <submit_patch>."
                         ),
                     }
                 )

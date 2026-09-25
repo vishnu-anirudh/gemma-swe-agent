@@ -449,6 +449,9 @@ def run_eval(
         )
 
     console.print(table)
+    for res in results:
+        if res.error_message:
+            console.print(f"[dim yellow]  • {res.instance_id}: {res.error_message}[/dim yellow]")
     summary = MetricsCalculator.compute_summary(results)
     summary.print_summary()
 
