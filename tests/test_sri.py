@@ -55,3 +55,25 @@ def test_sri_to_unified_diff():
     assert "+++ b/file.py" in diff
     assert "-    return 1" in diff
     assert "+    return 2" in diff
+
+
+def test_sri_apply_with_line_number_prefixes():
+    content = "def calculate(x):\n    result = x * 2\n    return result\n"
+    search = "  42 |     result = x * 2\n  43 |     return result"
+    replace = "  42 |     result = x * 3\n  43 |     return result"
+
+    new_content, success, msg = SRIFormatter.apply_to_content(content, search, replace)
+    assert success is True
+    assert "x * 3" in new_content
+    assert "x * 2" not in new_content
+
+
+def test_sri_apply_with_fuzzy_matching():
+    content = "def separability_matrix(transform):\n    if hasattr(transform, '_calculate_separability_matrix'):\n        return transform._calculate_separability_matrix()\n    return _separable(transform)\n"
+    search = "def separability_matrix(transform):\n    if hasattr(transform, '_calculate_separability_matrix'):"
+    replace = "def separability_matrix(transform):\n    # Fix applied\n    if hasattr(transform, '_calculate_separability_matrix'):"
+
+    new_content, success, msg = SRIFormatter.apply_to_content(content, search, replace)
+    assert success is True
+    assert "# Fix applied" in new_content
+

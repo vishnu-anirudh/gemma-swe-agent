@@ -145,6 +145,44 @@ class SRIFormatter:
                     "Applied with whitespace-relaxed matching.",
                 )
 
+            # Fallback 3: Strip tool observation line-number prefixes (e.g. '  66 | def ...')
+            cleaned_search = "\n".join(re.sub(r"^\s*\d+\s*\|\s?", "", l) for l in norm_search.splitlines())
+            cleaned_replace = "\n".join(re.sub(r"^\s*\d+\s*\|\s?", "", l) for l in norm_replace.splitlines())
+            if norm_content.count(cleaned_search) == 1:
+                new_content = norm_content.replace(cleaned_search, cleaned_replace, 1)
+                return new_content, True, "Applied with line-number prefix stripping."
+
+            # Fallback 4: Line-number prefix stripping + trailing whitespace relaxation
+            lines_cleaned_search = [re.sub(r"^\s*\d+\s*\|\s?", "", l).rstrip() for l in lines_search]
+            joined_cleaned_search = "\n".join(lines_cleaned_search)
+            if joined_content.count(joined_cleaned_search) == 1:
+                replaced_joined = joined_content.replace(joined_cleaned_search, cleaned_replace, 1)
+                return (
+                    replaced_joined,
+                    True,
+                    "Applied with line-number prefix stripping and whitespace relaxation.",
+                )
+
+            # Fallback 5: Fuzzy window matching for block replacement
+            search_lines = [l.strip() for l in cleaned_search.splitlines() if l.strip()]
+            if len(search_lines) >= 2:
+                content_lines = norm_content.splitlines()
+                match_indices = []
+                first_target = search_lines[0]
+                for i, c_line in enumerate(content_lines):
+                    if first_target in c_line.strip() or c_line.strip().startswith(first_target[:20]):
+                        matched = 0
+                        for j, s_line in enumerate(search_lines):
+                            if i + j < len(content_lines) and s_line in content_lines[i + j].strip():
+                                matched += 1
+                        if matched >= max(2, int(len(search_lines) * 0.7)):
+                            match_indices.append((i, i + len(search_lines)))
+
+                if len(match_indices) == 1:
+                    start_i, end_i = match_indices[0]
+                    new_lines = content_lines[:start_i] + cleaned_replace.splitlines() + content_lines[end_i:]
+                    return "\n".join(new_lines), True, "Applied with fuzzy window matching."
+
             return original_content, False, "Search string not found in target file."
 
         return (
