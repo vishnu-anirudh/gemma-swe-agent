@@ -98,19 +98,38 @@ class MultiTurnAgent:
 
         return None
 
+    def _prune_messages(self, messages: List[Dict[str, str]], max_older_obs_lines: int = 12) -> List[Dict[str, str]]:
+        """Keep initial issue prompt and recent turns intact, while summarizing older observations."""
+        if len(messages) <= 6:
+            return messages
+
+        pruned = [messages[0]]
+        cutoff = len(messages) - 4
+        for idx in range(1, len(messages)):
+            msg = messages[idx]
+            if idx < cutoff and msg["role"] == "user" and "Tool Observation for" in msg["content"]:
+                lines = msg["content"].splitlines()
+                if len(lines) > max_older_obs_lines:
+                    compressed = "\n".join(lines[:max_older_obs_lines]) + "\n... [earlier observation truncated to preserve context budget]"
+                    pruned.append({"role": "user", "content": compressed})
+                    continue
+            pruned.append(msg)
+        return pruned
+
     def _format_conversation(self, messages: List[Dict[str, str]]) -> str:
         """Format messages using tokenizer chat template if available, else plain text."""
+        pruned_msgs = self._prune_messages(messages)
         if self.tokenizer is not None and hasattr(self.tokenizer, "apply_chat_template"):
             try:
                 return self.tokenizer.apply_chat_template(
-                    messages, tokenize=False, add_generation_prompt=True
+                    pruned_msgs, tokenize=False, add_generation_prompt=True
                 )
             except Exception:
                 pass
 
         # Fallback to standard dialogue format
         rendered = []
-        for msg in messages:
+        for msg in pruned_msgs:
             role = msg["role"]
             content = msg["content"]
             if role == "user":

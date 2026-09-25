@@ -24,7 +24,8 @@ class RepoTools:
             lines = full_path.read_text(encoding="utf-8", errors="replace").splitlines()
             total_lines = len(lines)
             start_idx = max(0, start_line - 1)
-            end_idx = min(total_lines, end_line)
+            max_window = 60
+            end_idx = min(total_lines, min(end_line, start_idx + max_window))
 
             selected = [
                 f"{i + 1:4d} | {lines[i]}" for i in range(start_idx, end_idx)
