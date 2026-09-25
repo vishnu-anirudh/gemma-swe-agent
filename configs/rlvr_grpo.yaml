@@ -1,16 +1,16 @@
-# RLVR: Critic-Free GRPO + AVSPO Configuration
+# RLVR: Critic-Free GRPO + AVSPO Configuration (Scaled & SOTA Calibrated)
 model:
   name_or_path: "google/gemma-2-2b-it"
   torch_dtype: "bfloat16"
   device: "mps"
 
 grpo:
-  group_size: 4             # G: number of candidate rollouts per issue
+  group_size: 8             # G: Scaled from 4 to 8 candidate rollouts per issue
   epsilon_clip: 0.2         # Clipped surrogate objective bound
-  kl_beta: 0.04             # KL penalty factor against reference policy
+  kl_beta: 0.03             # KL penalty factor against reference policy
   learning_rate: 1.0e-5
   max_new_tokens: 512
-  temperature: 0.7
+  temperature: 0.85         # Higher exploration temperature for candidate diversity
   top_p: 0.95
 
 avspo:
@@ -19,12 +19,13 @@ avspo:
   window_size: 50
 
 reward:
-  execution_weight: 0.7     # Weight for binary test pass/fail
-  prm_weight: 0.3           # Weight for Rubric PRM process score
+  execution_weight: 0.65     # Weight for binary test pass/fail
+  prm_weight: 0.35           # Weight for Rubric PRM process score
   rubric:
     weight_localization: 0.35
     weight_discipline: 0.25
     weight_formatting: 0.40
 
 sandbox:
-  timeout_seconds: 30
+  timeout_seconds: 45
+  use_docker: true           # Attempt Docker container execution with worktree fallback

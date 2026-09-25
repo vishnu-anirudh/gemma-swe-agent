@@ -78,6 +78,8 @@ def run_sft(
     config_path: str,
     epochs: int = 1,
     save_checkpoint: str = "./checkpoints/sft_dr_lora/adapter_model.pt",
+    expanded_curriculum: bool = False,
+    dataset_path: Optional[str] = None,
 ) -> None:
     """Execute multi-tier curriculum SFT with Dynamic Rank LoRA and Step-Level Error Masking."""
     cfg = load_yaml(config_path)
@@ -112,9 +114,18 @@ def run_sft(
     )
 
     # 3. Setup Multi-Tier Curriculum Dataset (Easy -> Medium -> Hard)
-    curriculum = CurriculumTrajectoryDataset.create_synthetic_curriculum(masker)
+    if dataset_path:
+        curriculum = CurriculumTrajectoryDataset.from_jsonl(dataset_path, masker)
+        tier_label = f"external dataset '{dataset_path}'"
+    elif expanded_curriculum:
+        curriculum = CurriculumTrajectoryDataset.generate_expanded_curriculum(masker)
+        tier_label = "expanded 30-instance curriculum"
+    else:
+        curriculum = CurriculumTrajectoryDataset.create_synthetic_curriculum(masker)
+        tier_label = "standard curriculum"
+
     console.print(
-        f"[cyan]Loaded curriculum dataset with {len(curriculum)} multi-tier trajectories (Easy -> Medium -> Hard).[/cyan]"
+        f"[cyan]Loaded {tier_label} with {len(curriculum)} multi-tier trajectories (Easy -> Medium -> Hard).[/cyan]"
     )
 
     model.train()
@@ -249,6 +260,7 @@ def run_eval(
     agentic: bool = False,
     tts: bool = False,
     k: int = 4,
+    use_docker: bool = False,
 ) -> None:
     """Execute SWE-bench Evaluation on Lite/Verified instances."""
     cfg = load_yaml(config_path)
@@ -323,7 +335,13 @@ def run_eval(
             results.append(tokenizer.decode(outputs[0][prompt_len:], skip_special_tokens=True))
         return results
 
-    runner = SWEBenchRunner(model_generate_fn=generate_fn)
+    from src.rlvr.verifier import DockerSandboxVerifier
+
+    verifier = DockerSandboxVerifier(
+        enable_docker=use_docker,
+        timeout_seconds=cfg.get("sandbox", {}).get("timeout_seconds", 60),
+    )
+    runner = SWEBenchRunner(model_generate_fn=generate_fn, verifier=verifier)
     results: List[InstanceEvaluationResult] = []
 
     table = Table(title=f"SWE-bench Evaluation Results ({mode_label})", show_header=True)
@@ -476,12 +494,34 @@ def main() -> None:
         default=1,
         help="Number of optimization steps for RLVR (default: 1)",
     )
+    parser.add_argument(
+        "--expanded",
+        action="store_true",
+        help="Use expanded 30-instance multi-tier curriculum for SFT",
+    )
+    parser.add_argument(
+        "--dataset",
+        type=str,
+        default=None,
+        help="Path to external JSONL trajectory dataset for SFT",
+    )
+    parser.add_argument(
+        "--docker",
+        action="store_true",
+        help="Enable Docker container sandbox evaluation if available",
+    )
 
     args = parser.parse_args()
 
     if args.mode == "sft":
         save_path = args.checkpoint or "./checkpoints/sft_dr_lora/adapter_model.pt"
-        run_sft(args.config, epochs=args.epochs, save_checkpoint=save_path)
+        run_sft(
+            args.config,
+            epochs=args.epochs,
+            save_checkpoint=save_path,
+            expanded_curriculum=args.expanded,
+            dataset_path=args.dataset,
+        )
     elif args.mode == "rlvr":
         ckpt = args.checkpoint or "./checkpoints/sft_dr_lora/adapter_model.pt"
         run_rlvr(args.config, checkpoint_path=ckpt, steps=args.steps)
@@ -492,6 +532,7 @@ def main() -> None:
             agentic=args.agentic,
             tts=args.tts,
             k=args.k,
+            use_docker=args.docker,
         )
 
 

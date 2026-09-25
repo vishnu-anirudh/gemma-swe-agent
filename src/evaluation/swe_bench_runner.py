@@ -39,13 +39,16 @@ class SWEBenchRunner:
         self,
         model_generate_fn: Optional[Callable[[str], str]] = None,
         timeout_seconds: int = 120,
+        verifier: Optional[Any] = None,
     ):
         """Args:
             model_generate_fn: Function that accepts a prompt string and returns the generated text.
             timeout_seconds: Maximum execution time per test suite run.
+            verifier: Optional ExecutionSandboxVerifier (e.g. DockerSandboxVerifier) for running tests.
         """
         self.model_generate_fn = model_generate_fn
         self.timeout_seconds = timeout_seconds
+        self.verifier = verifier
 
     def format_instance_prompt(self, instance: SWEBenchInstance) -> str:
         """Construct the prompt text for an instance."""
@@ -100,6 +103,33 @@ class SWEBenchRunner:
         else:
             test_targets = " ".join(instance.fail_to_pass) if instance.fail_to_pass else ""
             f2p_cmd = f"pytest {test_targets}" if test_targets else "pytest"
+
+        p2p_cmd = None
+        if pass_to_pass_command_fn is not None:
+            p2p_cmd = pass_to_pass_command_fn(instance)
+        elif instance.pass_to_pass:
+            p2p_targets = " ".join(instance.pass_to_pass[:10])
+            p2p_cmd = f"pytest {p2p_targets}"
+
+        # If an external verifier (e.g. DockerSandboxVerifier) is configured, delegate
+        if self.verifier is not None:
+            v_res = self.verifier.verify_dual_suite(
+                base_dir=repo_dir,
+                patch_blocks=patch_res.sri_blocks,
+                fail_to_pass_command=f2p_cmd,
+                pass_to_pass_command=p2p_cmd,
+                repo_name=instance.repo,
+            )
+            return InstanceEvaluationResult(
+                instance_id=instance.instance_id,
+                resolved=v_res.passed,
+                patch_applied=v_res.patch_applied,
+                format_type=patch_res.format_type,
+                fail_to_pass_passed=v_res.fail_to_pass_passed,
+                pass_to_pass_passed=v_res.pass_to_pass_passed,
+                execution_time_seconds=time.time() - start_time,
+                error_message=v_res.error_message,
+            )
 
         # 4. Execute FAIL_TO_PASS test command
         try:

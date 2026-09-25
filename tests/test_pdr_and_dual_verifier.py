@@ -164,3 +164,36 @@ def test_dr_lora_save_and_load_checkpoint():
             manager1.adapted_layers["linear1"].lora_A,
             manager2.adapted_layers["linear1"].lora_A,
         )
+
+
+def test_docker_sandbox_verifier_fallback():
+    from src.rlvr.verifier import DockerSandboxVerifier
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        repo = Path(tmp_dir) / "repo"
+        repo.mkdir()
+        (repo / "calc.py").write_text("def add(a, b):\n    return a - b\n")
+
+        patch_blocks = [
+            SRIBlock(
+                file_path="calc.py",
+                search_content="    return a - b",
+                replace_content="    return a + b",
+            )
+        ]
+
+        # Test with enable_docker=True: if docker daemon not running, should seamlessly fallback
+        verifier = DockerSandboxVerifier(timeout_seconds=5, enable_docker=True)
+        res = verifier.verify_dual_suite(
+            base_dir=str(repo),
+            patch_blocks=patch_blocks,
+            fail_to_pass_command="python3 -c 'from calc import add; assert add(2, 3) == 5'",
+            pass_to_pass_command="python3 -c 'assert 1 == 1'",
+            repo_name="test_repo",
+        )
+
+        assert res.passed is True
+        assert res.reward == 1.0
+        assert res.patch_applied is True
+        assert res.fail_to_pass_passed is True
+        assert res.pass_to_pass_passed is True

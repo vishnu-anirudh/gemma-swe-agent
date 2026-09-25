@@ -75,3 +75,50 @@ def test_curriculum_trajectory_dataset():
     assert "input_ids" in item
     assert "labels" in item
     assert item["input_ids"].shape == item["labels"].shape
+
+
+def test_expanded_curriculum_dataset():
+    class DummyTokenizer:
+        def encode(self, text, add_special_tokens=False):
+            return [hash(w) % 1000 for w in text.split()]
+
+    masker = StepLevelErrorMasker(tokenizer=DummyTokenizer())
+    dataset = CurriculumTrajectoryDataset.generate_expanded_curriculum(masker)
+
+    assert len(dataset) == 30
+    easy_count = sum(1 for t in dataset.trajectories if t.difficulty == "easy")
+    med_count = sum(1 for t in dataset.trajectories if t.difficulty == "medium")
+    hard_count = sum(1 for t in dataset.trajectories if t.difficulty == "hard")
+
+    assert easy_count == 10
+    assert med_count == 10
+    assert hard_count == 10
+
+
+def test_curriculum_from_jsonl():
+    import json
+    class DummyTokenizer:
+        def encode(self, text, add_special_tokens=False):
+            return [hash(w) % 1000 for w in text.split()]
+
+    masker = StepLevelErrorMasker(tokenizer=DummyTokenizer())
+    with tempfile.NamedTemporaryFile("w+", suffix=".jsonl", delete=False) as f:
+        data = {
+            "instance_id": "test_jsonl_1",
+            "difficulty": "medium",
+            "system_prompt": "Fix bug",
+            "steps": [
+                {"action_text": "search_code query='test'", "observation_text": "found", "is_error": False}
+            ],
+            "final_patch": "<<<<<<< SEARCH: a.py\n1\n=======\n2\n>>>>>>> REPLACE",
+        }
+        f.write(json.dumps(data) + "\n")
+        f_path = f.name
+
+    try:
+        ds = CurriculumTrajectoryDataset.from_jsonl(f_path, masker)
+        assert len(ds) == 1
+        assert ds.trajectories[0].instance_id == "test_jsonl_1"
+        assert ds.trajectories[0].difficulty == "medium"
+    finally:
+        Path(f_path).unlink(missing_ok=True)
