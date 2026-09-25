@@ -239,7 +239,7 @@ def run_rlvr(config_path: str, checkpoint_path: Optional[str] = None, steps: int
         console.print(f"  • Advantage Collapse Rate (ACR): {metrics['advantage_collapse_rate']:.2%}")
 
     if manager is not None and adapter_checkpoint:
-        manager.save_checkpoint(adapter_checkpoint)
+        manager.save_adapters(adapter_checkpoint)
         console.print(f"[bold green]Updated DR-LoRA checkpoint saved to {adapter_checkpoint}[/bold green]")
 
 

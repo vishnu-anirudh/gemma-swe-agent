@@ -195,6 +195,10 @@ class DRLoRAManager:
         }
         torch.save(checkpoint_data, str(out_path))
 
+    def save_checkpoint(self, save_path: str) -> None:
+        """Alias for save_adapters to save model checkpoint."""
+        self.save_adapters(save_path)
+
     def load_adapters(self, load_path: str, device: Optional[torch.device] = None) -> None:
         """Load DR-LoRA adapter weights and restore active ranks."""
         data = torch.load(load_path, map_location="cpu")
