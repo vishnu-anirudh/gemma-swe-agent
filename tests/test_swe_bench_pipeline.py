@@ -86,3 +86,40 @@ def test_metrics_calculator_pass_at_1_and_k():
     p_at_1 = MetricsCalculator.compute_pass_at_k(n=10, c=2, k=1)
     p_at_5 = MetricsCalculator.compute_pass_at_k(n=10, c=2, k=5)
     assert p_at_1 < p_at_5
+
+
+def test_repo_manager_sandbox_lifecycle():
+    import subprocess
+    from src.evaluation.repo_manager import RepoManager
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        # Create a mock upstream repo
+        origin_dir = Path(tmp_dir) / "mock_origin"
+        origin_dir.mkdir()
+        subprocess.run(["git", "init"], cwd=str(origin_dir), check=True, capture_output=True)
+        subprocess.run(["git", "config", "user.name", "Test"], cwd=str(origin_dir), check=True)
+        subprocess.run(["git", "config", "user.email", "test@test.com"], cwd=str(origin_dir), check=True)
+
+        (origin_dir / "app.py").write_text("v = 1\n")
+        subprocess.run(["git", "add", "app.py"], cwd=str(origin_dir), check=True)
+        subprocess.run(["git", "commit", "-m", "commit 1"], cwd=str(origin_dir), check=True)
+        rev1 = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(origin_dir), text=True).strip()
+
+        (origin_dir / "app.py").write_text("v = 2\n")
+        subprocess.run(["git", "commit", "-am", "commit 2"], cwd=str(origin_dir), check=True)
+
+        # Create sandbox checked out at rev1
+        cache_dir = Path(tmp_dir) / "cache"
+        sandbox = RepoManager.create_instance_sandbox(
+            repo_name=str(origin_dir),
+            base_commit=rev1,
+            target_dir=Path(tmp_dir) / "instance_sb",
+            cache_dir=cache_dir,
+        )
+        assert sandbox.exists()
+        assert (sandbox / "app.py").read_text() == "v = 1\n"
+
+        # Cleanup
+        RepoManager.remove_sandbox(sandbox)
+        assert not sandbox.exists()
+

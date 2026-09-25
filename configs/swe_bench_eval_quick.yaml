@@ -12,3 +12,7 @@ model:
   max_new_tokens: 512
   temperature: 0.0
   use_sri_format: true
+
+agent:
+  max_turns: 4
+

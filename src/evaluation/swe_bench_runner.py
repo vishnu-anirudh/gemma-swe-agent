@@ -200,6 +200,7 @@ class SWEBenchRunner:
         max_turns: int = 6,
         test_command_fn: Optional[Callable[[SWEBenchInstance], str]] = None,
         pass_to_pass_command_fn: Optional[Callable[[SWEBenchInstance], str]] = None,
+        tokenizer: Optional[Any] = None,
     ) -> InstanceEvaluationResult:
         """Run interactive multi-turn agent exploration and bug fixing for an instance."""
         if self.model_generate_fn is None:
@@ -207,7 +208,11 @@ class SWEBenchRunner:
 
         from src.agent.agent_loop import MultiTurnAgent
 
-        agent = MultiTurnAgent(generate_fn=self.model_generate_fn, max_turns=max_turns)
+        agent = MultiTurnAgent(
+            generate_fn=self.model_generate_fn,
+            tokenizer=tokenizer,
+            max_turns=max_turns,
+        )
         session = agent.run_session(
             instance_id=instance.instance_id,
             problem_statement=instance.problem_statement,

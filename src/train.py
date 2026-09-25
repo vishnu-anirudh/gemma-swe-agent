@@ -292,11 +292,28 @@ def run_eval(
             blocks = SRIFormatter.parse(runner.model_generate_fn(runner.format_instance_prompt(inst)))
         elif agentic:
             # Interactive multi-turn agent exploration with RepoTools
-            res = runner.evaluate_instance_agentic(
-                instance=inst,
-                repo_dir=".",
-                max_turns=cfg.get("agent", {}).get("max_turns", 4),
-            )
+            from src.evaluation.repo_manager import RepoManager
+
+            sandbox_dir = None
+            try:
+                console.print(f"[dim]Preparing sandbox for {inst.repo} @ {inst.base_commit[:8]}...[/dim]")
+                sandbox_dir = RepoManager.create_instance_sandbox(inst.repo, inst.base_commit)
+                repo_target = str(sandbox_dir)
+            except Exception as e:
+                console.print(f"[yellow]Repo checkout fallback ({e}); using local directory.[/yellow]")
+                repo_target = "."
+
+            try:
+                res = runner.evaluate_instance_agentic(
+                    instance=inst,
+                    repo_dir=repo_target,
+                    max_turns=cfg.get("agent", {}).get("max_turns", 4),
+                    tokenizer=tokenizer,
+                )
+            finally:
+                if sandbox_dir:
+                    RepoManager.remove_sandbox(sandbox_dir, inst.repo)
+
             has_sri = res.patch_applied
             format_type = res.format_type
             blocks = [1] if has_sri else []
