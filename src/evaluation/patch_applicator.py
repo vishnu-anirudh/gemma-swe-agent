@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import os
 import subprocess
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -24,6 +24,7 @@ class PatchApplicationResult:
     applied_files: List[str]
     error_message: Optional[str] = None
     unified_diff: Optional[str] = None
+    sri_blocks: List[SRIBlock] = field(default_factory=list)
 
 
 class PatchApplicator:
@@ -125,6 +126,7 @@ class PatchApplicator:
             format_type="sri",
             applied_files=applied_files,
             unified_diff=diff,
+            sri_blocks=blocks,
         )
 
     @classmethod
