@@ -8,6 +8,7 @@ and Test-Time Scaling (TTS / Parallel-Distill-Refine).
 from __future__ import annotations
 
 import os
+import shlex
 import subprocess
 import tempfile
 import time
@@ -101,14 +102,14 @@ class SWEBenchRunner:
         if test_command_fn is not None:
             f2p_cmd = test_command_fn(instance)
         else:
-            test_targets = " ".join(instance.fail_to_pass) if instance.fail_to_pass else ""
+            test_targets = " ".join(shlex.quote(t) for t in instance.fail_to_pass) if instance.fail_to_pass else ""
             f2p_cmd = f"pytest {test_targets}" if test_targets else "pytest"
 
         p2p_cmd = None
         if pass_to_pass_command_fn is not None:
             p2p_cmd = pass_to_pass_command_fn(instance)
         elif instance.pass_to_pass:
-            p2p_targets = " ".join(instance.pass_to_pass[:10])
+            p2p_targets = " ".join(shlex.quote(t) for t in instance.pass_to_pass[:10])
             p2p_cmd = f"pytest {p2p_targets}"
 
         # If an external verifier (e.g. DockerSandboxVerifier) is configured, delegate
