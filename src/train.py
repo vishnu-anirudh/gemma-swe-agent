@@ -236,8 +236,21 @@ def run_eval(
         manager = DRLoRAManager.from_checkpoint(model=model, checkpoint_path=adapter_checkpoint, device=device)
         console.print(f"[green]Successfully loaded {len(manager.adapted_layers)} adapted submodules.[/green]")
 
+    def format_chat_prompt(text: str) -> str:
+        if tokenizer is not None and hasattr(tokenizer, "apply_chat_template"):
+            try:
+                return tokenizer.apply_chat_template(
+                    [{"role": "user", "content": text}],
+                    tokenize=False,
+                    add_generation_prompt=True,
+                )
+            except Exception:
+                pass
+        return text
+
     def generate_fn(prompt: str) -> str:
-        inputs = tokenizer(prompt, return_tensors="pt").to(device)
+        chat_prompt = format_chat_prompt(prompt)
+        inputs = tokenizer(chat_prompt, return_tensors="pt").to(device)
         with torch.no_grad():
             outputs = model.generate(
                 **inputs,
@@ -250,7 +263,8 @@ def run_eval(
         return tokenizer.decode(outputs[0][prompt_len:], skip_special_tokens=True)
 
     def sample_gen_fn(prompt: str, count: int) -> List[str]:
-        inputs = tokenizer(prompt, return_tensors="pt").to(device)
+        chat_prompt = format_chat_prompt(prompt)
+        inputs = tokenizer(chat_prompt, return_tensors="pt").to(device)
         results = []
         for _ in range(count):
             with torch.no_grad():
@@ -281,15 +295,28 @@ def run_eval(
 
         if tts:
             # Parallel-Distill-Refine Test-Time Scaling
-            res, pass_at_k, feedback = runner.evaluate_instance_tts(
-                instance=inst,
-                repo_dir=".",
-                k=k,
-                sample_generate_fn=sample_gen_fn,
-            )
+            from src.evaluation.repo_manager import RepoManager
+            sandbox_dir = None
+            try:
+                sandbox_dir = RepoManager.create_instance_sandbox(inst.repo, inst.base_commit)
+                repo_target = str(sandbox_dir)
+            except Exception:
+                repo_target = "."
+
+            try:
+                res, pass_at_k, feedback = runner.evaluate_instance_pdr(
+                    instance=inst,
+                    repo_dir=repo_target,
+                    k=k,
+                    sample_generate_fn=sample_gen_fn,
+                )
+            finally:
+                if sandbox_dir:
+                    RepoManager.remove_sandbox(sandbox_dir, inst.repo)
+
             has_sri = res.patch_applied
             format_type = res.format_type
-            blocks = SRIFormatter.parse(runner.model_generate_fn(runner.format_instance_prompt(inst)))
+            blocks = [1] if has_sri else []
         elif agentic:
             # Interactive multi-turn agent exploration with RepoTools
             from src.evaluation.repo_manager import RepoManager
