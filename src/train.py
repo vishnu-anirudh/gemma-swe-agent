@@ -188,7 +188,9 @@ def run_rlvr(config_path: str, checkpoint_path: Optional[str] = None, steps: int
         epsilon_clip=cfg["grpo"]["epsilon_clip"],
         kl_beta=cfg["grpo"]["kl_beta"],
         learning_rate=float(cfg["grpo"]["learning_rate"]),
-        max_new_tokens=cfg["grpo"].get("max_new_tokens", 256),
+        max_new_tokens=cfg["grpo"].get("max_new_tokens", 512),
+        temperature=float(cfg["grpo"].get("temperature", 0.85)),
+        top_p=float(cfg["grpo"].get("top_p", 0.95)),
     )
 
     trainer = GRPOTrainer(
