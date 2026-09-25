@@ -247,4 +247,37 @@ class MultiTurnAgent:
                     }
                 )
 
+        # Fallback safeguard: If turn budget exhausted without patch, prompt one final synthesis
+        if session.final_patch_raw is None:
+            console.print("  [cyan]Turn budget exhausted without patch. Prompting final patch synthesis...[/cyan]")
+            messages.append(
+                {
+                    "role": "user",
+                    "content": (
+                        "Turn budget exhausted. Based on the files and code you inspected above, "
+                        "please output your complete fix now in Search-and-Replace (SRI) format wrapped inside <submit_patch>:\n"
+                        "<submit_patch>\n"
+                        "<<<<<<< SEARCH: path/to/file.py\n"
+                        "<exact code to replace>\n"
+                        "=======\n"
+                        "<replacement code>\n"
+                        ">>>>>>> REPLACE\n"
+                        "</submit_patch>"
+                    ),
+                }
+            )
+            prompt_str = self._format_conversation(messages)
+            model_response = self.generate_fn(prompt_str).strip()
+            patch_match = self.PATCH_PATTERN.search(model_response)
+            if patch_match:
+                session.final_patch_raw = patch_match.group(1).strip()
+                session.parsed_sri_blocks = SRIFormatter.parse(session.final_patch_raw)
+                console.print(f"  [bold green]Final Synthesis:[/bold green] Patch extracted ({len(session.parsed_sri_blocks)} SRI blocks).")
+            else:
+                sri_blocks = SRIFormatter.parse(model_response)
+                if len(sri_blocks) > 0:
+                    session.final_patch_raw = model_response
+                    session.parsed_sri_blocks = sri_blocks
+                    console.print(f"  [bold green]Final Synthesis:[/bold green] Direct SRI patch detected ({len(sri_blocks)} blocks).")
+
         return session
