@@ -91,11 +91,18 @@ class SRIFormatter:
                 )
 
             current_file = file_path
+            # Strip accidental nested markers (e.g. '<<<<<<< SEARCH: ...')
+            cleaned_search = re.sub(
+                r"^<{3,7}\s*(?:SEARCH|REPLACE):?\s*", "", search_content.strip(), flags=re.IGNORECASE
+            )
+            cleaned_replace = re.sub(
+                r"^<{3,7}\s*(?:SEARCH|REPLACE):?\s*", "", replace_content.strip(), flags=re.IGNORECASE
+            )
             blocks.append(
                 SRIBlock(
                     file_path=file_path,
-                    search_content=search_content,
-                    replace_content=replace_content,
+                    search_content=cleaned_search,
+                    replace_content=cleaned_replace,
                 )
             )
 
@@ -112,6 +119,14 @@ class SRIFormatter:
         Returns:
             Tuple of (new_content, success, message)
         """
+        # Clean residual nested markers
+        search_str = re.sub(
+            r"^<{3,7}\s*(?:SEARCH|REPLACE):?\s*", "", search_str.strip(), flags=re.IGNORECASE
+        )
+        replace_str = re.sub(
+            r"^<{3,7}\s*(?:SEARCH|REPLACE):?\s*", "", replace_str.strip(), flags=re.IGNORECASE
+        )
+
         # Exact match count
         count = original_content.count(search_str)
 

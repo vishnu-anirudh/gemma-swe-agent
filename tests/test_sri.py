@@ -135,4 +135,25 @@ def test_sri_apply_with_anchor_scope_matching():
     assert "sepright = _separable(transform.right)" in new_content
 
 
+def test_sri_nested_marker_cleaning():
+    raw_text = """
+<<<<<<< SEARCH: astropy/io/ascii/rst.py
+<<<<<<< SEARCH: def get_fixedwidth_params(self, line):
+=======
+<<<<<<< REPLACE: def get_fixedwidth_params(self, line, header_rows=None):
+>>>>>>> REPLACE
+"""
+    blocks = SRIFormatter.parse(raw_text)
+    assert len(blocks) == 1
+    assert blocks[0].file_path == "astropy/io/ascii/rst.py"
+    assert blocks[0].search_content == "def get_fixedwidth_params(self, line):"
+    assert "header_rows=None" in blocks[0].replace_content
+
+    content = "class RST:\n    def get_fixedwidth_params(self, line):\n        pass\n"
+    new_content, success, msg = SRIFormatter.apply_to_content(content, blocks[0].search_content, blocks[0].replace_content)
+    assert success is True
+    assert "header_rows=None" in new_content
+
+
+
 
