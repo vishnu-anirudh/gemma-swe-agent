@@ -66,6 +66,20 @@ class GRPOTrainer:
             lr=self.config.learning_rate,
         )
 
+    def _format_prompt(self, prompt_text: str) -> str:
+        """Apply model chat template if not already applied."""
+        if self.tokenizer is not None and hasattr(self.tokenizer, "apply_chat_template"):
+            if "<start_of_turn>" not in prompt_text and "<bos>" not in prompt_text:
+                try:
+                    return self.tokenizer.apply_chat_template(
+                        [{"role": "user", "content": prompt_text}],
+                        tokenize=False,
+                        add_generation_prompt=True,
+                    )
+                except Exception:
+                    pass
+        return prompt_text
+
     def generate_group_rollouts(
         self,
         prompt_text: str,
@@ -73,7 +87,8 @@ class GRPOTrainer:
     ) -> List[str]:
         """Sample G independent candidate responses from current policy."""
         G = group_size or self.config.group_size
-        inputs = self.tokenizer(prompt_text, return_tensors="pt").to(self.device)
+        formatted_prompt = self._format_prompt(prompt_text)
+        inputs = self.tokenizer(formatted_prompt, return_tensors="pt").to(self.device)
 
         self.model.eval()
         with torch.no_grad():
@@ -103,9 +118,10 @@ class GRPOTrainer:
         response_text: str,
     ) -> torch.Tensor:
         """Compute the sum of log probabilities of response tokens given prompt."""
-        full_text = prompt_text + response_text
+        formatted_prompt = self._format_prompt(prompt_text)
+        full_text = formatted_prompt + response_text
         encoded_full = self.tokenizer(full_text, return_tensors="pt").to(self.device)
-        encoded_prompt = self.tokenizer(prompt_text, return_tensors="pt").to(self.device)
+        encoded_prompt = self.tokenizer(formatted_prompt, return_tensors="pt").to(self.device)
 
         input_ids = encoded_full["input_ids"]
         prompt_len = encoded_prompt["input_ids"].shape[1]
