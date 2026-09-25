@@ -14,5 +14,5 @@ model:
   use_sri_format: true
 
 agent:
-  max_turns: 4
+  max_turns: 8
 

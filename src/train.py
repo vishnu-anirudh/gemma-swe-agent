@@ -80,6 +80,7 @@ def run_sft(
     save_checkpoint: str = "./checkpoints/sft_dr_lora/adapter_model.pt",
     expanded_curriculum: bool = False,
     dataset_path: Optional[str] = None,
+    resume_checkpoint: Optional[str] = None,
 ) -> None:
     """Execute multi-tier curriculum SFT with Dynamic Rank LoRA and Step-Level Error Masking."""
     cfg = load_yaml(config_path)
@@ -89,21 +90,25 @@ def run_sft(
     console.print(f"[bold green]Starting SFT with DR-LoRA[/bold green] on {model_name}")
     model, tokenizer = load_model_and_tokenizer(model_name, device)
 
-    # 1. Inject Dynamic Rank LoRA
-    target_modules = cfg["peft"]["target_modules"]
-    initial_rank = cfg["peft"]["initial_rank"]
-    max_rank = cfg["peft"]["max_rank"]
-    min_rank = cfg["peft"]["min_rank"]
+    # 1. Inject or Resume Dynamic Rank LoRA
+    if resume_checkpoint and os.path.exists(resume_checkpoint):
+        console.print(f"[cyan]Resuming DR-LoRA from existing checkpoint: {resume_checkpoint}...[/cyan]")
+        manager = DRLoRAManager.from_checkpoint(model=model, checkpoint_path=resume_checkpoint, device=device)
+    else:
+        target_modules = cfg["peft"]["target_modules"]
+        initial_rank = cfg["peft"]["initial_rank"]
+        max_rank = cfg["peft"]["max_rank"]
+        min_rank = cfg["peft"]["min_rank"]
 
-    console.print(f"Injecting DR-LoRA adapters (Initial Rank: {initial_rank}, Max Rank: {max_rank})...")
-    manager = DRLoRAManager(
-        model=model,
-        target_modules=target_modules,
-        max_rank=max_rank,
-        min_rank=min_rank,
-        initial_rank=initial_rank,
-        lora_alpha=cfg["peft"].get("lora_alpha", 16.0),
-    )
+        console.print(f"Injecting DR-LoRA adapters (Initial Rank: {initial_rank}, Max Rank: {max_rank})...")
+        manager = DRLoRAManager(
+            model=model,
+            target_modules=target_modules,
+            max_rank=max_rank,
+            min_rank=min_rank,
+            initial_rank=initial_rank,
+            lora_alpha=cfg["peft"].get("lora_alpha", 16.0),
+        )
     console.print(f"Adapted {len(manager.adapted_layers)} submodules.")
 
     # 2. Setup Step-Level Error Masker & Optimizer
@@ -510,17 +515,24 @@ def main() -> None:
         action="store_true",
         help="Enable Docker container sandbox evaluation if available",
     )
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume SFT from existing checkpoint",
+    )
 
     args = parser.parse_args()
 
     if args.mode == "sft":
         save_path = args.checkpoint or "./checkpoints/sft_dr_lora/adapter_model.pt"
+        resume_path = save_path if args.resume else None
         run_sft(
             args.config,
             epochs=args.epochs,
             save_checkpoint=save_path,
             expanded_curriculum=args.expanded,
             dataset_path=args.dataset,
+            resume_checkpoint=resume_path,
         )
     elif args.mode == "rlvr":
         ckpt = args.checkpoint or "./checkpoints/sft_dr_lora/adapter_model.pt"
