@@ -9,6 +9,9 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 from src.agent.tools import RepoTools
 from src.data.masking import TrajectoryStep
 from src.data.sri_formatter import SRIBlock, SRIFormatter
+from rich.console import Console
+
+console = Console()
 
 
 @dataclass
@@ -76,35 +79,14 @@ class MultiTurnAgent:
             attrs = dict(re.findall(r'(\w+)="([^"]*)"', attrs_str))
             return tool_name, attrs
 
-        # 2. Markdown block: ```tool_call ... ```
-        block_match = re.search(r'```(?:tool_call|tool)?\s*\n?(.*?)\n?```', text, re.DOTALL)
-        if block_match:
-            inner = block_match.group(1).strip()
-            # Check for inner XML
-            xml_inner = re.search(r'<tool_call\s+name="([^"]+)"([^>]*)/?>', inner)
-            if xml_inner:
-                tool_name = xml_inner.group(1).strip()
-                attrs = dict(re.findall(r'(\w+)="([^"]*)"', xml_inner.group(2)))
-                return tool_name, attrs
-
-            parts = inner.split(maxsplit=1)
-            if parts:
-                tool_name = parts[0].strip().replace("()", "")
-                rest = parts[1] if len(parts) > 1 else ""
-                clean_attrs = {}
-                for m in re.finditer(r'(\w+)=(?:"([^"]*)"|\'([^\']*)\'|([^\s\)]+))', rest):
-                    key = m.group(1)
-                    val = m.group(2) or m.group(3) or m.group(4) or ""
-                    clean_attrs[key] = val
-                if tool_name == "search_code" and "name" in clean_attrs and "query" not in clean_attrs:
-                    clean_attrs["query"] = clean_attrs["name"]
-                return tool_name, clean_attrs
-
-        # 3. Direct line: search_code query="..." or view_file path="..."
-        direct_match = re.search(r'\b(search_code|view_file|list_dir|run_test)\b\s*\(?([^)\n]*)\)?', text)
-        if direct_match:
-            tool_name = direct_match.group(1)
-            rest = direct_match.group(2)
+        # 2. Universal tool pattern across Markdown blocks (```tool_call, ```python, etc.) and free text
+        tool_pattern = re.search(
+            r'\b(search_code|view_file|list_dir|run_test)\b\s*\(?([^)\n]*)\)?',
+            text,
+        )
+        if tool_pattern:
+            tool_name = tool_pattern.group(1).strip()
+            rest = tool_pattern.group(2)
             clean_attrs = {}
             for m in re.finditer(r'(\w+)=(?:"([^"]*)"|\'([^\']*)\'|([^\s\)]+))', rest):
                 key = m.group(1)
@@ -174,6 +156,7 @@ class MultiTurnAgent:
                         is_error=False,
                     )
                 )
+                console.print(f"  [bold green]Turn {turn}/{self.max_turns}:[/bold green] Patch submitted ({len(session.parsed_sri_blocks)} SRI blocks).")
                 break
 
             # Or check if raw SRI blocks were emitted directly
@@ -188,6 +171,7 @@ class MultiTurnAgent:
                         is_error=False,
                     )
                 )
+                console.print(f"  [bold green]Turn {turn}/{self.max_turns}:[/bold green] Direct SRI patch detected ({len(sri_blocks)} blocks).")
                 break
 
             # 2. Check for tool calls using multi-format parser
@@ -223,6 +207,10 @@ class MultiTurnAgent:
                     )
                 )
 
+                first_obs = observation.splitlines()[0] if observation.splitlines() else observation
+                console.print(f"  [cyan]Turn {turn}/{self.max_turns}:[/cyan] Tool Call -> [bold]{tool_name}[/bold]({attrs})")
+                console.print(f"    [dim]-> Observation: {first_obs[:85]}[/dim]")
+
                 # Record conversational turn
                 messages.append({"role": "model", "content": model_response})
                 if turn == self.max_turns - 1:
@@ -246,6 +234,8 @@ class MultiTurnAgent:
                         is_error=True,
                     )
                 )
+                first_line = model_response.splitlines()[0] if model_response.splitlines() else model_response
+                console.print(f"  [yellow]Turn {turn}/{self.max_turns}:[/yellow] Model emitted text without tool call: [dim]{first_line[:65]}...[/dim]")
                 messages.append({"role": "model", "content": model_response})
                 messages.append(
                     {

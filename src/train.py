@@ -150,7 +150,7 @@ def run_sft(
     console.print(f"[bold green]Saved fine-tuned DR-LoRA checkpoint to {save_checkpoint}[/bold green]")
 
 
-def run_rlvr(config_path: str) -> None:
+def run_rlvr(config_path: str, checkpoint_path: Optional[str] = None, steps: int = 1) -> None:
     """Execute RLVR with Critic-Free GRPO + AVSPO Anti-Advantage Collapse."""
     cfg = load_yaml(config_path)
     device = get_device()
@@ -158,6 +158,14 @@ def run_rlvr(config_path: str) -> None:
 
     console.print(f"[bold cyan]Starting RLVR (GRPO + AVSPO)[/bold cyan] on {model_name}")
     model, tokenizer = load_model_and_tokenizer(model_name, device)
+
+    # Optionally load fine-tuned DR-LoRA checkpoint
+    manager = None
+    adapter_checkpoint = checkpoint_path or cfg["model"].get("adapter_path")
+    if adapter_checkpoint and os.path.exists(adapter_checkpoint):
+        console.print(f"[cyan]Loading fine-tuned DR-LoRA checkpoint from {adapter_checkpoint}...[/cyan]")
+        manager = DRLoRAManager.from_checkpoint(model=model, checkpoint_path=adapter_checkpoint, device=device)
+        console.print(f"[green]Successfully loaded {len(manager.adapted_layers)} adapted submodules for RLVR.[/green]")
 
     grpo_cfg = GRPOTrainingConfig(
         group_size=cfg["grpo"]["group_size"],
@@ -175,35 +183,64 @@ def run_rlvr(config_path: str) -> None:
     )
     prm = RubricProcessRewardModel()
 
-    console.print(f"Sampling group rollouts (G={grpo_cfg.group_size}) for sample coding task...")
-    prompt = (
-        "You are an expert autonomous software engineer.\n"
-        "Bug description: Function divide(a, b) does not handle b=0.\n"
-        "Output your fix in Search-and-Replace Infilling (SRI) format:"
-    )
+    tasks = [
+        (
+            "Function divide(a, b) raises ZeroDivisionError when b == 0. Return float('inf') instead.",
+            ["float('inf')", "b == 0", "return"],
+        ),
+        (
+            "Function get_element(lst, idx) raises IndexError when idx >= len(lst). Return None instead.",
+            ["None", "idx >= len", "len(lst)"],
+        ),
+        (
+            "Function parse_int(s) raises ValueError when given non-digits. Return 0 instead.",
+            ["0", "ValueError", "isdigit"],
+        ),
+    ]
 
-    rollouts = trainer.generate_group_rollouts(prompt)
-    console.print(f"[green]Generated {len(rollouts)} rollouts successfully.[/green]")
+    for step_idx in range(steps):
+        task_desc, keywords = tasks[step_idx % len(tasks)]
+        console.print(f"\n[bold]Step {step_idx + 1}/{steps}:[/bold] Sampling group rollouts (G={grpo_cfg.group_size})...")
+        prompt = (
+            "You are an expert autonomous software engineer.\n"
+            f"Bug description: {task_desc}\n"
+            "Output your fix in Search-and-Replace Infilling (SRI) format:"
+        )
 
-    # Evaluate rollouts against Rubric PRM and verifiable test
-    process_scores = [prm.evaluate_trajectory(r).total_score for r in rollouts]
+        rollouts = trainer.generate_group_rollouts(prompt)
+        console.print(f"[green]Generated {len(rollouts)} rollouts successfully.[/green]")
 
-    # Demonstrate AVSPO: Simulate an all-failing or homogeneous batch
-    simulated_test_rewards = [0.0] * len(rollouts)
+        # Evaluate rollouts against Rubric PRM and verifiable test
+        process_scores = [prm.evaluate_trajectory(r).total_score for r in rollouts]
 
-    console.print("[cyan]Performing Critic-Free GRPO step with AVSPO Advantage Normalization...[/cyan]")
-    metrics = trainer.train_step(
-        prompt_text=prompt,
-        rollouts=rollouts,
-        execution_rewards=simulated_test_rewards,
-        process_scores=process_scores,
-    )
+        # Evaluate rollouts using verifiable rewards
+        test_rewards = []
+        for r in rollouts:
+            sri_blocks = SRIFormatter.parse(r)
+            if sri_blocks and any(kw in r for kw in keywords):
+                test_rewards.append(1.0)
+            elif sri_blocks:
+                test_rewards.append(0.5)
+            else:
+                test_rewards.append(0.0)
 
-    console.print(f"[bold green]RLVR Step Completed![/bold green]")
-    console.print(f"  • Mean Policy Loss: {metrics['mean_loss']:.4f}")
-    console.print(f"  • Mean KL Penalty: {metrics['mean_kl']:.4f}")
-    console.print(f"  • Advantage Collapse Neutralized: {bool(metrics['was_collapsed'])}")
-    console.print(f"  • Advantage Collapse Rate (ACR): {metrics['advantage_collapse_rate']:.2%}")
+        console.print("[cyan]Performing Critic-Free GRPO step with AVSPO Advantage Normalization...[/cyan]")
+        metrics = trainer.train_step(
+            prompt_text=prompt,
+            rollouts=rollouts,
+            execution_rewards=test_rewards,
+            process_scores=process_scores,
+        )
+
+        console.print(f"[bold green]RLVR Step {step_idx + 1} Completed![/bold green]")
+        console.print(f"  • Mean Policy Loss: {metrics['mean_loss']:.4f}")
+        console.print(f"  • Mean KL Penalty: {metrics['mean_kl']:.4f}")
+        console.print(f"  • Advantage Collapse Neutralized: {bool(metrics['was_collapsed'])}")
+        console.print(f"  • Advantage Collapse Rate (ACR): {metrics['advantage_collapse_rate']:.2%}")
+
+    if manager is not None and adapter_checkpoint:
+        manager.save_checkpoint(adapter_checkpoint)
+        console.print(f"[bold green]Updated DR-LoRA checkpoint saved to {adapter_checkpoint}[/bold green]")
 
 
 def run_eval(
@@ -237,6 +274,8 @@ def run_eval(
         console.print(f"[green]Successfully loaded {len(manager.adapted_layers)} adapted submodules.[/green]")
 
     def format_chat_prompt(text: str) -> str:
+        if "<start_of_turn>" in text or "<bos>" in text:
+            return text
         if tokenizer is not None and hasattr(tokenizer, "apply_chat_template"):
             try:
                 return tokenizer.apply_chat_template(
@@ -251,14 +290,19 @@ def run_eval(
     def generate_fn(prompt: str) -> str:
         chat_prompt = format_chat_prompt(prompt)
         inputs = tokenizer(chat_prompt, return_tensors="pt").to(device)
+        temp = cfg["model"].get("temperature", 0.0)
+        gen_kwargs = {
+            "max_new_tokens": cfg["model"].get("max_new_tokens", 512),
+            "pad_token_id": tokenizer.pad_token_id or tokenizer.eos_token_id,
+        }
+        if temp > 0:
+            gen_kwargs["temperature"] = temp
+            gen_kwargs["do_sample"] = True
+        else:
+            gen_kwargs["do_sample"] = False
+
         with torch.no_grad():
-            outputs = model.generate(
-                **inputs,
-                max_new_tokens=cfg["model"].get("max_new_tokens", 512),
-                temperature=cfg["model"].get("temperature", 0.0),
-                do_sample=cfg["model"].get("temperature", 0.0) > 0,
-                pad_token_id=tokenizer.pad_token_id or tokenizer.eos_token_id,
-            )
+            outputs = model.generate(**inputs, **gen_kwargs)
         prompt_len = inputs["input_ids"].shape[1]
         return tokenizer.decode(outputs[0][prompt_len:], skip_special_tokens=True)
 
@@ -343,7 +387,7 @@ def run_eval(
 
             has_sri = res.patch_applied
             format_type = res.format_type
-            blocks = [1] if has_sri else []
+            blocks = [1] if (has_sri or format_type == "sri") else []
         else:
             prompt = runner.format_instance_prompt(inst)
             model_output = generate_fn(prompt)
@@ -362,12 +406,21 @@ def run_eval(
             )
 
         results.append(res)
+        if res.resolved:
+            status_str = "[bold green]RESOLVED[/bold green]"
+        elif res.patch_applied:
+            status_str = "[yellow]PATCH APPLIED[/yellow]"
+        elif format_type == "sri" or len(blocks) > 0:
+            status_str = "[cyan]SRI DETECTED[/cyan]"
+        else:
+            status_str = "[red]NO PATCH[/red]"
+
         table.add_row(
             inst.instance_id,
             inst.repo,
             format_type,
             str(len(blocks)),
-            "[green]FORMATTED[/green]" if has_sri else "[red]NO SRI[/red]",
+            status_str,
         )
 
     console.print(table)
@@ -417,6 +470,12 @@ def main() -> None:
         default=4,
         help="Number of parallel rollouts for TTS (default: 4)",
     )
+    parser.add_argument(
+        "--steps",
+        type=int,
+        default=1,
+        help="Number of optimization steps for RLVR (default: 1)",
+    )
 
     args = parser.parse_args()
 
@@ -424,7 +483,8 @@ def main() -> None:
         save_path = args.checkpoint or "./checkpoints/sft_dr_lora/adapter_model.pt"
         run_sft(args.config, epochs=args.epochs, save_checkpoint=save_path)
     elif args.mode == "rlvr":
-        run_rlvr(args.config)
+        ckpt = args.checkpoint or "./checkpoints/sft_dr_lora/adapter_model.pt"
+        run_rlvr(args.config, checkpoint_path=ckpt, steps=args.steps)
     elif args.mode == "eval":
         run_eval(
             args.config,
