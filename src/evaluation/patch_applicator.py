@@ -67,12 +67,27 @@ class PatchApplicator:
         for idx, block in enumerate(blocks):
             target_file = repo_path / block.file_path
             if not target_file.exists():
-                return PatchApplicationResult(
-                    success=False,
-                    format_type="sri",
-                    applied_files=applied_files,
-                    error_message=f"Block {idx+1}: File '{block.file_path}' does not exist in repo.",
-                )
+                # Fuzzy path resolution: find unique matching file in repository
+                filename = Path(block.file_path).name
+                candidates = [
+                    c for c in repo_path.rglob(filename)
+                    if not any(x in str(c) for x in [".git", "__pycache__", ".venv"])
+                ]
+                if len(candidates) == 1:
+                    target_file = candidates[0]
+                    block.file_path = str(target_file.relative_to(repo_path))
+                elif len(candidates) > 1:
+                    parts = set(Path(block.file_path).parts)
+                    best_match = max(candidates, key=lambda c: len(parts.intersection(set(c.parts))))
+                    target_file = best_match
+                    block.file_path = str(target_file.relative_to(repo_path))
+                else:
+                    return PatchApplicationResult(
+                        success=False,
+                        format_type="sri",
+                        applied_files=applied_files,
+                        error_message=f"Block {idx+1}: File '{block.file_path}' does not exist in repo.",
+                    )
 
             try:
                 content = target_file.read_text(encoding="utf-8", errors="replace")
@@ -88,7 +103,7 @@ class PatchApplicator:
                         success=False,
                         format_type="sri",
                         applied_files=applied_files,
-                        error_message=f"Block {idx+1} for '{block.file_path}' failed: {msg}",
+                        error_message=f"Block {idx+1} for '{block.file_path}' failed: {msg} | Search: {repr(block.search_content[:120])}",
                     )
 
                 target_file.write_text(new_content, encoding="utf-8")
