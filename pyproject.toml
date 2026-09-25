@@ -1,0 +1,23 @@
+[project]
+name = "gemma-swe"
+version = "0.1.0"
+description = "Autonomous Software Engineering Agents: Post-Training Gemma on Apple Silicon"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.2.0",
+    "transformers>=4.40.0",
+    "peft>=0.10.0",
+    "trl>=0.8.0",
+    "datasets>=2.18.0",
+    "accelerate>=0.28.0",
+    "swebench>=2.1.0",
+    "pytest>=8.0.0",
+    "pyyaml>=6.0",
+    "rich>=13.0.0",
+    "unidiff>=0.7.5",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

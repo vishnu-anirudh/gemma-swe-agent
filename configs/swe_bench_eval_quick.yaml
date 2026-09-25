@@ -1,0 +1,14 @@
+# Quick SWE-bench Evaluation Configuration for Checkpoint Verification
+benchmark:
+  dataset_name: "princeton-nlp/SWE-bench_Lite"
+  split: "test"
+  limit: 2
+  timeout_seconds: 60
+  output_dir: "./eval_results"
+
+model:
+  name_or_path: "google/gemma-2-2b-it"
+  adapter_path: "./checkpoints/sft_dr_lora/adapter_model.pt"
+  max_new_tokens: 512
+  temperature: 0.0
+  use_sri_format: true

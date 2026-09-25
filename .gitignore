@@ -1,0 +1,41 @@
+# Environments & Secrets
+.env
+.env.*
+!.env.example
+.venv/
+env/
+venv/
+
+# Heavy Weights and Checkpoints (>100MB rejected by GitHub)
+checkpoints/*.pt
+checkpoints/**/*.pt
+checkpoints/*.bin
+*.pt
+*.bin
+*.safetensors
+
+# Evaluation artifacts
+eval_results/
+tmp/
+
+# Python cache & build artifacts
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.pytest_cache/
+.coverage
+htmlcov/
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Private notes & internal milestone reports
+SWE-bench SOTA Pipeline Comparison.md
+milestone_*.md
+research.md
+
