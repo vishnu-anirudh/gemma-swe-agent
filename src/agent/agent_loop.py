@@ -240,7 +240,7 @@ class MultiTurnAgent:
 
                 # Check for duplicate consecutive tool calls
                 is_duplicate = (len(session.trajectory_steps) > 1 and 
-                                session.trajectory_steps[-1].action_text == model_response)
+                                session.trajectory_steps[-2].action_text == model_response)
                 
                 hint = ""
                 if is_duplicate:

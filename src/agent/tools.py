@@ -67,6 +67,23 @@ class RepoTools:
                 timeout=10,
             )
             lines = proc.stdout.splitlines()
+
+            # Expand dotted queries (e.g. astropy.io.ascii.RST -> class RST)
+            if "." in query and not query.endswith(".py"):
+                base_symbol = query.split(".")[-1].strip()
+                if len(base_symbol) >= 2:
+                    for prefix in [f"class {base_symbol}", f"def {base_symbol}"]:
+                        cmd_base = ["grep", "-rnI", "--include=*.py", prefix, "."]
+                        proc_base = subprocess.run(
+                            cmd_base,
+                            cwd=repo_dir,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                            text=True,
+                            timeout=5,
+                        )
+                        lines = proc_base.stdout.splitlines() + lines
+
             if not lines:
                 return f"No matches found for '{query}'."
 
