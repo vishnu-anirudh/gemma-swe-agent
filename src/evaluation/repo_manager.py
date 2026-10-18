@@ -59,6 +59,7 @@ class RepoManager:
         base_commit: str,
         target_dir: Optional[Path] = None,
         cache_dir: Optional[Path] = None,
+        test_patch: Optional[str] = None,
     ) -> Path:
         """Prepare an isolated working directory checked out to base_commit via git worktree."""
         cached_repo = cls.clone_or_fetch(repo_name, cache_dir)
@@ -83,6 +84,28 @@ class RepoManager:
             dest_dir.mkdir(parents=True, exist_ok=True)
             shutil.copytree(str(cached_repo), str(dest_dir), dirs_exist_ok=True)
             subprocess.run(["git", "checkout", base_commit], cwd=str(dest_dir), capture_output=True)
+
+        # 3. Apply test_patch if provided to install official benchmark test cases
+        if test_patch:
+            proc_tp = subprocess.run(
+                ["git", "apply", "-"],
+                input=test_patch,
+                cwd=str(dest_dir),
+                capture_output=True,
+                text=True,
+            )
+            if proc_tp.returncode != 0:
+                subprocess.run(
+                    ["git", "apply", "--whitespace=nowarn", "-"],
+                    input=test_patch,
+                    cwd=str(dest_dir),
+                    capture_output=True,
+                    text=True,
+                )
+            subprocess.run(["git", "config", "user.name", "swe-eval"], cwd=str(dest_dir), capture_output=True)
+            subprocess.run(["git", "config", "user.email", "swe@eval.local"], cwd=str(dest_dir), capture_output=True)
+            subprocess.run(["git", "add", "-A"], cwd=str(dest_dir), capture_output=True)
+            subprocess.run(["git", "commit", "-m", "installed test_patch"], cwd=str(dest_dir), capture_output=True)
 
         return dest_dir
 

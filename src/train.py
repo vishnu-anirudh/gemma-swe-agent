@@ -133,21 +133,26 @@ def run_sft(
         f"[cyan]Loaded {tier_label} with {len(curriculum)} multi-tier trajectories (Easy -> Medium -> Hard).[/cyan]"
     )
 
+    trainable_params = [p for p in model.parameters() if p.requires_grad]
+    grad_accum = int(cfg["training"].get("gradient_accumulation_steps", 4)) if len(curriculum) > 5 else 1
     model.train()
     for ep in range(1, epochs + 1):
         epoch_loss = 0.0
+        optimizer.zero_grad()
         for idx, batch in enumerate(curriculum):
             input_ids = batch["input_ids"].unsqueeze(0).to(device)
             labels = batch["labels"].unsqueeze(0).to(device)
 
             outputs = model(input_ids=input_ids, labels=labels)
             loss = outputs.loss
-            loss.backward()
+            (loss / grad_accum).backward()
 
             # Track module saliency from parameter gradients
             manager.saliency_tracker.update_from_model(model)
-            optimizer.step()
-            optimizer.zero_grad()
+            if (idx + 1) % grad_accum == 0 or (idx + 1) == len(curriculum):
+                torch.nn.utils.clip_grad_norm_(trainable_params, max_norm=1.0)
+                optimizer.step()
+                optimizer.zero_grad()
 
             epoch_loss += loss.item()
 
@@ -375,7 +380,9 @@ def run_eval(
             from src.evaluation.repo_manager import RepoManager
             sandbox_dir = None
             try:
-                sandbox_dir = RepoManager.create_instance_sandbox(inst.repo, inst.base_commit)
+                sandbox_dir = RepoManager.create_instance_sandbox(
+                    inst.repo, inst.base_commit, test_patch=inst.test_patch
+                )
                 repo_target = str(sandbox_dir)
             except Exception:
                 repo_target = "."
@@ -401,7 +408,9 @@ def run_eval(
             sandbox_dir = None
             try:
                 console.print(f"[dim]Preparing sandbox for {inst.repo} @ {inst.base_commit[:8]}...[/dim]")
-                sandbox_dir = RepoManager.create_instance_sandbox(inst.repo, inst.base_commit)
+                sandbox_dir = RepoManager.create_instance_sandbox(
+                    inst.repo, inst.base_commit, test_patch=inst.test_patch
+                )
                 repo_target = str(sandbox_dir)
             except Exception as e:
                 console.print(f"[yellow]Repo checkout fallback ({e}); using local directory.[/yellow]")

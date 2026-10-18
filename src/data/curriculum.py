@@ -115,25 +115,25 @@ class CurriculumTrajectoryDataset(Dataset):
                 system_prompt="You are an autonomous SWE agent. Fix bugs using SRI format.",
                 steps=[
                     TrajectoryStep(
-                        action_text="<tool_call name=\"search_code\" query=\"FilteredRelation\" />",
-                        observation_text="django/db/models/sql/query.py:120: class FilteredRelation",
+                        action_text="<tool_call name=\"search_code\" query=\"FilePathField\" />",
+                        observation_text="django/db/models/fields/__init__.py:1663: class FilePathField(Field):",
                         is_error=False,
                     ),
                     TrajectoryStep(
-                        action_text="<tool_call name=\"view_file\" path=\"django/db/models/sql/query.py\" start_line=\"120\" end_line=\"150\" />",
-                        observation_text="125 | def resolve_expression(self):\n126 |     return self.relation_name",
+                        action_text="<tool_call name=\"view_file\" path=\"django/db/models/fields/__init__.py\" start_line=\"1709\" end_line=\"1720\" />",
+                        observation_text="1710 |     def formfield(self, **kwargs):\n1711 |         return super().formfield(**{\n1712 |             'path': self.path,",
                         is_error=False,
                     ),
                     TrajectoryStep(
-                        action_text="<tool_call name=\"run_test\" command=\"pytest tests/queries/test_filtered_relation.py\" />",
-                        observation_text="FAILED tests/queries/test_filtered_relation.py::test_aggregate - AttributeError: 'NoneType' object has no attribute 'name'",
+                        action_text="<tool_call name=\"run_test\" command=\"./tests/runtests.py model_fields.test_filepathfield\" />",
+                        observation_text="FAILED model_fields.test_filepathfield - TypeError: scandir: path should be string, bytes, os.PathLike or None, not function",
                         is_error=True,  # Masked!
                     ),
                 ],
                 final_patch=SRIFormatter.format_block(
-                    "django/db/models/sql/query.py",
-                    "    return self.relation_name",
-                    "    return self.relation_name if self.relation_name else None",
+                    "django/db/models/fields/__init__.py",
+                    "            'path': self.path,",
+                    "            'path': self.path() if callable(self.path) else self.path,",
                 ),
             ),
         ]
@@ -205,9 +205,9 @@ class CurriculumTrajectoryDataset(Dataset):
         # ==========================================
         easy_templates = [
             ("easy_calc_zero_div", "calc.py", "def divide(a, b):\n    return a / b", "def divide(a, b):\n    if b == 0:\n        return float('inf')\n    return a / b"),
-            ("easy_dict_get_fallback", "config.py", "def get_timeout(cfg):\n    return cfg['timeout']", "def get_timeout(cfg):\n    return cfg.get('timeout', 30)"),
+            ("easy_django_upload_permissions", "django/conf/global_settings.py", "FILE_UPLOAD_PERMISSIONS = None", "FILE_UPLOAD_PERMISSIONS = 0o644"),
             ("easy_list_index_guard", "pager.py", "def get_page(items, p):\n    return items[p]", "def get_page(items, p):\n    return items[p] if 0 <= p < len(items) else None"),
-            ("easy_none_attribute", "auth.py", "def get_role(user):\n    return user.role.name", "def get_role(user):\n    return user.role.name if user and user.role else 'guest'"),
+            ("easy_callable_default_eval", "django/db/models/fields/__init__.py", "            'path': self.path,", "            'path': self.path() if callable(self.path) else self.path,"),
             ("easy_str_decode_utf8", "parser.py", "def to_str(b):\n    return b.decode('ascii')", "def to_str(b):\n    return b.decode('utf-8', errors='replace')"),
             ("easy_path_exists_check", "storage.py", "def load_file(p):\n    return open(p).read()", "def load_file(p):\n    import os\n    return open(p).read() if os.path.exists(p) else ''"),
             ("easy_int_conversion", "converter.py", "def parse_num(v):\n    return int(v)", "def parse_num(v):\n    try:\n        return int(v)\n    except (ValueError, TypeError):\n        return 0"),
@@ -224,7 +224,7 @@ class CurriculumTrajectoryDataset(Dataset):
                     system_prompt=sys_prompt,
                     steps=[
                         TrajectoryStep(
-                            action_text=f'<tool_call name="view_file" path="{path}" start_line="1" end_line="15" />',
+                            action_text=f'```tool_call\nview_file path="{path}" start_line="1" end_line="15"\n```',
                             observation_text=f"=== File: {path} ===\n{old_c}",
                             is_error=False,
                         )
@@ -257,17 +257,17 @@ class CurriculumTrajectoryDataset(Dataset):
                     system_prompt=sys_prompt,
                     steps=[
                         TrajectoryStep(
-                            action_text=f'<tool_call name="search_code" query="{path.split(".")[0]}" />',
+                            action_text=f'```tool_call\nsearch_code query="{path.split(".")[0]}"\n```',
                             observation_text=f"{path}:10: {old_c.splitlines()[0]}",
                             is_error=False,
                         ),
                         TrajectoryStep(
-                            action_text=f'<tool_call name="run_test" command="pytest tests/test_{path}" />',
+                            action_text=f'```tool_call\nrun_test command="pytest tests/test_{path}"\n```',
                             observation_text=f"FAILED tests/test_{path}::test_edge - AssertionFailed",
                             is_error=True,  # Execution blunder: masked!
                         ),
                         TrajectoryStep(
-                            action_text=f'<tool_call name="view_file" path="{path}" start_line="1" end_line="20" />',
+                            action_text=f'```tool_call\nview_file path="{path}" start_line="1" end_line="20"\n```',
                             observation_text=f"=== File: {path} ===\n{old_c}",
                             is_error=False,
                         ),
@@ -280,7 +280,12 @@ class CurriculumTrajectoryDataset(Dataset):
         # 10 Hard Trajectories: 3-4 turns across cross-module refactors
         # ==========================================
         hard_templates = [
-            ("hard_django_filtered_relation", "django/db/models/sql/query.py", "def resolve_expression(self):\n    return self.relation_name", "def resolve_expression(self):\n    return self.relation_name if self.relation_name else None"),
+            (
+                "hard_django_filepath_callable",
+                "django/db/models/fields/__init__.py",
+                "            'path': self.path,",
+                "            'path': self.path() if callable(self.path) else self.path,",
+            ),
             ("hard_astropy_separable_matrix", "astropy/modeling/separable.py", "def separability_matrix(model):\n    return _separable(model)", "def separability_matrix(model):\n    if hasattr(model, '_calculate_separability_matrix'):\n        return model._calculate_separability_matrix()\n    return _separable(model)"),
             ("hard_scipy_sparse_crs_multiply", "scipy/sparse/linalg.py", "def matmul(A, B):\n    return A.dot(B)", "def matmul(A, B):\n    if A.shape[1] != B.shape[0]:\n        raise ValueError(f'Dimension mismatch: {A.shape} vs {B.shape}')\n    return A.dot(B)"),
             ("hard_sympy_integral_singularity", "sympy/integrals/risch.py", "def integrate_term(term):\n    return term.integrate()", "def integrate_term(term):\n    if term.is_singular:\n        return term.principal_value()\n    return term.integrate()"),
@@ -300,22 +305,22 @@ class CurriculumTrajectoryDataset(Dataset):
                     system_prompt=sys_prompt,
                     steps=[
                         TrajectoryStep(
-                            action_text=f'<tool_call name="search_code" query="{path.split("/")[-1].split(".")[0]}" />',
-                            observation_text=f"{path}:1: def {old_c.splitlines()[0].split('(')[0].replace('def ', '')}",
+                            action_text=f'```tool_call\nsearch_code query="FilePathField"\n```',
+                            observation_text=f"{path}:1710: {old_c.splitlines()[0]}",
                             is_error=False,
                         ),
                         TrajectoryStep(
-                            action_text=f'<tool_call name="view_file" path="{path}" start_line="1" end_line="35" />',
+                            action_text=f'```tool_call\nview_file path="{path}" start_line="1710" end_line="1721"\n```',
                             observation_text=f"=== File: {path} ===\n{old_c}",
                             is_error=False,
                         ),
                         TrajectoryStep(
-                            action_text=f'<tool_call name="run_test" command="pytest tests/test_{path.split("/")[-1]}" />',
-                            observation_text=f"FAILED tests/test_{path.split('/')[-1]} - Deadlock / Regression detected",
+                            action_text=f'```tool_call\nrun_test command="pytest tests/test_{path.split("/")[-1]}"\n```',
+                            observation_text=f"FAILED tests/test_{path.split('/')[-1]} - TypeError: scandir: path should be string, not function",
                             is_error=True,  # Execution blunder: masked!
                         ),
                         TrajectoryStep(
-                            action_text=f'<tool_call name="view_file" path="{path}" start_line="1" end_line="50" />',
+                            action_text=f'```tool_call\nview_file path="{path}" start_line="1710" end_line="1721"\n```',
                             observation_text=f"=== File: {path} (Context Confirmed) ===\n{old_c}",
                             is_error=False,
                         ),

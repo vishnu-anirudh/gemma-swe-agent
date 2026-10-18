@@ -57,6 +57,48 @@ def test_multi_turn_agent_tool_calling_and_patch():
         assert session.parsed_sri_blocks[0].file_path == "math_mod.py"
 
 
+def test_multi_turn_agent_premature_patch_guard():
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        repo = Path(tmp_dir)
+        (repo / "calc.py").write_text("def add(a, b):\n    return a * b\n", encoding="utf-8")
+
+        # Turn 1: Attempt premature patch without viewing calc.py
+        # Turn 2: View calc.py as required by the guard
+        # Turn 3: Submit valid patch
+        turn_responses = [
+            '<submit_patch>\n<<<<<<< SEARCH: calc.py\n    return a * b\n=======\n    return a + b\n>>>>>>> REPLACE\n</submit_patch>',
+            '<tool_call name="view_file" path="calc.py" start_line="1" end_line="5" />',
+            '<submit_patch>\n<<<<<<< SEARCH: calc.py\n    return a * b\n=======\n    return a + b\n>>>>>>> REPLACE\n</submit_patch>',
+        ]
+        turn_counter = 0
+
+        def mock_generate(prompt: str) -> str:
+            nonlocal turn_counter
+            resp = turn_responses[min(turn_counter, len(turn_responses) - 1)]
+            turn_counter += 1
+            return resp
+
+        agent = MultiTurnAgent(generate_fn=mock_generate, max_turns=5)
+        session = agent.run_session(
+            instance_id="toy_test_guard",
+            problem_statement="Fix add function.",
+            repo_dir=str(repo),
+        )
+
+        # Verified that turn 1 was rejected and turn 3 succeeded
+        assert session.turns == 3
+        assert session.tool_calls_made == 1
+        assert "calc.py" in session.files_viewed
+        assert len(session.parsed_sri_blocks) == 1
+        assert session.parsed_sri_blocks[0].file_path == "calc.py"
+
+        # Verify is_file_viewed path normalization
+        assert MultiTurnAgent.is_file_viewed("calc.py", {"calc.py"})
+        assert MultiTurnAgent.is_file_viewed("pkg/sub/calc.py", {"sub/calc.py"})
+        assert MultiTurnAgent.is_file_viewed("./calc.py", {"calc.py"})
+        assert not MultiTurnAgent.is_file_viewed("other.py", {"calc.py"})
+
+
 def test_curriculum_trajectory_dataset():
     class DummyTokenizer:
         def encode(self, text, add_special_tokens=False):

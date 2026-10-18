@@ -8,8 +8,10 @@ and Test-Time Scaling (TTS / Parallel-Distill-Refine).
 from __future__ import annotations
 
 import os
+import re
 import shlex
 import subprocess
+import sys
 import tempfile
 import time
 from dataclasses import dataclass
@@ -61,6 +63,29 @@ class SWEBenchRunner:
             f"Please provide your fix in SRI format:"
         )
 
+    @classmethod
+    def build_test_command(cls, instance: SWEBenchInstance, is_pass_to_pass: bool = False) -> str:
+        """Construct repo-aware test command for SWE-bench instances."""
+        targets_raw = instance.pass_to_pass[:10] if is_pass_to_pass else instance.fail_to_pass
+        if not targets_raw:
+            return "pytest"
+
+        # Repo-specific formatting:
+        if "django" in instance.repo:
+            formatted_targets = []
+            for t in targets_raw:
+                # Format: 'test_func (package.module.Class)' -> 'package.module.Class.test_func'
+                m = re.match(r"^(\w+)\s*\(([\w\.]+)\)$", t.strip())
+                if m:
+                    formatted_targets.append(f"{m.group(2)}.{m.group(1)}")
+                else:
+                    formatted_targets.append(t.strip())
+            joined = " ".join(shlex.quote(t) for t in formatted_targets)
+            return f"PYTHONPATH=. {sys.executable} tests/runtests.py --settings=test_sqlite {joined}"
+
+        quoted_targets = " ".join(shlex.quote(t) for t in targets_raw)
+        return f"PYTHONPATH=. pytest {quoted_targets}"
+
     def evaluate_instance(
         self,
         instance: SWEBenchInstance,
@@ -102,18 +127,18 @@ class SWEBenchRunner:
         if test_command_fn is not None:
             f2p_cmd = test_command_fn(instance)
         else:
-            test_targets = " ".join(shlex.quote(t) for t in instance.fail_to_pass) if instance.fail_to_pass else ""
-            f2p_cmd = f"pytest {test_targets}" if test_targets else "pytest"
+            f2p_cmd = self.build_test_command(instance, is_pass_to_pass=False)
 
         p2p_cmd = None
         if pass_to_pass_command_fn is not None:
             p2p_cmd = pass_to_pass_command_fn(instance)
         elif instance.pass_to_pass:
-            p2p_targets = " ".join(shlex.quote(t) for t in instance.pass_to_pass[:10])
-            p2p_cmd = f"pytest {p2p_targets}"
+            p2p_cmd = self.build_test_command(instance, is_pass_to_pass=True)
 
         # If an external verifier (e.g. DockerSandboxVerifier) is configured, delegate
         if self.verifier is not None:
+            subprocess.run(["git", "reset", "--hard", "HEAD"], cwd=repo_dir, capture_output=True)
+            subprocess.run(["git", "clean", "-fd"], cwd=repo_dir, capture_output=True)
             v_res = self.verifier.verify_dual_suite(
                 base_dir=repo_dir,
                 patch_blocks=patch_res.sri_blocks,
@@ -244,10 +269,13 @@ class SWEBenchRunner:
             tokenizer=tokenizer,
             max_turns=max_turns,
         )
+        f2p_cmd = test_command_fn(instance) if test_command_fn else self.build_test_command(instance, is_pass_to_pass=False)
         session = agent.run_session(
             instance_id=instance.instance_id,
             problem_statement=instance.problem_statement,
             repo_dir=repo_dir,
+            test_command=f2p_cmd,
+            test_timeout=self.timeout_seconds,
         )
 
         patch_text = session.final_patch_raw or ""
@@ -284,18 +312,60 @@ class SWEBenchRunner:
         pdr = ParallelDistillRefine(k=k, max_refine_rounds=1)
         prompt = self.format_instance_prompt(instance)
 
+        # Ground PDR prompt with repository localization if repo_dir is available
+        try:
+            from src.agent.tools import RepoTools
+
+            symbols = re.findall(r"\b(?:[A-Z][A-Z0-9_]{3,}|[A-Z][a-zA-Z0-9]+Field|[A-Z][a-z0-9]+[A-Z][a-zA-Z0-9]*)\b", instance.problem_statement)
+            for sym in dict.fromkeys(symbols):
+                obs = RepoTools.search_code(repo_dir, sym)
+                m_match = re.search(r"^([a-zA-Z0-9_\-\./]+\.py):(\d+):(.*)$", obs, re.MULTILINE)
+                if m_match:
+                    m_path, m_line, m_code = m_match.group(1), int(m_match.group(2)), m_match.group(3).strip()
+                    s_line = m_line if re.match(r"^[A-Z_][A-Z0-9_]*\s*=", m_code) else max(1, m_line - 5)
+                    snippet = RepoTools.view_file(repo_dir, m_path, s_line, s_line + 20)
+                    user_part = (
+                        f"{self.SYSTEM_PROMPT}\n\n"
+                        f"Repository: {instance.repo}\n"
+                        f"Base Commit: {instance.base_commit}\n"
+                        f"Problem Statement:\n{instance.problem_statement}\n\n"
+                        f"Target File Context:\n{snippet}\n\n"
+                        f"Please provide your fix for {m_path} in SRI format:"
+                    )
+                    prefill_part = f"<<<<<<< SEARCH: {m_path}\n{m_code}\n=======\n"
+                    prompt = f"<start_of_turn>user\n{user_part}<end_of_turn>\n<start_of_turn>model\n{prefill_part}"
+                    break
+        except Exception:
+            pass
+
         def batch_gen(p: str, count: int) -> List[str]:
             if sample_generate_fn is not None:
-                return sample_generate_fn(p, count)
+                raw_list = sample_generate_fn(p, count)
             elif self.model_generate_fn is not None:
-                return [self.model_generate_fn(p) for _ in range(count)]
-            raise ValueError("No candidate generation function provided.")
+                raw_list = [self.model_generate_fn(p) for _ in range(count)]
+            else:
+                raise ValueError("No candidate generation function provided.")
+            prefix = ""
+            if "<<<<<<< SEARCH:" in p:
+                prefix = "<<<<<<< SEARCH:" + p.split("<<<<<<< SEARCH:")[-1]
+            out_list = []
+            for r in raw_list:
+                r_clean = r.strip()
+                if prefix and "<<<<<<< SEARCH" not in r_clean:
+                    if ">>>>>>> REPLACE" not in r_clean:
+                        first_l = r_clean.splitlines()[0] if r_clean.splitlines() else r_clean
+                        out_list.append(f"{prefix}{first_l}\n>>>>>>> REPLACE")
+                    else:
+                        out_list.append(f"{prefix}{r_clean}")
+                else:
+                    out_list.append(r_clean)
+            return out_list
 
         def verifier_cb(blocks: List[SRIBlock]) -> Tuple[bool, str, str]:
             from src.rlvr.verifier import ExecutionSandboxVerifier
 
             sb = ExecutionSandboxVerifier(timeout_seconds=self.timeout_seconds)
-            t_cmd = test_command_fn(instance) if test_command_fn else "pytest"
+            t_cmd = test_command_fn(instance) if test_command_fn else self.build_test_command(instance, is_pass_to_pass=False)
             res = sb.verify_patch(repo_dir, blocks, t_cmd)
             return res.passed, res.stdout, res.stderr
 

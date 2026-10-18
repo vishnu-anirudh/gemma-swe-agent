@@ -59,10 +59,9 @@ class DRLoRALinear(nn.Module):
         nn.init.zeros_(self.lora_B)
 
     def set_active_rank(self, new_rank: int) -> None:
-        """Update active rank dynamically."""
+        """Update active rank dynamically while preserving adapter scaling stability."""
         clamped_rank = max(1, min(new_rank, self.max_rank))
         self.active_rank = clamped_rank
-        self.scaling = self.lora_alpha / self.active_rank
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # Base forward

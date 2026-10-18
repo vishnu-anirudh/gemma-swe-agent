@@ -160,15 +160,16 @@ class SRIFormatter:
                     "Applied with whitespace-relaxed matching.",
                 )
 
-            # Fallback 3: Strip tool observation line-number prefixes (e.g. '  66 | def ...')
-            cleaned_search = "\n".join(re.sub(r"^\s*\d+\s*\|\s?", "", l) for l in norm_search.splitlines())
-            cleaned_replace = "\n".join(re.sub(r"^\s*\d+\s*\|\s?", "", l) for l in norm_replace.splitlines())
+            # Fallback 3: Strip tool observation line-number or grep prefixes (e.g. '  66 | def ...' or 'path.py:66:def ...')
+            prefix_re = r"^\s*(?:[a-zA-Z0-9_\-\./]+:\d+:|\d+\s*\|\s?)"
+            cleaned_search = "\n".join(re.sub(prefix_re, "", l) for l in norm_search.splitlines())
+            cleaned_replace = "\n".join(re.sub(prefix_re, "", l) for l in norm_replace.splitlines())
             if norm_content.count(cleaned_search) == 1:
                 new_content = norm_content.replace(cleaned_search, cleaned_replace, 1)
                 return new_content, True, "Applied with line-number prefix stripping."
 
             # Fallback 4: Line-number prefix stripping + trailing whitespace relaxation
-            lines_cleaned_search = [re.sub(r"^\s*\d+\s*\|\s?", "", l).rstrip() for l in lines_search]
+            lines_cleaned_search = [re.sub(prefix_re, "", l).rstrip() for l in lines_search]
             joined_cleaned_search = "\n".join(lines_cleaned_search)
             if joined_content.count(joined_cleaned_search) == 1:
                 replaced_joined = joined_content.replace(joined_cleaned_search, cleaned_replace, 1)
@@ -195,7 +196,22 @@ class SRIFormatter:
 
                 if len(match_indices) == 1:
                     start_i, end_i = match_indices[0]
-                    new_lines = content_lines[:start_i] + cleaned_replace.splitlines() + content_lines[end_i:]
+                    rep_lines = cleaned_replace.splitlines()
+                    if rep_lines and start_i < len(content_lines):
+                        target_indent = len(content_lines[start_i]) - len(content_lines[start_i].lstrip())
+                        rep_first_indent = len(rep_lines[0]) - len(rep_lines[0].lstrip())
+                        if target_indent > rep_first_indent:
+                            delta = target_indent - rep_first_indent
+                            if (
+                                len(rep_lines) > 1
+                                and start_i + 1 < len(content_lines)
+                                and (len(content_lines[start_i + 1]) - len(content_lines[start_i + 1].lstrip()))
+                                == (len(rep_lines[1]) - len(rep_lines[1].lstrip()))
+                            ):
+                                rep_lines[0] = (" " * delta) + rep_lines[0]
+                            else:
+                                rep_lines = [(" " * delta + rl) if rl.strip() else rl for rl in rep_lines]
+                    new_lines = content_lines[:start_i] + rep_lines + content_lines[end_i:]
                     return "\n".join(new_lines), True, "Applied with fuzzy window matching."
 
             # Fallback 6: Contiguous sub-chunk alignment matching

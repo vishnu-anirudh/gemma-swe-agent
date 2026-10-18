@@ -29,6 +29,8 @@ class SWEBenchInstance:
     created_at: Optional[str] = None
     version: Optional[str] = None
     environment_setup_commit: Optional[str] = None
+    test_patch: Optional[str] = None
+    patch: Optional[str] = None
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> SWEBenchInstance:
@@ -58,6 +60,8 @@ class SWEBenchInstance:
             created_at=data.get("created_at"),
             version=data.get("version"),
             environment_setup_commit=data.get("environment_setup_commit"),
+            test_patch=data.get("test_patch"),
+            patch=data.get("patch"),
         )
 
 
