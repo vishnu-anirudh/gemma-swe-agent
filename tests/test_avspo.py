@@ -52,3 +52,25 @@ def test_avspo_acr_monitoring():
     assert stats.collapsed_groups == 3
     assert stats.advantage_collapse_rate == 0.75
     assert stats.virtual_samples_injected == 3
+
+
+def test_avspo_structural_tie_breaker_penalizes_truncated_rollouts():
+    estimator = AVSPOAdvantageEstimator(virtual_bias_strength=0.15)
+    rollouts = [
+        "No patch.",  # Short truncated output (9 chars)
+        "<thought>\nFix bug.\n</thought>\n<<<<<<< SEARCH: a.py\nx = 1\n=======\nx = 2\n>>>>>>> REPLACE",  # Complete concise SRI
+        "<thought>\nFix bug.\n</thought>\n<<<<<<< SEARCH: a.py\nx = 1\n=======\nx = 2\n>>>>>>> REPLACE\n" + ("# comment\n" * 20),  # Verbose SRI
+        "Unformatted rambling text without any patch blocks at all " * 3,
+    ]
+    tie_scores = estimator.compute_structural_tie_breaker(rollouts)
+    rewards = torch.zeros(4)
+    adv, collapsed = estimator.compute_advantages(rewards, tie_breaker_scores=tie_scores)
+
+    assert collapsed is True
+    # Complete concise SRI (index 1) must receive the highest positive advantage
+    assert torch.argmax(adv).item() == 1
+    # Truncated output "No patch." (index 0) must receive the lowest negative advantage
+    assert torch.argmin(adv).item() == 0
+    assert adv[1] > 1.0
+    assert adv[0] < -1.0
+

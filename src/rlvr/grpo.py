@@ -166,8 +166,8 @@ class GRPOTrainer:
             proc_tensor = None
             combined_rewards = raw_rewards
 
-        tie_breaker = torch.tensor(
-            [-float(len(r)) for r in rollouts], dtype=torch.float32, device=self.device
+        tie_breaker = self.avspo.compute_structural_tie_breaker(
+            rollouts, device=self.device
         )
 
         if use_avspo:

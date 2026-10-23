@@ -1,0 +1,1516 @@
+{
+  "generated_at_utc": "2026-10-23T22:53:11Z",
+  "system_environment": {
+    "os": "macOS-26.6.2-arm64-arm-64bit",
+    "python": "3.10.19",
+    "pytorch": "2.14.0",
+    "mps_available": true
+  },
+  "exact_binomial_95_cis": {
+    "zero_shot_sri_valid_25": {
+      "k": 21,
+      "n": 25,
+      "rate_pct": 84.0,
+      "ci_95_pct": [
+        63.92,
+        95.46
+      ]
+    },
+    "zero_shot_resolved_25": {
+      "k": 0,
+      "n": 25,
+      "rate_pct": 0.0,
+      "ci_95_pct": [
+        0.0,
+        13.72
+      ]
+    },
+    "sandbox_4_0": {
+      "k": 0,
+      "n": 4,
+      "rate_pct": 0.0,
+      "ci_95_pct": [
+        0.0,
+        60.24
+      ]
+    },
+    "sandbox_4_1": {
+      "k": 1,
+      "n": 4,
+      "rate_pct": 25.0,
+      "ci_95_pct": [
+        0.63,
+        80.59
+      ]
+    },
+    "sandbox_4_2": {
+      "k": 2,
+      "n": 4,
+      "rate_pct": 50.0,
+      "ci_95_pct": [
+        6.76,
+        93.24
+      ]
+    },
+    "sandbox_4_3": {
+      "k": 3,
+      "n": 4,
+      "rate_pct": 75.0,
+      "ci_95_pct": [
+        19.41,
+        99.37
+      ]
+    },
+    "sandbox_4_4": {
+      "k": 4,
+      "n": 4,
+      "rate_pct": 100.0,
+      "ci_95_pct": [
+        39.76,
+        100.0
+      ]
+    },
+    "django_subset_2_2": {
+      "k": 2,
+      "n": 2,
+      "rate_pct": 100.0,
+      "ci_95_pct": [
+        15.81,
+        100.0
+      ]
+    },
+    "django_subset_0_2": {
+      "k": 0,
+      "n": 2,
+      "rate_pct": 0.0,
+      "ci_95_pct": [
+        0.0,
+        84.19
+      ]
+    },
+    "pdr_candidates_4_4": {
+      "k": 4,
+      "n": 4,
+      "rate_pct": 100.0,
+      "ci_95_pct": [
+        39.76,
+        100.0
+      ]
+    }
+  },
+  "checkpoint_audit": {
+    "exists": true,
+    "path": "./checkpoints/sft_dr_lora/adapter_model.pt",
+    "file_size_bytes": 166245395,
+    "sha256": "02598ff756435f92536b23a7c094a27c7d55658c8805202e0c8f798d38b55b93",
+    "metadata": {
+      "initial_rank": 8,
+      "max_rank": 64,
+      "min_rank": 2,
+      "lora_alpha": 16.0,
+      "target_modules": [
+        "q_proj",
+        "v_proj",
+        "k_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj"
+      ]
+    },
+    "total_adapted_modules": 182,
+    "total_allocated_lora_params": 83066880,
+    "total_active_lora_params": 10627072,
+    "by_module_type": {
+      "q_proj": {
+        "count": 26,
+        "mean_active_rank": 6.5,
+        "min_active_rank": 5,
+        "max_active_rank": 14,
+        "mean_delta_w_frob": 0.025881,
+        "std_delta_w_frob": 0.001215,
+        "mean_top_active_energy": 0.780191,
+        "active_params_per_layer": 28288,
+        "allocated_params_per_layer": 278528
+      },
+      "k_proj": {
+        "count": 26,
+        "mean_active_rank": 6.4615,
+        "min_active_rank": 5,
+        "max_active_rank": 15,
+        "mean_delta_w_frob": 0.018209,
+        "std_delta_w_frob": 0.000835,
+        "mean_top_active_energy": 0.774696,
+        "active_params_per_layer": 21504,
+        "allocated_params_per_layer": 212992
+      },
+      "v_proj": {
+        "count": 26,
+        "mean_active_rank": 8.8846,
+        "min_active_rank": 7,
+        "max_active_rank": 13,
+        "mean_delta_w_frob": 0.021607,
+        "std_delta_w_frob": 0.000786,
+        "mean_top_active_energy": 0.985707,
+        "active_params_per_layer": 29568,
+        "allocated_params_per_layer": 212992
+      },
+      "o_proj": {
+        "count": 26,
+        "mean_active_rank": 8.6923,
+        "min_active_rank": 7,
+        "max_active_rank": 12,
+        "mean_delta_w_frob": 0.032174,
+        "std_delta_w_frob": 0.000911,
+        "mean_top_active_energy": 0.96655,
+        "active_params_per_layer": 37828,
+        "allocated_params_per_layer": 278528
+      },
+      "gate_proj": {
+        "count": 26,
+        "mean_active_rank": 8.6154,
+        "min_active_rank": 7,
+        "max_active_rank": 15,
+        "mean_delta_w_frob": 0.062255,
+        "std_delta_w_frob": 0.001324,
+        "mean_top_active_energy": 0.961708,
+        "active_params_per_layer": 99249,
+        "allocated_params_per_layer": 737280
+      },
+      "up_proj": {
+        "count": 26,
+        "mean_active_rank": 8.8846,
+        "min_active_rank": 7,
+        "max_active_rank": 12,
+        "mean_delta_w_frob": 0.064052,
+        "std_delta_w_frob": 0.001922,
+        "mean_top_active_energy": 0.990206,
+        "active_params_per_layer": 102350,
+        "allocated_params_per_layer": 737280
+      },
+      "down_proj": {
+        "count": 26,
+        "mean_active_rank": 7.8077,
+        "min_active_rank": 6,
+        "max_active_rank": 9,
+        "mean_delta_w_frob": 0.032236,
+        "std_delta_w_frob": 0.001159,
+        "mean_top_active_energy": 0.966006,
+        "active_params_per_layer": 89944,
+        "allocated_params_per_layer": 737280
+      }
+    },
+    "full_rank_distribution": {
+      "model.layers.0.self_attn.q_proj": 14,
+      "model.layers.0.self_attn.k_proj": 15,
+      "model.layers.0.self_attn.v_proj": 13,
+      "model.layers.0.self_attn.o_proj": 11,
+      "model.layers.0.mlp.gate_proj": 15,
+      "model.layers.0.mlp.up_proj": 12,
+      "model.layers.0.mlp.down_proj": 8,
+      "model.layers.1.self_attn.q_proj": 9,
+      "model.layers.1.self_attn.k_proj": 7,
+      "model.layers.1.self_attn.v_proj": 8,
+      "model.layers.1.self_attn.o_proj": 9,
+      "model.layers.1.mlp.gate_proj": 10,
+      "model.layers.1.mlp.up_proj": 11,
+      "model.layers.1.mlp.down_proj": 8,
+      "model.layers.2.self_attn.q_proj": 7,
+      "model.layers.2.self_attn.k_proj": 7,
+      "model.layers.2.self_attn.v_proj": 10,
+      "model.layers.2.self_attn.o_proj": 9,
+      "model.layers.2.mlp.gate_proj": 9,
+      "model.layers.2.mlp.up_proj": 10,
+      "model.layers.2.mlp.down_proj": 8,
+      "model.layers.3.self_attn.q_proj": 6,
+      "model.layers.3.self_attn.k_proj": 7,
+      "model.layers.3.self_attn.v_proj": 9,
+      "model.layers.3.self_attn.o_proj": 9,
+      "model.layers.3.mlp.gate_proj": 10,
+      "model.layers.3.mlp.up_proj": 9,
+      "model.layers.3.mlp.down_proj": 7,
+      "model.layers.4.self_attn.q_proj": 6,
+      "model.layers.4.self_attn.k_proj": 6,
+      "model.layers.4.self_attn.v_proj": 9,
+      "model.layers.4.self_attn.o_proj": 9,
+      "model.layers.4.mlp.gate_proj": 10,
+      "model.layers.4.mlp.up_proj": 11,
+      "model.layers.4.mlp.down_proj": 8,
+      "model.layers.5.self_attn.q_proj": 6,
+      "model.layers.5.self_attn.k_proj": 6,
+      "model.layers.5.self_attn.v_proj": 10,
+      "model.layers.5.self_attn.o_proj": 11,
+      "model.layers.5.mlp.gate_proj": 9,
+      "model.layers.5.mlp.up_proj": 9,
+      "model.layers.5.mlp.down_proj": 8,
+      "model.layers.6.self_attn.q_proj": 6,
+      "model.layers.6.self_attn.k_proj": 7,
+      "model.layers.6.self_attn.v_proj": 9,
+      "model.layers.6.self_attn.o_proj": 9,
+      "model.layers.6.mlp.gate_proj": 8,
+      "model.layers.6.mlp.up_proj": 10,
+      "model.layers.6.mlp.down_proj": 8,
+      "model.layers.7.self_attn.q_proj": 6,
+      "model.layers.7.self_attn.k_proj": 6,
+      "model.layers.7.self_attn.v_proj": 9,
+      "model.layers.7.self_attn.o_proj": 10,
+      "model.layers.7.mlp.gate_proj": 10,
+      "model.layers.7.mlp.up_proj": 10,
+      "model.layers.7.mlp.down_proj": 8,
+      "model.layers.8.self_attn.q_proj": 6,
+      "model.layers.8.self_attn.k_proj": 7,
+      "model.layers.8.self_attn.v_proj": 9,
+      "model.layers.8.self_attn.o_proj": 12,
+      "model.layers.8.mlp.gate_proj": 10,
+      "model.layers.8.mlp.up_proj": 9,
+      "model.layers.8.mlp.down_proj": 8,
+      "model.layers.9.self_attn.q_proj": 6,
+      "model.layers.9.self_attn.k_proj": 6,
+      "model.layers.9.self_attn.v_proj": 9,
+      "model.layers.9.self_attn.o_proj": 9,
+      "model.layers.9.mlp.gate_proj": 9,
+      "model.layers.9.mlp.up_proj": 9,
+      "model.layers.9.mlp.down_proj": 8,
+      "model.layers.10.self_attn.q_proj": 6,
+      "model.layers.10.self_attn.k_proj": 6,
+      "model.layers.10.self_attn.v_proj": 10,
+      "model.layers.10.self_attn.o_proj": 8,
+      "model.layers.10.mlp.gate_proj": 10,
+      "model.layers.10.mlp.up_proj": 10,
+      "model.layers.10.mlp.down_proj": 8,
+      "model.layers.11.self_attn.q_proj": 6,
+      "model.layers.11.self_attn.k_proj": 6,
+      "model.layers.11.self_attn.v_proj": 10,
+      "model.layers.11.self_attn.o_proj": 9,
+      "model.layers.11.mlp.gate_proj": 9,
+      "model.layers.11.mlp.up_proj": 8,
+      "model.layers.11.mlp.down_proj": 8,
+      "model.layers.12.self_attn.q_proj": 6,
+      "model.layers.12.self_attn.k_proj": 6,
+      "model.layers.12.self_attn.v_proj": 9,
+      "model.layers.12.self_attn.o_proj": 12,
+      "model.layers.12.mlp.gate_proj": 9,
+      "model.layers.12.mlp.up_proj": 8,
+      "model.layers.12.mlp.down_proj": 9,
+      "model.layers.13.self_attn.q_proj": 6,
+      "model.layers.13.self_attn.k_proj": 6,
+      "model.layers.13.self_attn.v_proj": 10,
+      "model.layers.13.self_attn.o_proj": 8,
+      "model.layers.13.mlp.gate_proj": 8,
+      "model.layers.13.mlp.up_proj": 9,
+      "model.layers.13.mlp.down_proj": 8,
+      "model.layers.14.self_attn.q_proj": 7,
+      "model.layers.14.self_attn.k_proj": 6,
+      "model.layers.14.self_attn.v_proj": 9,
+      "model.layers.14.self_attn.o_proj": 10,
+      "model.layers.14.mlp.gate_proj": 8,
+      "model.layers.14.mlp.up_proj": 8,
+      "model.layers.14.mlp.down_proj": 8,
+      "model.layers.15.self_attn.q_proj": 6,
+      "model.layers.15.self_attn.k_proj": 6,
+      "model.layers.15.self_attn.v_proj": 9,
+      "model.layers.15.self_attn.o_proj": 8,
+      "model.layers.15.mlp.gate_proj": 8,
+      "model.layers.15.mlp.up_proj": 8,
+      "model.layers.15.mlp.down_proj": 8,
+      "model.layers.16.self_attn.q_proj": 6,
+      "model.layers.16.self_attn.k_proj": 6,
+      "model.layers.16.self_attn.v_proj": 8,
+      "model.layers.16.self_attn.o_proj": 7,
+      "model.layers.16.mlp.gate_proj": 7,
+      "model.layers.16.mlp.up_proj": 8,
+      "model.layers.16.mlp.down_proj": 8,
+      "model.layers.17.self_attn.q_proj": 7,
+      "model.layers.17.self_attn.k_proj": 6,
+      "model.layers.17.self_attn.v_proj": 8,
+      "model.layers.17.self_attn.o_proj": 8,
+      "model.layers.17.mlp.gate_proj": 8,
+      "model.layers.17.mlp.up_proj": 8,
+      "model.layers.17.mlp.down_proj": 8,
+      "model.layers.18.self_attn.q_proj": 6,
+      "model.layers.18.self_attn.k_proj": 6,
+      "model.layers.18.self_attn.v_proj": 8,
+      "model.layers.18.self_attn.o_proj": 7,
+      "model.layers.18.mlp.gate_proj": 7,
+      "model.layers.18.mlp.up_proj": 8,
+      "model.layers.18.mlp.down_proj": 8,
+      "model.layers.19.self_attn.q_proj": 6,
+      "model.layers.19.self_attn.k_proj": 6,
+      "model.layers.19.self_attn.v_proj": 7,
+      "model.layers.19.self_attn.o_proj": 8,
+      "model.layers.19.mlp.gate_proj": 7,
+      "model.layers.19.mlp.up_proj": 8,
+      "model.layers.19.mlp.down_proj": 7,
+      "model.layers.20.self_attn.q_proj": 6,
+      "model.layers.20.self_attn.k_proj": 6,
+      "model.layers.20.self_attn.v_proj": 7,
+      "model.layers.20.self_attn.o_proj": 7,
+      "model.layers.20.mlp.gate_proj": 7,
+      "model.layers.20.mlp.up_proj": 7,
+      "model.layers.20.mlp.down_proj": 7,
+      "model.layers.21.self_attn.q_proj": 6,
+      "model.layers.21.self_attn.k_proj": 6,
+      "model.layers.21.self_attn.v_proj": 8,
+      "model.layers.21.self_attn.o_proj": 8,
+      "model.layers.21.mlp.gate_proj": 7,
+      "model.layers.21.mlp.up_proj": 8,
+      "model.layers.21.mlp.down_proj": 7,
+      "model.layers.22.self_attn.q_proj": 6,
+      "model.layers.22.self_attn.k_proj": 6,
+      "model.layers.22.self_attn.v_proj": 10,
+      "model.layers.22.self_attn.o_proj": 7,
+      "model.layers.22.mlp.gate_proj": 7,
+      "model.layers.22.mlp.up_proj": 8,
+      "model.layers.22.mlp.down_proj": 6,
+      "model.layers.23.self_attn.q_proj": 6,
+      "model.layers.23.self_attn.k_proj": 6,
+      "model.layers.23.self_attn.v_proj": 8,
+      "model.layers.23.self_attn.o_proj": 7,
+      "model.layers.23.mlp.gate_proj": 7,
+      "model.layers.23.mlp.up_proj": 7,
+      "model.layers.23.mlp.down_proj": 7,
+      "model.layers.24.self_attn.q_proj": 6,
+      "model.layers.24.self_attn.k_proj": 5,
+      "model.layers.24.self_attn.v_proj": 7,
+      "model.layers.24.self_attn.o_proj": 7,
+      "model.layers.24.mlp.gate_proj": 7,
+      "model.layers.24.mlp.up_proj": 8,
+      "model.layers.24.mlp.down_proj": 8,
+      "model.layers.25.self_attn.q_proj": 5,
+      "model.layers.25.self_attn.k_proj": 5,
+      "model.layers.25.self_attn.v_proj": 8,
+      "model.layers.25.self_attn.o_proj": 7,
+      "model.layers.25.mlp.gate_proj": 8,
+      "model.layers.25.mlp.up_proj": 10,
+      "model.layers.25.mlp.down_proj": 9
+    }
+  },
+  "ablation_1_peft": {
+    "seed_runs": {
+      "uniform_lora": [
+        {
+          "seed": 42,
+          "initial_loss": 5.654615,
+          "final_loss": 0.691259,
+          "token_exact_match_acc": 0.8711,
+          "rank_by_module": {
+            "q_proj": 8.0,
+            "k_proj": 8.0,
+            "v_proj": 8.0,
+            "o_proj": 8.0,
+            "gate_proj": 8.0,
+            "up_proj": 8.0,
+            "down_proj": 8.0
+          },
+          "rank_std_across_modules": 0.0
+        },
+        {
+          "seed": 43,
+          "initial_loss": 5.754995,
+          "final_loss": 0.970087,
+          "token_exact_match_acc": 0.8105,
+          "rank_by_module": {
+            "q_proj": 8.0,
+            "k_proj": 8.0,
+            "v_proj": 8.0,
+            "o_proj": 8.0,
+            "gate_proj": 8.0,
+            "up_proj": 8.0,
+            "down_proj": 8.0
+          },
+          "rank_std_across_modules": 0.0
+        },
+        {
+          "seed": 44,
+          "initial_loss": 5.677018,
+          "final_loss": 0.981078,
+          "token_exact_match_acc": 0.8008,
+          "rank_by_module": {
+            "q_proj": 8.0,
+            "k_proj": 8.0,
+            "v_proj": 8.0,
+            "o_proj": 8.0,
+            "gate_proj": 8.0,
+            "up_proj": 8.0,
+            "down_proj": 8.0
+          },
+          "rank_std_across_modules": 0.0
+        }
+      ],
+      "dr_lora_no_tv": [
+        {
+          "seed": 42,
+          "initial_loss": 5.654615,
+          "final_loss": 0.949884,
+          "token_exact_match_acc": 0.8574,
+          "rank_by_module": {
+            "q_proj": 2.5,
+            "k_proj": 2.5,
+            "v_proj": 10.25,
+            "o_proj": 11.25,
+            "gate_proj": 9.25,
+            "up_proj": 9.0,
+            "down_proj": 12.25
+          },
+          "rank_std_across_modules": 4.3319
+        },
+        {
+          "seed": 43,
+          "initial_loss": 5.754995,
+          "final_loss": 0.817722,
+          "token_exact_match_acc": 0.8496,
+          "rank_by_module": {
+            "q_proj": 3.5,
+            "k_proj": 3.5,
+            "v_proj": 3.25,
+            "o_proj": 4.25,
+            "gate_proj": 12.0,
+            "up_proj": 11.25,
+            "down_proj": 15.25
+          },
+          "rank_std_across_modules": 5.0598
+        },
+        {
+          "seed": 44,
+          "initial_loss": 5.677018,
+          "final_loss": 0.674126,
+          "token_exact_match_acc": 0.8613,
+          "rank_by_module": {
+            "q_proj": 5.0,
+            "k_proj": 4.75,
+            "v_proj": 4.0,
+            "o_proj": 6.0,
+            "gate_proj": 10.75,
+            "up_proj": 11.25,
+            "down_proj": 13.5
+          },
+          "rank_std_across_modules": 4.593
+        }
+      ],
+      "dr_lora_tv": [
+        {
+          "seed": 42,
+          "initial_loss": 5.654615,
+          "final_loss": 0.513205,
+          "token_exact_match_acc": 0.8965,
+          "rank_by_module": {
+            "q_proj": 3.5,
+            "k_proj": 3.5,
+            "v_proj": 6.75,
+            "o_proj": 9.25,
+            "gate_proj": 11.0,
+            "up_proj": 10.25,
+            "down_proj": 12.75
+          },
+          "rank_std_across_modules": 3.8888
+        },
+        {
+          "seed": 43,
+          "initial_loss": 5.754995,
+          "final_loss": 1.018344,
+          "token_exact_match_acc": 0.8184,
+          "rank_by_module": {
+            "q_proj": 3.75,
+            "k_proj": 3.25,
+            "v_proj": 6.5,
+            "o_proj": 7.75,
+            "gate_proj": 10.75,
+            "up_proj": 10.25,
+            "down_proj": 13.75
+          },
+          "rank_std_across_modules": 3.8173
+        },
+        {
+          "seed": 44,
+          "initial_loss": 5.677018,
+          "final_loss": 0.913199,
+          "token_exact_match_acc": 0.7949,
+          "rank_by_module": {
+            "q_proj": 3.0,
+            "k_proj": 4.0,
+            "v_proj": 5.5,
+            "o_proj": 8.25,
+            "gate_proj": 10.75,
+            "up_proj": 11.25,
+            "down_proj": 14.0
+          },
+          "rank_std_across_modules": 4.1087
+        }
+      ]
+    },
+    "aggregated": {
+      "uniform_lora": {
+        "mean_initial_loss": 5.6955,
+        "mean_final_loss": 0.8808,
+        "std_final_loss": 0.1341,
+        "mean_token_acc": 0.8275,
+        "mean_rank_std": 0.0,
+        "mean_rank_by_module": {
+          "q_proj": 8.0,
+          "k_proj": 8.0,
+          "v_proj": 8.0,
+          "o_proj": 8.0,
+          "gate_proj": 8.0,
+          "up_proj": 8.0,
+          "down_proj": 8.0
+        }
+      },
+      "dr_lora_no_tv": {
+        "mean_initial_loss": 5.6955,
+        "mean_final_loss": 0.8139,
+        "std_final_loss": 0.1126,
+        "mean_token_acc": 0.8561,
+        "mean_rank_std": 4.6616,
+        "mean_rank_by_module": {
+          "q_proj": 3.6667,
+          "k_proj": 3.5833,
+          "v_proj": 5.8333,
+          "o_proj": 7.1667,
+          "gate_proj": 10.6667,
+          "up_proj": 10.5,
+          "down_proj": 13.6667
+        }
+      },
+      "dr_lora_tv": {
+        "mean_initial_loss": 5.6955,
+        "mean_final_loss": 0.8149,
+        "std_final_loss": 0.2176,
+        "mean_token_acc": 0.8366,
+        "mean_rank_std": 3.9383,
+        "mean_rank_by_module": {
+          "q_proj": 3.4167,
+          "k_proj": 3.5833,
+          "v_proj": 6.25,
+          "o_proj": 8.4167,
+          "gate_proj": 10.8333,
+          "up_proj": 10.5833,
+          "down_proj": 13.5
+        }
+      }
+    }
+  },
+  "ablation_2_error_masking": {
+    "total_trajectory_tokens": 605,
+    "unmasked_supervised_tokens": 370,
+    "masked_supervised_tokens": 280,
+    "masked_out_fraction": 0.2432,
+    "seed_runs": {
+      "masked_sft": [
+        {
+          "seed": 42,
+          "err_token_nll": 5.6543,
+          "valid_patch_nll": 1.2802,
+          "err_token_mean_prob": 0.003502,
+          "valid_patch_mean_prob": 0.277972,
+          "clean_action_preference": true
+        },
+        {
+          "seed": 43,
+          "err_token_nll": 5.2663,
+          "valid_patch_nll": 1.2854,
+          "err_token_mean_prob": 0.005162,
+          "valid_patch_mean_prob": 0.27653,
+          "clean_action_preference": true
+        },
+        {
+          "seed": 44,
+          "err_token_nll": 5.7158,
+          "valid_patch_nll": 1.2792,
+          "err_token_mean_prob": 0.003294,
+          "valid_patch_mean_prob": 0.27826,
+          "clean_action_preference": true
+        }
+      ],
+      "unmasked_sft": [
+        {
+          "seed": 42,
+          "err_token_nll": 1.6697,
+          "valid_patch_nll": 1.4038,
+          "err_token_mean_prob": 0.188312,
+          "valid_patch_mean_prob": 0.245664,
+          "clean_action_preference": false
+        },
+        {
+          "seed": 43,
+          "err_token_nll": 1.702,
+          "valid_patch_nll": 1.397,
+          "err_token_mean_prob": 0.18232,
+          "valid_patch_mean_prob": 0.247338,
+          "clean_action_preference": false
+        },
+        {
+          "seed": 44,
+          "err_token_nll": 1.7394,
+          "valid_patch_nll": 1.3841,
+          "err_token_mean_prob": 0.175626,
+          "valid_patch_mean_prob": 0.250547,
+          "clean_action_preference": false
+        }
+      ]
+    },
+    "aggregated": {
+      "masked_sft": {
+        "mean_err_token_nll": 5.5455,
+        "std_err_token_nll": 0.199,
+        "mean_valid_patch_nll": 1.2816,
+        "std_valid_patch_nll": 0.0027,
+        "mean_err_token_prob": 0.003986,
+        "mean_valid_patch_prob": 0.277587
+      },
+      "unmasked_sft": {
+        "mean_err_token_nll": 1.7037,
+        "std_err_token_nll": 0.0285,
+        "mean_valid_patch_nll": 1.395,
+        "std_valid_patch_nll": 0.0082,
+        "mean_err_token_prob": 0.182086,
+        "mean_valid_patch_prob": 0.24785
+      }
+    }
+  },
+  "ablation_3_avspo_tie_breakers": {
+    "rollout_descriptions": [
+      "Rollout 0 (y_valid): Valid SRI + correct target file (242 chars)",
+      "Rollout 1 (y_wrong_file): Valid SRI + wrong target file (223 chars)",
+      "Rollout 2 (y_trunc): Truncated incomplete string 'No patch.' (9 chars)",
+      "Rollout 3 (y_ramble): Unformatted rambling text without SRI (288 chars)"
+    ],
+    "prm_scores": [
+      1.0,
+      0.65,
+      0.25,
+      0.25
+    ],
+    "structural_tie_breaker_scores": [
+      1.2204,
+      1.2294,
+      -1.0009,
+      -0.0312
+    ],
+    "naive_length_tie_breaker_scores": [
+      -296.0,
+      -206.0,
+      -9.0,
+      -312.0
+    ],
+    "seed_runs": {
+      "vanilla_grpo": [
+        {
+          "seed": 42,
+          "advantages": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "grad_norm_l2": 0.0,
+          "post_rlvr_valid_target_patch_prob": 0.2566,
+          "post_rlvr_valid_sri_total_prob": 0.5189,
+          "post_rlvr_truncated_prob": 0.224,
+          "top1_selected_rollout_idx": 1,
+          "top1_is_valid_sri_patch": true,
+          "top1_is_exact_target_patch": false
+        },
+        {
+          "seed": 43,
+          "advantages": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "grad_norm_l2": 0.0,
+          "post_rlvr_valid_target_patch_prob": 0.2798,
+          "post_rlvr_valid_sri_total_prob": 0.5311,
+          "post_rlvr_truncated_prob": 0.2213,
+          "top1_selected_rollout_idx": 0,
+          "top1_is_valid_sri_patch": true,
+          "top1_is_exact_target_patch": true
+        },
+        {
+          "seed": 44,
+          "advantages": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "grad_norm_l2": 0.0,
+          "post_rlvr_valid_target_patch_prob": 0.2763,
+          "post_rlvr_valid_sri_total_prob": 0.5277,
+          "post_rlvr_truncated_prob": 0.1947,
+          "top1_selected_rollout_idx": 3,
+          "top1_is_valid_sri_patch": false,
+          "top1_is_exact_target_patch": false
+        }
+      ],
+      "avspo_tier2_naive_length": [
+        {
+          "seed": 42,
+          "advantages": [
+            -0.4472,
+            0.4472,
+            1.3416,
+            -1.3416
+          ],
+          "grad_norm_l2": 1.5914,
+          "post_rlvr_valid_target_patch_prob": 0.0,
+          "post_rlvr_valid_sri_total_prob": 0.0,
+          "post_rlvr_truncated_prob": 1.0,
+          "top1_selected_rollout_idx": 2,
+          "top1_is_valid_sri_patch": false,
+          "top1_is_exact_target_patch": false
+        },
+        {
+          "seed": 43,
+          "advantages": [
+            -0.4472,
+            0.4472,
+            1.3416,
+            -1.3416
+          ],
+          "grad_norm_l2": 1.6093,
+          "post_rlvr_valid_target_patch_prob": 0.0,
+          "post_rlvr_valid_sri_total_prob": 0.0,
+          "post_rlvr_truncated_prob": 1.0,
+          "top1_selected_rollout_idx": 2,
+          "top1_is_valid_sri_patch": false,
+          "top1_is_exact_target_patch": false
+        },
+        {
+          "seed": 44,
+          "advantages": [
+            -0.4472,
+            0.4472,
+            1.3416,
+            -1.3416
+          ],
+          "grad_norm_l2": 1.64,
+          "post_rlvr_valid_target_patch_prob": 0.0,
+          "post_rlvr_valid_sri_total_prob": 1.0,
+          "post_rlvr_truncated_prob": 0.0,
+          "top1_selected_rollout_idx": 1,
+          "top1_is_valid_sri_patch": true,
+          "top1_is_exact_target_patch": false
+        }
+      ],
+      "avspo_tier2_gaussian_noise": [
+        {
+          "seed": 42,
+          "advantages": [
+            -0.4472,
+            0.4472,
+            1.3416,
+            -1.3416
+          ],
+          "grad_norm_l2": 1.5914,
+          "post_rlvr_valid_target_patch_prob": 0.0,
+          "post_rlvr_valid_sri_total_prob": 0.0,
+          "post_rlvr_truncated_prob": 1.0,
+          "top1_selected_rollout_idx": 2,
+          "top1_is_valid_sri_patch": false,
+          "top1_is_exact_target_patch": false
+        },
+        {
+          "seed": 43,
+          "advantages": [
+            -1.3416,
+            1.3416,
+            0.4472,
+            -0.4472
+          ],
+          "grad_norm_l2": 0.8771,
+          "post_rlvr_valid_target_patch_prob": 0.0,
+          "post_rlvr_valid_sri_total_prob": 0.0,
+          "post_rlvr_truncated_prob": 1.0,
+          "top1_selected_rollout_idx": 2,
+          "top1_is_valid_sri_patch": false,
+          "top1_is_exact_target_patch": false
+        },
+        {
+          "seed": 44,
+          "advantages": [
+            -0.4472,
+            0.4472,
+            1.3416,
+            -1.3416
+          ],
+          "grad_norm_l2": 1.64,
+          "post_rlvr_valid_target_patch_prob": 0.0,
+          "post_rlvr_valid_sri_total_prob": 1.0,
+          "post_rlvr_truncated_prob": 0.0,
+          "top1_selected_rollout_idx": 1,
+          "top1_is_valid_sri_patch": true,
+          "top1_is_exact_target_patch": false
+        }
+      ],
+      "avspo_tier2_structural_gated": [
+        {
+          "seed": 42,
+          "advantages": [
+            0.4472,
+            1.3416,
+            -1.3416,
+            -0.4472
+          ],
+          "grad_norm_l2": 1.517,
+          "post_rlvr_valid_target_patch_prob": 0.0,
+          "post_rlvr_valid_sri_total_prob": 0.0,
+          "post_rlvr_truncated_prob": 0.0,
+          "top1_selected_rollout_idx": 3,
+          "top1_is_valid_sri_patch": false,
+          "top1_is_exact_target_patch": false
+        },
+        {
+          "seed": 43,
+          "advantages": [
+            0.4472,
+            1.3416,
+            -1.3416,
+            -0.4472
+          ],
+          "grad_norm_l2": 1.5073,
+          "post_rlvr_valid_target_patch_prob": 0.0,
+          "post_rlvr_valid_sri_total_prob": 1.0,
+          "post_rlvr_truncated_prob": 0.0,
+          "top1_selected_rollout_idx": 1,
+          "top1_is_valid_sri_patch": true,
+          "top1_is_exact_target_patch": false
+        },
+        {
+          "seed": 44,
+          "advantages": [
+            0.4472,
+            1.3416,
+            -1.3416,
+            -0.4472
+          ],
+          "grad_norm_l2": 1.587,
+          "post_rlvr_valid_target_patch_prob": 0.0,
+          "post_rlvr_valid_sri_total_prob": 1.0,
+          "post_rlvr_truncated_prob": 0.0,
+          "top1_selected_rollout_idx": 1,
+          "top1_is_valid_sri_patch": true,
+          "top1_is_exact_target_patch": false
+        }
+      ],
+      "avspo_tier1_rubric_prm": [
+        {
+          "seed": 42,
+          "advantages": [
+            1.4776,
+            0.3594,
+            -0.9185,
+            -0.9185
+          ],
+          "grad_norm_l2": 1.1242,
+          "post_rlvr_valid_target_patch_prob": 1.0,
+          "post_rlvr_valid_sri_total_prob": 1.0,
+          "post_rlvr_truncated_prob": 0.0,
+          "top1_selected_rollout_idx": 0,
+          "top1_is_valid_sri_patch": true,
+          "top1_is_exact_target_patch": true
+        },
+        {
+          "seed": 43,
+          "advantages": [
+            1.4776,
+            0.3594,
+            -0.9185,
+            -0.9185
+          ],
+          "grad_norm_l2": 1.1157,
+          "post_rlvr_valid_target_patch_prob": 1.0,
+          "post_rlvr_valid_sri_total_prob": 1.0,
+          "post_rlvr_truncated_prob": 0.0,
+          "top1_selected_rollout_idx": 0,
+          "top1_is_valid_sri_patch": true,
+          "top1_is_exact_target_patch": true
+        },
+        {
+          "seed": 44,
+          "advantages": [
+            1.4776,
+            0.3594,
+            -0.9185,
+            -0.9185
+          ],
+          "grad_norm_l2": 1.1538,
+          "post_rlvr_valid_target_patch_prob": 0.0,
+          "post_rlvr_valid_sri_total_prob": 1.0,
+          "post_rlvr_truncated_prob": 0.0,
+          "top1_selected_rollout_idx": 1,
+          "top1_is_valid_sri_patch": true,
+          "top1_is_exact_target_patch": false
+        }
+      ]
+    },
+    "aggregated": {
+      "vanilla_grpo": {
+        "mean_grad_norm_l2": 0.0,
+        "std_grad_norm_l2": 0.0,
+        "mean_valid_target_patch_prob": 0.2709,
+        "mean_valid_sri_total_prob": 0.5259,
+        "mean_truncated_prob": 0.2133,
+        "top1_valid_sri_selection_rate": 0.6667,
+        "top1_exact_target_patch_rate": 0.3333,
+        "sample_advantages": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "avspo_tier2_naive_length": {
+        "mean_grad_norm_l2": 1.6136,
+        "std_grad_norm_l2": 0.0201,
+        "mean_valid_target_patch_prob": 0.0,
+        "mean_valid_sri_total_prob": 0.3333,
+        "mean_truncated_prob": 0.6667,
+        "top1_valid_sri_selection_rate": 0.3333,
+        "top1_exact_target_patch_rate": 0.0,
+        "sample_advantages": [
+          -0.4472,
+          0.4472,
+          1.3416,
+          -1.3416
+        ]
+      },
+      "avspo_tier2_gaussian_noise": {
+        "mean_grad_norm_l2": 1.3695,
+        "std_grad_norm_l2": 0.3487,
+        "mean_valid_target_patch_prob": 0.0,
+        "mean_valid_sri_total_prob": 0.3333,
+        "mean_truncated_prob": 0.6667,
+        "top1_valid_sri_selection_rate": 0.3333,
+        "top1_exact_target_patch_rate": 0.0,
+        "sample_advantages": [
+          -0.4472,
+          0.4472,
+          1.3416,
+          -1.3416
+        ]
+      },
+      "avspo_tier2_structural_gated": {
+        "mean_grad_norm_l2": 1.5371,
+        "std_grad_norm_l2": 0.0355,
+        "mean_valid_target_patch_prob": 0.0,
+        "mean_valid_sri_total_prob": 0.6667,
+        "mean_truncated_prob": 0.0,
+        "top1_valid_sri_selection_rate": 0.6667,
+        "top1_exact_target_patch_rate": 0.0,
+        "sample_advantages": [
+          0.4472,
+          1.3416,
+          -1.3416,
+          -0.4472
+        ]
+      },
+      "avspo_tier1_rubric_prm": {
+        "mean_grad_norm_l2": 1.1312,
+        "std_grad_norm_l2": 0.0163,
+        "mean_valid_target_patch_prob": 0.6667,
+        "mean_valid_sri_total_prob": 1.0,
+        "mean_truncated_prob": 0.0,
+        "top1_valid_sri_selection_rate": 1.0,
+        "top1_exact_target_patch_rate": 0.6667,
+        "sample_advantages": [
+          1.4776,
+          0.3594,
+          -0.9185,
+          -0.9185
+        ]
+      }
+    }
+  },
+  "component_removal_downstream_audit": {
+    "instances": [
+      "django__django-10914",
+      "django__django-10924",
+      "astropy__astropy-12907",
+      "astropy__astropy-14182"
+    ],
+    "configurations": [
+      {
+        "config_id": "C0_zero_shot_base",
+        "name": "Zero-Shot Base (Single-Pass, No Tools, No SFT)",
+        "sri_valid": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "patch_applied": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "fail_to_pass": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "pass_to_pass": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "resolved": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "notes": "Lacks repository file lines in context; hallucinates search blocks.",
+        "sri_valid_summary": {
+          "k": 4,
+          "n": 4,
+          "rate_pct": 100.0,
+          "ci_95_pct": [
+            39.76,
+            100.0
+          ]
+        },
+        "patch_applied_summary": {
+          "k": 0,
+          "n": 4,
+          "rate_pct": 0.0,
+          "ci_95_pct": [
+            0.0,
+            60.24
+          ]
+        },
+        "fail_to_pass_summary": {
+          "k": 0,
+          "n": 4,
+          "rate_pct": 0.0,
+          "ci_95_pct": [
+            0.0,
+            60.24
+          ]
+        },
+        "pass_to_pass_summary": {
+          "k": 0,
+          "n": 4,
+          "rate_pct": 0.0,
+          "ci_95_pct": [
+            0.0,
+            60.24
+          ]
+        },
+        "resolved_summary": {
+          "k": 0,
+          "n": 4,
+          "rate_pct": 0.0,
+          "ci_95_pct": [
+            0.0,
+            60.24
+          ]
+        }
+      },
+      {
+        "config_id": "C1_multiturn_base_no_sft",
+        "name": "Multi-Turn Agent + Base Model (No SFT)",
+        "sri_valid": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "patch_applied": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "fail_to_pass": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "pass_to_pass": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "resolved": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "notes": "Localizes files via view_file, but base model emits no-op or unaligned replacement on callable/permission tasks.",
+        "sri_valid_summary": {
+          "k": 4,
+          "n": 4,
+          "rate_pct": 100.0,
+          "ci_95_pct": [
+            39.76,
+            100.0
+          ]
+        },
+        "patch_applied_summary": {
+          "k": 1,
+          "n": 4,
+          "rate_pct": 25.0,
+          "ci_95_pct": [
+            0.63,
+            80.59
+          ]
+        },
+        "fail_to_pass_summary": {
+          "k": 0,
+          "n": 4,
+          "rate_pct": 0.0,
+          "ci_95_pct": [
+            0.0,
+            60.24
+          ]
+        },
+        "pass_to_pass_summary": {
+          "k": 1,
+          "n": 4,
+          "rate_pct": 25.0,
+          "ci_95_pct": [
+            0.63,
+            80.59
+          ]
+        },
+        "resolved_summary": {
+          "k": 0,
+          "n": 4,
+          "rate_pct": 0.0,
+          "ci_95_pct": [
+            0.0,
+            60.24
+          ]
+        }
+      },
+      {
+        "config_id": "C2_multiturn_unmasked_sft",
+        "name": "Multi-Turn Agent + Unmasked SFT (mask_error_actions=False)",
+        "sri_valid": [
+          true,
+          true,
+          true,
+          false
+        ],
+        "patch_applied": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "fail_to_pass": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "pass_to_pass": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "resolved": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "notes": "Resolves django-10914 (1/4), but unmasked error turns increase intermediate tool-call noise on multi-step localization.",
+        "sri_valid_summary": {
+          "k": 3,
+          "n": 4,
+          "rate_pct": 75.0,
+          "ci_95_pct": [
+            19.41,
+            99.37
+          ]
+        },
+        "patch_applied_summary": {
+          "k": 2,
+          "n": 4,
+          "rate_pct": 50.0,
+          "ci_95_pct": [
+            6.76,
+            93.24
+          ]
+        },
+        "fail_to_pass_summary": {
+          "k": 1,
+          "n": 4,
+          "rate_pct": 25.0,
+          "ci_95_pct": [
+            0.63,
+            80.59
+          ]
+        },
+        "pass_to_pass_summary": {
+          "k": 2,
+          "n": 4,
+          "rate_pct": 50.0,
+          "ci_95_pct": [
+            6.76,
+            93.24
+          ]
+        },
+        "resolved_summary": {
+          "k": 1,
+          "n": 4,
+          "rate_pct": 25.0,
+          "ci_95_pct": [
+            0.63,
+            80.59
+          ]
+        }
+      },
+      {
+        "config_id": "C3_multiturn_uniform_lora_masked_sft",
+        "name": "Multi-Turn Agent + Uniform LoRA (r=8) + Step-Level Error Masking",
+        "sri_valid": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "patch_applied": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "fail_to_pass": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "pass_to_pass": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "resolved": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "notes": "Resolves both Django tasks (2/4), but fails to apply patch cleanly on astropy-12907 due to indentation/context mismatch.",
+        "sri_valid_summary": {
+          "k": 4,
+          "n": 4,
+          "rate_pct": 100.0,
+          "ci_95_pct": [
+            39.76,
+            100.0
+          ]
+        },
+        "patch_applied_summary": {
+          "k": 2,
+          "n": 4,
+          "rate_pct": 50.0,
+          "ci_95_pct": [
+            6.76,
+            93.24
+          ]
+        },
+        "fail_to_pass_summary": {
+          "k": 2,
+          "n": 4,
+          "rate_pct": 50.0,
+          "ci_95_pct": [
+            6.76,
+            93.24
+          ]
+        },
+        "pass_to_pass_summary": {
+          "k": 2,
+          "n": 4,
+          "rate_pct": 50.0,
+          "ci_95_pct": [
+            6.76,
+            93.24
+          ]
+        },
+        "resolved_summary": {
+          "k": 2,
+          "n": 4,
+          "rate_pct": 50.0,
+          "ci_95_pct": [
+            6.76,
+            93.24
+          ]
+        }
+      },
+      {
+        "config_id": "C4_multiturn_dr_lora_masked_sft",
+        "name": "Multi-Turn Agent + DR-LoRA (r0=8, TV=0.4) + Step-Level Error Masking",
+        "sri_valid": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "patch_applied": [
+          true,
+          true,
+          true,
+          false
+        ],
+        "fail_to_pass": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "pass_to_pass": [
+          true,
+          true,
+          true,
+          false
+        ],
+        "resolved": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "notes": "Applies patches cleanly on 3/4 tasks (zero PASS_TO_PASS regressions on all 3 applied patches) and resolves 2/4 (100% on Django subset).",
+        "sri_valid_summary": {
+          "k": 4,
+          "n": 4,
+          "rate_pct": 100.0,
+          "ci_95_pct": [
+            39.76,
+            100.0
+          ]
+        },
+        "patch_applied_summary": {
+          "k": 3,
+          "n": 4,
+          "rate_pct": 75.0,
+          "ci_95_pct": [
+            19.41,
+            99.37
+          ]
+        },
+        "fail_to_pass_summary": {
+          "k": 2,
+          "n": 4,
+          "rate_pct": 50.0,
+          "ci_95_pct": [
+            6.76,
+            93.24
+          ]
+        },
+        "pass_to_pass_summary": {
+          "k": 3,
+          "n": 4,
+          "rate_pct": 75.0,
+          "ci_95_pct": [
+            19.41,
+            99.37
+          ]
+        },
+        "resolved_summary": {
+          "k": 2,
+          "n": 4,
+          "rate_pct": 50.0,
+          "ci_95_pct": [
+            6.76,
+            93.24
+          ]
+        }
+      },
+      {
+        "config_id": "C5_full_pipeline_dr_lora_avspo_pdr_k4",
+        "name": "Full Pipeline: Multi-Turn + DR-LoRA + GRPO-AVSPO + PDR (K=4)",
+        "sri_valid": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "patch_applied": [
+          true,
+          true,
+          true,
+          false
+        ],
+        "fail_to_pass": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "pass_to_pass": [
+          true,
+          true,
+          true,
+          false
+        ],
+        "resolved": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "notes": "4/4 candidate diversity in PDR tournament; selects verified RESOLVED patch on django-10914 and django-10924 with 0% ACR.",
+        "sri_valid_summary": {
+          "k": 4,
+          "n": 4,
+          "rate_pct": 100.0,
+          "ci_95_pct": [
+            39.76,
+            100.0
+          ]
+        },
+        "patch_applied_summary": {
+          "k": 3,
+          "n": 4,
+          "rate_pct": 75.0,
+          "ci_95_pct": [
+            19.41,
+            99.37
+          ]
+        },
+        "fail_to_pass_summary": {
+          "k": 2,
+          "n": 4,
+          "rate_pct": 50.0,
+          "ci_95_pct": [
+            6.76,
+            93.24
+          ]
+        },
+        "pass_to_pass_summary": {
+          "k": 3,
+          "n": 4,
+          "rate_pct": 75.0,
+          "ci_95_pct": [
+            19.41,
+            99.37
+          ]
+        },
+        "resolved_summary": {
+          "k": 2,
+          "n": 4,
+          "rate_pct": 50.0,
+          "ci_95_pct": [
+            6.76,
+            93.24
+          ]
+        }
+      }
+    ]
+  },
+  "elapsed_sec": 9.63
+}

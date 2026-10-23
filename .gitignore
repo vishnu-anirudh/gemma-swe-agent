@@ -35,7 +35,6 @@ htmlcov/
 .LSOverride
 
 # Private notes & internal milestone reports
-SWE-bench SOTA Pipeline Comparison.md
 milestone_*.md
 research.md
 

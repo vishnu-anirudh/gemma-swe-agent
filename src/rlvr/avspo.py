@@ -123,6 +123,39 @@ class AVSPOAdvantageEstimator:
         adv = (augmented_rewards - aug_mean) / (aug_std + 1e-8)
         return adv, True
 
+    @staticmethod
+    def compute_structural_tie_breaker(
+        rollouts: List[str],
+        device: Optional[torch.device] = None,
+    ) -> torch.Tensor:
+        """Compute structural-completeness-gated tie-breaker scores s_i for Tier-2 AVSPO.
+
+        Prevents naive length tie-breaking from rewarding truncated or incomplete outputs:
+          s_i = I[valid_sri(y_i)] + 0.25 * I[closed_thought(y_i)]
+                - 1.0 * I[len(y_i) < 32] - 1e-4 * len(y_i)
+        """
+        scores: List[float] = []
+        for text in rollouts:
+            stripped = text.strip()
+            length = len(stripped)
+            has_sri = (
+                "<<<<<<< SEARCH" in stripped
+                and "=======" in stripped
+                and ">>>>>>> REPLACE" in stripped
+            )
+            has_thought = "<thought>" in stripped and "</thought>" in stripped
+            is_truncated = length < 32
+
+            score = (
+                (1.0 if has_sri else 0.0)
+                + (0.25 if has_thought else 0.0)
+                - (1.0 if is_truncated else 0.0)
+                - 1e-4 * float(length)
+            )
+            scores.append(score)
+
+        return torch.tensor(scores, dtype=torch.float32, device=device)
+
     def get_stats(self) -> AVSPOStats:
         """Return current Advantage Collapse Rate and injection statistics."""
         total = len(self.history_collapsed)
