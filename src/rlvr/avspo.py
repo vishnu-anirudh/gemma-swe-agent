@@ -48,13 +48,26 @@ class AVSPOAdvantageEstimator:
         self,
         rewards: torch.Tensor,
         process_scores: Optional[torch.Tensor] = None,
+        tie_breaker_scores: Optional[torch.Tensor] = None,
     ) -> Tuple[torch.Tensor, bool]:
         """Compute normalized group-relative advantages for a group of G rollouts.
 
+        Implements a two-tier collapse-recovery estimator when binary execution
+        rewards exhibit zero variance (std(R) < variance_epsilon):
+          - Tier 1 (Rubric PRM Substitution): If dense process_scores P_i have
+            non-zero variance, substitute P_i into both numerator and denominator:
+            A_i = (P_i - mean(P)) / (std(P) + eps).
+          - Tier 2 (Virtual Reward Perturbation): Perturb the reward vector itself
+            via R_tilde_i = R_i + Delta_i (where sum_i Delta_i = 0), aligned with
+            tie_breaker_scores (e.g., negative sequence length) when provided, so
+            both numerator (R_tilde_i - mean(R_tilde)) and denominator std(R_tilde)
+            are strictly non-zero.
+
         Args:
-            rewards: Tensor of shape (G,) representing binary outcome rewards.
-            process_scores: Optional Tensor of shape (G,) representing PRM
-              scores.
+            rewards: Tensor of shape (G,) representing outcome rewards.
+            process_scores: Optional Tensor of shape (G,) representing PRM scores.
+            tie_breaker_scores: Optional Tensor of shape (G,) used to rank virtual
+              perturbations (higher score receives positive perturbation).
 
         Returns:
             Tuple of (advantages_tensor of shape (G,), was_collapsed_bool)
@@ -80,25 +93,30 @@ class AVSPOAdvantageEstimator:
         # Advantage Collapse Case (All rewards are identical, e.g. all 0.0 or all 1.0)
         self.total_virtual_samples += 1
 
-        if process_scores is not None and torch.std(process_scores) > self.variance_epsilon:
-            # Method 1: Use Process Reward Model (PRM) variance to break the tie
-            proc_std = torch.std(process_scores, unbiased=False)
-            proc_mean = torch.mean(process_scores)
-            adv = (process_scores - proc_mean) / (proc_std + 1e-8)
+        if process_scores is not None and torch.std(process_scores, unbiased=False) > self.variance_epsilon:
+            # Tier 1: Use Process Reward Model (PRM) variance in numerator and denominator
+            proc_float = process_scores.to(torch.float32)
+            proc_std = torch.std(proc_float, unbiased=False)
+            proc_mean = torch.mean(proc_float)
+            adv = (proc_float - proc_mean) / (proc_std + 1e-8)
             return adv, True
 
-        # Method 2: Adaptive Virtual Sample Injection
-        # If all failed (mean == 0), inject virtual positive bias for shorter/cleaner sequences
-        # If all passed (mean == 1), inject small relative differences
-        # Construct synthetic anchor variance:
-        # e.g., virtual bias gradient based on rank or small synthetic perturbation
-        virtual_variance = torch.linspace(
+        # Tier 2: Adaptive Virtual Sample Reward Perturbation (R_tilde_i = R_i + Delta_i)
+        base_perturbation = torch.linspace(
             -self.virtual_bias_strength,
             self.virtual_bias_strength,
             steps=G,
             device=rewards.device,
         )
-        augmented_rewards = rewards_float + virtual_variance
+        if tie_breaker_scores is not None and tie_breaker_scores.shape[0] == G:
+            # Assign higher virtual perturbation to higher tie-breaker scores (e.g., shorter length)
+            sorted_indices = torch.argsort(tie_breaker_scores.to(rewards.device))
+            virtual_perturbation = torch.zeros_like(base_perturbation)
+            virtual_perturbation[sorted_indices] = base_perturbation
+        else:
+            virtual_perturbation = base_perturbation
+
+        augmented_rewards = rewards_float + virtual_perturbation
         aug_mean = torch.mean(augmented_rewards)
         aug_std = torch.std(augmented_rewards, unbiased=False)
 

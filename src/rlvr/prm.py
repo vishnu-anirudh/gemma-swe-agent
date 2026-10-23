@@ -53,7 +53,10 @@ class RubricProcessRewardModel:
 
         # 1. Formatting & SRI Validity Score
         # Check if the output contains parseable SRI blocks
-        blocks = SRIFormatter.parse(trajectory_text)
+        try:
+            blocks = SRIFormatter.parse(trajectory_text)
+        except Exception:
+            blocks = []
         if len(blocks) > 0:
             # Check if all blocks specify existing-looking relative paths
             valid_paths = [b.is_valid() and not b.file_path.startswith("/") for b in blocks]

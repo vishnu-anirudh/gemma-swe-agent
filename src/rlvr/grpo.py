@@ -147,6 +147,8 @@ class GRPOTrainer:
         rollouts: List[str],
         execution_rewards: List[float],
         process_scores: Optional[List[float]] = None,
+        old_log_probs: Optional[List[torch.Tensor]] = None,
+        use_avspo: bool = True,
     ) -> Dict[str, float]:
         """Perform one critic-free GRPO update step on the group of rollouts."""
         self.model.train()
@@ -164,10 +166,23 @@ class GRPOTrainer:
             proc_tensor = None
             combined_rewards = raw_rewards
 
-        # Compute advantages using AVSPO (combats collapse if all passed/failed)
-        advantages, was_collapsed = self.avspo.compute_advantages(
-            combined_rewards, process_scores=proc_tensor
+        tie_breaker = torch.tensor(
+            [-float(len(r)) for r in rollouts], dtype=torch.float32, device=self.device
         )
+
+        if use_avspo:
+            # Compute advantages using AVSPO (combats collapse if all passed/failed)
+            advantages, was_collapsed = self.avspo.compute_advantages(
+                combined_rewards,
+                process_scores=proc_tensor,
+                tie_breaker_scores=tie_breaker,
+            )
+        else:
+            # Standard vanilla GRPO advantage estimator without AVSPO
+            std = torch.std(combined_rewards, unbiased=False)
+            mean = torch.mean(combined_rewards)
+            was_collapsed = bool(std.item() < 1e-6)
+            advantages = (combined_rewards - mean) / (std + 1e-8)
 
         loss_list = []
         kl_list = []
@@ -185,9 +200,21 @@ class GRPOTrainer:
             with torch.no_grad():
                 ref_log_prob = self.compute_log_probs(self.ref_model, prompt_text, resp)
 
-            ratio = torch.exp(cur_log_prob - cur_log_prob.detach())  # approx ratio for step
+            old_lp = (
+                old_log_probs[i].detach()
+                if old_log_probs is not None
+                else cur_log_prob.detach()
+            )
+            ratio = torch.exp(cur_log_prob - old_lp)
             surr1 = ratio * adv
-            surr2 = torch.clamp(ratio, 1.0 - self.config.epsilon_clip, 1.0 + self.config.epsilon_clip) * adv
+            surr2 = (
+                torch.clamp(
+                    ratio,
+                    1.0 - self.config.epsilon_clip,
+                    1.0 + self.config.epsilon_clip,
+                )
+                * adv
+            )
             policy_loss = -torch.min(surr1, surr2)
 
             kl_div = cur_log_prob - ref_log_prob
@@ -200,7 +227,11 @@ class GRPOTrainer:
             # Backprop per sample to conserve peak memory on Apple Silicon
             (total_sample_loss / G).backward()
 
-        torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
+        grad_norm = float(
+            torch.nn.utils.clip_grad_norm_(
+                [p for p in self.model.parameters() if p.requires_grad], max_norm=1.0
+            ).item()
+        )
         self.optimizer.step()
 
         stats = self.avspo.get_stats()
@@ -208,6 +239,7 @@ class GRPOTrainer:
             "mean_loss": sum(loss_list) / G,
             "mean_reward": float(raw_rewards.mean().item()),
             "mean_kl": sum(kl_list) / G,
+            "grad_norm": grad_norm,
             "was_collapsed": float(was_collapsed),
             "advantage_collapse_rate": stats.advantage_collapse_rate,
         }
