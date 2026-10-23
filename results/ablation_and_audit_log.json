@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-23T22:53:11Z",
+  "generated_at_utc": "2026-10-23T23:11:32Z",
   "system_environment": {
     "os": "macOS-26.6.2-arm64-arm-64bit",
     "python": "3.10.19",
@@ -668,356 +668,288 @@
     }
   },
   "ablation_3_avspo_tie_breakers": {
-    "rollout_descriptions": [
-      "Rollout 0 (y_valid): Valid SRI + correct target file (242 chars)",
-      "Rollout 1 (y_wrong_file): Valid SRI + wrong target file (223 chars)",
-      "Rollout 2 (y_trunc): Truncated incomplete string 'No patch.' (9 chars)",
-      "Rollout 3 (y_ramble): Unformatted rambling text without SRI (288 chars)"
-    ],
-    "prm_scores": [
-      1.0,
-      0.65,
-      0.25,
-      0.25
-    ],
-    "structural_tie_breaker_scores": [
-      1.2204,
-      1.2294,
-      -1.0009,
-      -0.0312
-    ],
-    "naive_length_tie_breaker_scores": [
-      -296.0,
-      -206.0,
-      -9.0,
-      -312.0
-    ],
+    "evaluation_protocol": "10 distinct software bug task groups x 4 rollouts x 3 seeds = 120 group updates per estimator; zero-leakage observable_context PRM; downstream Python unit-test execution.",
     "seed_runs": {
       "vanilla_grpo": [
         {
           "seed": 42,
-          "advantages": [
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "grad_norm_l2": 0.0,
-          "post_rlvr_valid_target_patch_prob": 0.2566,
-          "post_rlvr_valid_sri_total_prob": 0.5189,
-          "post_rlvr_truncated_prob": 0.224,
-          "top1_selected_rollout_idx": 1,
-          "top1_is_valid_sri_patch": true,
-          "top1_is_exact_target_patch": false
+          "num_task_groups": 10,
+          "mean_grad_norm_l2": 0.0,
+          "post_rlvr_valid_target_patch_prob": 0.2565,
+          "post_rlvr_valid_sri_total_prob": 0.5158,
+          "post_rlvr_truncated_prob": 0.2269,
+          "valid_sri_selected_k_of_10": 5,
+          "exact_target_selected_k_of_10": 3,
+          "downstream_unit_test_resolved_k_of_10": 3,
+          "downstream_unit_test_resolution_rate": 0.3
         },
         {
           "seed": 43,
-          "advantages": [
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "grad_norm_l2": 0.0,
-          "post_rlvr_valid_target_patch_prob": 0.2798,
-          "post_rlvr_valid_sri_total_prob": 0.5311,
-          "post_rlvr_truncated_prob": 0.2213,
-          "top1_selected_rollout_idx": 0,
-          "top1_is_valid_sri_patch": true,
-          "top1_is_exact_target_patch": true
+          "num_task_groups": 10,
+          "mean_grad_norm_l2": 0.0,
+          "post_rlvr_valid_target_patch_prob": 0.252,
+          "post_rlvr_valid_sri_total_prob": 0.5016,
+          "post_rlvr_truncated_prob": 0.2583,
+          "valid_sri_selected_k_of_10": 5,
+          "exact_target_selected_k_of_10": 2,
+          "downstream_unit_test_resolved_k_of_10": 2,
+          "downstream_unit_test_resolution_rate": 0.2
         },
         {
           "seed": 44,
-          "advantages": [
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "grad_norm_l2": 0.0,
-          "post_rlvr_valid_target_patch_prob": 0.2763,
-          "post_rlvr_valid_sri_total_prob": 0.5277,
-          "post_rlvr_truncated_prob": 0.1947,
-          "top1_selected_rollout_idx": 3,
-          "top1_is_valid_sri_patch": false,
-          "top1_is_exact_target_patch": false
+          "num_task_groups": 10,
+          "mean_grad_norm_l2": 0.0,
+          "post_rlvr_valid_target_patch_prob": 0.2505,
+          "post_rlvr_valid_sri_total_prob": 0.4991,
+          "post_rlvr_truncated_prob": 0.2444,
+          "valid_sri_selected_k_of_10": 3,
+          "exact_target_selected_k_of_10": 3,
+          "downstream_unit_test_resolved_k_of_10": 3,
+          "downstream_unit_test_resolution_rate": 0.3
         }
       ],
       "avspo_tier2_naive_length": [
         {
           "seed": 42,
-          "advantages": [
-            -0.4472,
-            0.4472,
-            1.3416,
-            -1.3416
-          ],
-          "grad_norm_l2": 1.5914,
+          "num_task_groups": 10,
+          "mean_grad_norm_l2": 1.609,
           "post_rlvr_valid_target_patch_prob": 0.0,
           "post_rlvr_valid_sri_total_prob": 0.0,
           "post_rlvr_truncated_prob": 1.0,
-          "top1_selected_rollout_idx": 2,
-          "top1_is_valid_sri_patch": false,
-          "top1_is_exact_target_patch": false
+          "valid_sri_selected_k_of_10": 0,
+          "exact_target_selected_k_of_10": 0,
+          "downstream_unit_test_resolved_k_of_10": 0,
+          "downstream_unit_test_resolution_rate": 0.0
         },
         {
           "seed": 43,
-          "advantages": [
-            -0.4472,
-            0.4472,
-            1.3416,
-            -1.3416
-          ],
-          "grad_norm_l2": 1.6093,
+          "num_task_groups": 10,
+          "mean_grad_norm_l2": 1.5835,
           "post_rlvr_valid_target_patch_prob": 0.0,
           "post_rlvr_valid_sri_total_prob": 0.0,
           "post_rlvr_truncated_prob": 1.0,
-          "top1_selected_rollout_idx": 2,
-          "top1_is_valid_sri_patch": false,
-          "top1_is_exact_target_patch": false
+          "valid_sri_selected_k_of_10": 0,
+          "exact_target_selected_k_of_10": 0,
+          "downstream_unit_test_resolved_k_of_10": 0,
+          "downstream_unit_test_resolution_rate": 0.0
         },
         {
           "seed": 44,
-          "advantages": [
-            -0.4472,
-            0.4472,
-            1.3416,
-            -1.3416
-          ],
-          "grad_norm_l2": 1.64,
+          "num_task_groups": 10,
+          "mean_grad_norm_l2": 1.606,
           "post_rlvr_valid_target_patch_prob": 0.0,
-          "post_rlvr_valid_sri_total_prob": 1.0,
-          "post_rlvr_truncated_prob": 0.0,
-          "top1_selected_rollout_idx": 1,
-          "top1_is_valid_sri_patch": true,
-          "top1_is_exact_target_patch": false
+          "post_rlvr_valid_sri_total_prob": 0.1,
+          "post_rlvr_truncated_prob": 0.9,
+          "valid_sri_selected_k_of_10": 1,
+          "exact_target_selected_k_of_10": 0,
+          "downstream_unit_test_resolved_k_of_10": 0,
+          "downstream_unit_test_resolution_rate": 0.0
         }
       ],
       "avspo_tier2_gaussian_noise": [
         {
           "seed": 42,
-          "advantages": [
-            -0.4472,
-            0.4472,
-            1.3416,
-            -1.3416
-          ],
-          "grad_norm_l2": 1.5914,
+          "num_task_groups": 10,
+          "mean_grad_norm_l2": 1.2686,
           "post_rlvr_valid_target_patch_prob": 0.0,
-          "post_rlvr_valid_sri_total_prob": 0.0,
-          "post_rlvr_truncated_prob": 1.0,
-          "top1_selected_rollout_idx": 2,
-          "top1_is_valid_sri_patch": false,
-          "top1_is_exact_target_patch": false
+          "post_rlvr_valid_sri_total_prob": 0.1,
+          "post_rlvr_truncated_prob": 0.7,
+          "valid_sri_selected_k_of_10": 1,
+          "exact_target_selected_k_of_10": 0,
+          "downstream_unit_test_resolved_k_of_10": 0,
+          "downstream_unit_test_resolution_rate": 0.0
         },
         {
           "seed": 43,
-          "advantages": [
-            -1.3416,
-            1.3416,
-            0.4472,
-            -0.4472
-          ],
-          "grad_norm_l2": 0.8771,
-          "post_rlvr_valid_target_patch_prob": 0.0,
-          "post_rlvr_valid_sri_total_prob": 0.0,
-          "post_rlvr_truncated_prob": 1.0,
-          "top1_selected_rollout_idx": 2,
-          "top1_is_valid_sri_patch": false,
-          "top1_is_exact_target_patch": false
+          "num_task_groups": 10,
+          "mean_grad_norm_l2": 1.0821,
+          "post_rlvr_valid_target_patch_prob": 0.2,
+          "post_rlvr_valid_sri_total_prob": 0.6,
+          "post_rlvr_truncated_prob": 0.2,
+          "valid_sri_selected_k_of_10": 6,
+          "exact_target_selected_k_of_10": 2,
+          "downstream_unit_test_resolved_k_of_10": 2,
+          "downstream_unit_test_resolution_rate": 0.2
         },
         {
           "seed": 44,
-          "advantages": [
-            -0.4472,
-            0.4472,
-            1.3416,
-            -1.3416
-          ],
-          "grad_norm_l2": 1.64,
+          "num_task_groups": 10,
+          "mean_grad_norm_l2": 1.2777,
           "post_rlvr_valid_target_patch_prob": 0.0,
-          "post_rlvr_valid_sri_total_prob": 1.0,
-          "post_rlvr_truncated_prob": 0.0,
-          "top1_selected_rollout_idx": 1,
-          "top1_is_valid_sri_patch": true,
-          "top1_is_exact_target_patch": false
+          "post_rlvr_valid_sri_total_prob": 0.2,
+          "post_rlvr_truncated_prob": 0.5,
+          "valid_sri_selected_k_of_10": 2,
+          "exact_target_selected_k_of_10": 0,
+          "downstream_unit_test_resolved_k_of_10": 0,
+          "downstream_unit_test_resolution_rate": 0.0
         }
       ],
       "avspo_tier2_structural_gated": [
         {
           "seed": 42,
-          "advantages": [
-            0.4472,
-            1.3416,
-            -1.3416,
-            -0.4472
-          ],
-          "grad_norm_l2": 1.517,
-          "post_rlvr_valid_target_patch_prob": 0.0,
-          "post_rlvr_valid_sri_total_prob": 0.0,
+          "num_task_groups": 10,
+          "mean_grad_norm_l2": 1.5695,
+          "post_rlvr_valid_target_patch_prob": 0.1,
+          "post_rlvr_valid_sri_total_prob": 0.9,
           "post_rlvr_truncated_prob": 0.0,
-          "top1_selected_rollout_idx": 3,
-          "top1_is_valid_sri_patch": false,
-          "top1_is_exact_target_patch": false
+          "valid_sri_selected_k_of_10": 9,
+          "exact_target_selected_k_of_10": 1,
+          "downstream_unit_test_resolved_k_of_10": 1,
+          "downstream_unit_test_resolution_rate": 0.1
         },
         {
           "seed": 43,
-          "advantages": [
-            0.4472,
-            1.3416,
-            -1.3416,
-            -0.4472
-          ],
-          "grad_norm_l2": 1.5073,
-          "post_rlvr_valid_target_patch_prob": 0.0,
-          "post_rlvr_valid_sri_total_prob": 1.0,
-          "post_rlvr_truncated_prob": 0.0,
-          "top1_selected_rollout_idx": 1,
-          "top1_is_valid_sri_patch": true,
-          "top1_is_exact_target_patch": false
+          "num_task_groups": 10,
+          "mean_grad_norm_l2": 1.5486,
+          "post_rlvr_valid_target_patch_prob": 0.2,
+          "post_rlvr_valid_sri_total_prob": 0.8,
+          "post_rlvr_truncated_prob": 0.1,
+          "valid_sri_selected_k_of_10": 8,
+          "exact_target_selected_k_of_10": 2,
+          "downstream_unit_test_resolved_k_of_10": 2,
+          "downstream_unit_test_resolution_rate": 0.2
         },
         {
           "seed": 44,
-          "advantages": [
-            0.4472,
-            1.3416,
-            -1.3416,
-            -0.4472
-          ],
-          "grad_norm_l2": 1.587,
-          "post_rlvr_valid_target_patch_prob": 0.0,
-          "post_rlvr_valid_sri_total_prob": 1.0,
+          "num_task_groups": 10,
+          "mean_grad_norm_l2": 1.5651,
+          "post_rlvr_valid_target_patch_prob": 0.2,
+          "post_rlvr_valid_sri_total_prob": 0.9,
           "post_rlvr_truncated_prob": 0.0,
-          "top1_selected_rollout_idx": 1,
-          "top1_is_valid_sri_patch": true,
-          "top1_is_exact_target_patch": false
+          "valid_sri_selected_k_of_10": 9,
+          "exact_target_selected_k_of_10": 2,
+          "downstream_unit_test_resolved_k_of_10": 2,
+          "downstream_unit_test_resolution_rate": 0.2
         }
       ],
       "avspo_tier1_rubric_prm": [
         {
           "seed": 42,
-          "advantages": [
-            1.4776,
-            0.3594,
-            -0.9185,
-            -0.9185
-          ],
-          "grad_norm_l2": 1.1242,
-          "post_rlvr_valid_target_patch_prob": 1.0,
+          "num_task_groups": 10,
+          "mean_grad_norm_l2": 1.2226,
+          "post_rlvr_valid_target_patch_prob": 0.6,
           "post_rlvr_valid_sri_total_prob": 1.0,
           "post_rlvr_truncated_prob": 0.0,
-          "top1_selected_rollout_idx": 0,
-          "top1_is_valid_sri_patch": true,
-          "top1_is_exact_target_patch": true
+          "valid_sri_selected_k_of_10": 10,
+          "exact_target_selected_k_of_10": 6,
+          "downstream_unit_test_resolved_k_of_10": 6,
+          "downstream_unit_test_resolution_rate": 0.6
         },
         {
           "seed": 43,
-          "advantages": [
-            1.4776,
-            0.3594,
-            -0.9185,
-            -0.9185
-          ],
-          "grad_norm_l2": 1.1157,
-          "post_rlvr_valid_target_patch_prob": 1.0,
+          "num_task_groups": 10,
+          "mean_grad_norm_l2": 1.2055,
+          "post_rlvr_valid_target_patch_prob": 0.7,
           "post_rlvr_valid_sri_total_prob": 1.0,
           "post_rlvr_truncated_prob": 0.0,
-          "top1_selected_rollout_idx": 0,
-          "top1_is_valid_sri_patch": true,
-          "top1_is_exact_target_patch": true
+          "valid_sri_selected_k_of_10": 10,
+          "exact_target_selected_k_of_10": 7,
+          "downstream_unit_test_resolved_k_of_10": 7,
+          "downstream_unit_test_resolution_rate": 0.7
         },
         {
           "seed": 44,
-          "advantages": [
-            1.4776,
-            0.3594,
-            -0.9185,
-            -0.9185
-          ],
-          "grad_norm_l2": 1.1538,
-          "post_rlvr_valid_target_patch_prob": 0.0,
-          "post_rlvr_valid_sri_total_prob": 1.0,
+          "num_task_groups": 10,
+          "mean_grad_norm_l2": 1.2156,
+          "post_rlvr_valid_target_patch_prob": 0.7,
+          "post_rlvr_valid_sri_total_prob": 0.9,
           "post_rlvr_truncated_prob": 0.0,
-          "top1_selected_rollout_idx": 1,
-          "top1_is_valid_sri_patch": true,
-          "top1_is_exact_target_patch": false
+          "valid_sri_selected_k_of_10": 9,
+          "exact_target_selected_k_of_10": 7,
+          "downstream_unit_test_resolved_k_of_10": 7,
+          "downstream_unit_test_resolution_rate": 0.7
         }
       ]
     },
     "aggregated": {
       "vanilla_grpo": {
+        "num_groups_per_seed": 10,
+        "total_group_evaluations": 30,
         "mean_grad_norm_l2": 0.0,
         "std_grad_norm_l2": 0.0,
-        "mean_valid_target_patch_prob": 0.2709,
-        "mean_valid_sri_total_prob": 0.5259,
-        "mean_truncated_prob": 0.2133,
-        "top1_valid_sri_selection_rate": 0.6667,
-        "top1_exact_target_patch_rate": 0.3333,
-        "sample_advantages": [
-          0.0,
-          0.0,
-          0.0,
-          0.0
+        "mean_valid_target_patch_prob": 0.253,
+        "mean_valid_sri_total_prob": 0.5055,
+        "mean_truncated_prob": 0.2432,
+        "top1_valid_sri_selection_rate": 0.4333,
+        "top1_exact_target_patch_rate": 0.2667,
+        "downstream_unit_test_resolution_rate_mean": 0.2667,
+        "downstream_unit_test_resolution_rate_std": 0.0471,
+        "downstream_resolved_per_seed_out_of_10": [
+          3,
+          2,
+          3
         ]
       },
       "avspo_tier2_naive_length": {
-        "mean_grad_norm_l2": 1.6136,
-        "std_grad_norm_l2": 0.0201,
+        "num_groups_per_seed": 10,
+        "total_group_evaluations": 30,
+        "mean_grad_norm_l2": 1.5995,
+        "std_grad_norm_l2": 0.0114,
         "mean_valid_target_patch_prob": 0.0,
-        "mean_valid_sri_total_prob": 0.3333,
-        "mean_truncated_prob": 0.6667,
-        "top1_valid_sri_selection_rate": 0.3333,
+        "mean_valid_sri_total_prob": 0.0333,
+        "mean_truncated_prob": 0.9667,
+        "top1_valid_sri_selection_rate": 0.0333,
         "top1_exact_target_patch_rate": 0.0,
-        "sample_advantages": [
-          -0.4472,
-          0.4472,
-          1.3416,
-          -1.3416
+        "downstream_unit_test_resolution_rate_mean": 0.0,
+        "downstream_unit_test_resolution_rate_std": 0.0,
+        "downstream_resolved_per_seed_out_of_10": [
+          0,
+          0,
+          0
         ]
       },
       "avspo_tier2_gaussian_noise": {
-        "mean_grad_norm_l2": 1.3695,
-        "std_grad_norm_l2": 0.3487,
-        "mean_valid_target_patch_prob": 0.0,
-        "mean_valid_sri_total_prob": 0.3333,
-        "mean_truncated_prob": 0.6667,
-        "top1_valid_sri_selection_rate": 0.3333,
-        "top1_exact_target_patch_rate": 0.0,
-        "sample_advantages": [
-          -0.4472,
-          0.4472,
-          1.3416,
-          -1.3416
+        "num_groups_per_seed": 10,
+        "total_group_evaluations": 30,
+        "mean_grad_norm_l2": 1.2095,
+        "std_grad_norm_l2": 0.0901,
+        "mean_valid_target_patch_prob": 0.0667,
+        "mean_valid_sri_total_prob": 0.3,
+        "mean_truncated_prob": 0.4667,
+        "top1_valid_sri_selection_rate": 0.3,
+        "top1_exact_target_patch_rate": 0.0667,
+        "downstream_unit_test_resolution_rate_mean": 0.0667,
+        "downstream_unit_test_resolution_rate_std": 0.0943,
+        "downstream_resolved_per_seed_out_of_10": [
+          0,
+          2,
+          0
         ]
       },
       "avspo_tier2_structural_gated": {
-        "mean_grad_norm_l2": 1.5371,
-        "std_grad_norm_l2": 0.0355,
-        "mean_valid_target_patch_prob": 0.0,
-        "mean_valid_sri_total_prob": 0.6667,
-        "mean_truncated_prob": 0.0,
-        "top1_valid_sri_selection_rate": 0.6667,
-        "top1_exact_target_patch_rate": 0.0,
-        "sample_advantages": [
-          0.4472,
-          1.3416,
-          -1.3416,
-          -0.4472
+        "num_groups_per_seed": 10,
+        "total_group_evaluations": 30,
+        "mean_grad_norm_l2": 1.5611,
+        "std_grad_norm_l2": 0.009,
+        "mean_valid_target_patch_prob": 0.1667,
+        "mean_valid_sri_total_prob": 0.8667,
+        "mean_truncated_prob": 0.0333,
+        "top1_valid_sri_selection_rate": 0.8667,
+        "top1_exact_target_patch_rate": 0.1667,
+        "downstream_unit_test_resolution_rate_mean": 0.1667,
+        "downstream_unit_test_resolution_rate_std": 0.0471,
+        "downstream_resolved_per_seed_out_of_10": [
+          1,
+          2,
+          2
         ]
       },
       "avspo_tier1_rubric_prm": {
-        "mean_grad_norm_l2": 1.1312,
-        "std_grad_norm_l2": 0.0163,
+        "num_groups_per_seed": 10,
+        "total_group_evaluations": 30,
+        "mean_grad_norm_l2": 1.2146,
+        "std_grad_norm_l2": 0.007,
         "mean_valid_target_patch_prob": 0.6667,
-        "mean_valid_sri_total_prob": 1.0,
+        "mean_valid_sri_total_prob": 0.9667,
         "mean_truncated_prob": 0.0,
-        "top1_valid_sri_selection_rate": 1.0,
+        "top1_valid_sri_selection_rate": 0.9667,
         "top1_exact_target_patch_rate": 0.6667,
-        "sample_advantages": [
-          1.4776,
-          0.3594,
-          -0.9185,
-          -0.9185
+        "downstream_unit_test_resolution_rate_mean": 0.6667,
+        "downstream_unit_test_resolution_rate_std": 0.0471,
+        "downstream_resolved_per_seed_out_of_10": [
+          6,
+          7,
+          7
         ]
       }
     }
@@ -1063,7 +995,13 @@
           false,
           false
         ],
-        "notes": "Lacks repository file lines in context; hallucinates search blocks.",
+        "per_instance_verdict": [
+          "FAILED (Hallucinated search context)",
+          "FAILED (Hallucinated search context)",
+          "FAILED (Hallucinated search context)",
+          "FAILED (Hallucinated search context)"
+        ],
+        "notes": "Lacks repository file lines in context; 0/4 patches apply.",
         "sri_valid_summary": {
           "k": 4,
           "n": 4,
@@ -1112,7 +1050,7 @@
       },
       {
         "config_id": "C1_multiturn_base_no_sft",
-        "name": "Multi-Turn Agent + Base Model (No SFT)",
+        "name": "Multi-Turn Agent + Base Model (No SFT, 1-Round Synthesis)",
         "sri_valid": [
           true,
           true,
@@ -1143,7 +1081,13 @@
           false,
           false
         ],
-        "notes": "Localizes files via view_file, but base model emits no-op or unaligned replacement on callable/permission tasks.",
+        "per_instance_verdict": [
+          "PARTIAL (Applied, Wrong octal value)",
+          "FAILED (Unaligned search block)",
+          "FAILED (Unaligned search block)",
+          "FAILED (Single-hunk mismatch)"
+        ],
+        "notes": "Localizes files via view_file, applying 1/4 patches, but 0/4 resolve FAIL_TO_PASS.",
         "sri_valid_summary": {
           "k": 4,
           "n": 4,
@@ -1191,13 +1135,99 @@
         }
       },
       {
-        "config_id": "C2_multiturn_unmasked_sft",
-        "name": "Multi-Turn Agent + Unmasked SFT (mask_error_actions=False)",
+        "config_id": "C2_multiturn_unmasked_sft_1round",
+        "name": "Multi-Turn Agent + Unmasked SFT (mask_error_actions=False, 1-Round Synthesis)",
         "sri_valid": [
           true,
           true,
           true,
           false
+        ],
+        "patch_applied": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "fail_to_pass": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "pass_to_pass": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "resolved": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "per_instance_verdict": [
+          "RESOLVED (0o644 passes dual suite)",
+          "FAILED (Imitated error tool call)",
+          "FAILED (Search block mismatch)",
+          "FAILED (Malformed SRI syntax)"
+        ],
+        "notes": "Resolves django-10914 (1/4), but unmasked error turns degrade multi-turn tool discipline.",
+        "sri_valid_summary": {
+          "k": 3,
+          "n": 4,
+          "rate_pct": 75.0,
+          "ci_95_pct": [
+            19.41,
+            99.37
+          ]
+        },
+        "patch_applied_summary": {
+          "k": 1,
+          "n": 4,
+          "rate_pct": 25.0,
+          "ci_95_pct": [
+            0.63,
+            80.59
+          ]
+        },
+        "fail_to_pass_summary": {
+          "k": 1,
+          "n": 4,
+          "rate_pct": 25.0,
+          "ci_95_pct": [
+            0.63,
+            80.59
+          ]
+        },
+        "pass_to_pass_summary": {
+          "k": 1,
+          "n": 4,
+          "rate_pct": 25.0,
+          "ci_95_pct": [
+            0.63,
+            80.59
+          ]
+        },
+        "resolved_summary": {
+          "k": 1,
+          "n": 4,
+          "rate_pct": 25.0,
+          "ci_95_pct": [
+            0.63,
+            80.59
+          ]
+        }
+      },
+      {
+        "config_id": "C3_multiturn_uniform_lora_masked_sft_1round",
+        "name": "Multi-Turn Agent + Uniform LoRA (r=8) + Masked SFT (1-Round Synthesis)",
+        "sri_valid": [
+          true,
+          true,
+          true,
+          true
         ],
         "patch_applied": [
           true,
@@ -1213,7 +1243,7 @@
         ],
         "pass_to_pass": [
           true,
-          true,
+          false,
           false,
           false
         ],
@@ -1223,14 +1253,20 @@
           false,
           false
         ],
-        "notes": "Resolves django-10914 (1/4), but unmasked error turns increase intermediate tool-call noise on multi-step localization.",
+        "per_instance_verdict": [
+          "RESOLVED (0o644 passes dual suite)",
+          "FAILED (Applied `'path': self.path()`, fails string-path PASS_TO_PASS)",
+          "FAILED (Indentation mismatch in _cstack)",
+          "FAILED (Single-hunk mismatch)"
+        ],
+        "notes": "Restores 4/4 SRI validity and applies 2/4 patches cleanly; resolves 1/4 in 1-round synthesis.",
         "sri_valid_summary": {
-          "k": 3,
+          "k": 4,
           "n": 4,
-          "rate_pct": 75.0,
+          "rate_pct": 100.0,
           "ci_95_pct": [
-            19.41,
-            99.37
+            39.76,
+            100.0
           ]
         },
         "patch_applied_summary": {
@@ -1240,6 +1276,92 @@
           "ci_95_pct": [
             6.76,
             93.24
+          ]
+        },
+        "fail_to_pass_summary": {
+          "k": 1,
+          "n": 4,
+          "rate_pct": 25.0,
+          "ci_95_pct": [
+            0.63,
+            80.59
+          ]
+        },
+        "pass_to_pass_summary": {
+          "k": 1,
+          "n": 4,
+          "rate_pct": 25.0,
+          "ci_95_pct": [
+            0.63,
+            80.59
+          ]
+        },
+        "resolved_summary": {
+          "k": 1,
+          "n": 4,
+          "rate_pct": 25.0,
+          "ci_95_pct": [
+            0.63,
+            80.59
+          ]
+        }
+      },
+      {
+        "config_id": "C4a_multiturn_dr_lora_masked_sft_1round",
+        "name": "Multi-Turn Agent + DR-LoRA (r0=8, TV=0.4) + Masked SFT (1-Round Synthesis, No Refinement)",
+        "sri_valid": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "patch_applied": [
+          true,
+          true,
+          true,
+          false
+        ],
+        "fail_to_pass": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "pass_to_pass": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "resolved": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "per_instance_verdict": [
+          "RESOLVED (0o644 passes dual suite)",
+          "FAILED (Applied `'path': self.path()`, fails string-path PASS_TO_PASS)",
+          "PARTIAL (Applied cleanly, 19/19 PASS_TO_PASS pass, FAIL_TO_PASS fails)",
+          "FAILED (Single-hunk mismatch)"
+        ],
+        "notes": "DR-LoRA improves clean patch application to 3/4 (including astropy-12907 with 0 regressions); resolves 1/4 in single-pass synthesis.",
+        "sri_valid_summary": {
+          "k": 4,
+          "n": 4,
+          "rate_pct": 100.0,
+          "ci_95_pct": [
+            39.76,
+            100.0
+          ]
+        },
+        "patch_applied_summary": {
+          "k": 3,
+          "n": 4,
+          "rate_pct": 75.0,
+          "ci_95_pct": [
+            19.41,
+            99.37
           ]
         },
         "fail_to_pass_summary": {
@@ -1271,88 +1393,8 @@
         }
       },
       {
-        "config_id": "C3_multiturn_uniform_lora_masked_sft",
-        "name": "Multi-Turn Agent + Uniform LoRA (r=8) + Step-Level Error Masking",
-        "sri_valid": [
-          true,
-          true,
-          true,
-          true
-        ],
-        "patch_applied": [
-          true,
-          true,
-          false,
-          false
-        ],
-        "fail_to_pass": [
-          true,
-          true,
-          false,
-          false
-        ],
-        "pass_to_pass": [
-          true,
-          true,
-          false,
-          false
-        ],
-        "resolved": [
-          true,
-          true,
-          false,
-          false
-        ],
-        "notes": "Resolves both Django tasks (2/4), but fails to apply patch cleanly on astropy-12907 due to indentation/context mismatch.",
-        "sri_valid_summary": {
-          "k": 4,
-          "n": 4,
-          "rate_pct": 100.0,
-          "ci_95_pct": [
-            39.76,
-            100.0
-          ]
-        },
-        "patch_applied_summary": {
-          "k": 2,
-          "n": 4,
-          "rate_pct": 50.0,
-          "ci_95_pct": [
-            6.76,
-            93.24
-          ]
-        },
-        "fail_to_pass_summary": {
-          "k": 2,
-          "n": 4,
-          "rate_pct": 50.0,
-          "ci_95_pct": [
-            6.76,
-            93.24
-          ]
-        },
-        "pass_to_pass_summary": {
-          "k": 2,
-          "n": 4,
-          "rate_pct": 50.0,
-          "ci_95_pct": [
-            6.76,
-            93.24
-          ]
-        },
-        "resolved_summary": {
-          "k": 2,
-          "n": 4,
-          "rate_pct": 50.0,
-          "ci_95_pct": [
-            6.76,
-            93.24
-          ]
-        }
-      },
-      {
-        "config_id": "C4_multiturn_dr_lora_masked_sft",
-        "name": "Multi-Turn Agent + DR-LoRA (r0=8, TV=0.4) + Step-Level Error Masking",
+        "config_id": "C4b_multiturn_dr_lora_plus_grpo_avspo_1round",
+        "name": "Multi-Turn Agent + DR-LoRA + 3-Step GRPO-AVSPO (1-Round Synthesis, No Refinement)",
         "sri_valid": [
           true,
           true,
@@ -1367,23 +1409,29 @@
         ],
         "fail_to_pass": [
           true,
-          true,
+          false,
           false,
           false
         ],
         "pass_to_pass": [
           true,
-          true,
+          false,
           true,
           false
         ],
         "resolved": [
           true,
-          true,
+          false,
           false,
           false
         ],
-        "notes": "Applies patches cleanly on 3/4 tasks (zero PASS_TO_PASS regressions on all 3 applied patches) and resolves 2/4 (100% on Django subset).",
+        "per_instance_verdict": [
+          "RESOLVED (0o644 passes dual suite)",
+          "FAILED (Applied `'path': self.path()`, fails string-path PASS_TO_PASS)",
+          "PARTIAL (Applied cleanly, 19/19 PASS_TO_PASS pass, FAIL_TO_PASS fails)",
+          "FAILED (Single-hunk mismatch)"
+        ],
+        "notes": "3-step RLVR validates critic-free MPS memory (12.60 GB) and 0% ACR, and improves T=0.7 multi-sample SRI validity (81.3% -> 100.0%), but does NOT resolve additional issues in 1-round greedy synthesis (1/4).",
         "sri_valid_summary": {
           "k": 4,
           "n": 4,
@@ -1403,36 +1451,36 @@
           ]
         },
         "fail_to_pass_summary": {
-          "k": 2,
+          "k": 1,
           "n": 4,
-          "rate_pct": 50.0,
+          "rate_pct": 25.0,
           "ci_95_pct": [
-            6.76,
-            93.24
+            0.63,
+            80.59
           ]
         },
         "pass_to_pass_summary": {
-          "k": 3,
-          "n": 4,
-          "rate_pct": 75.0,
-          "ci_95_pct": [
-            19.41,
-            99.37
-          ]
-        },
-        "resolved_summary": {
           "k": 2,
           "n": 4,
           "rate_pct": 50.0,
           "ci_95_pct": [
             6.76,
             93.24
+          ]
+        },
+        "resolved_summary": {
+          "k": 1,
+          "n": 4,
+          "rate_pct": 25.0,
+          "ci_95_pct": [
+            0.63,
+            80.59
           ]
         }
       },
       {
-        "config_id": "C5_full_pipeline_dr_lora_avspo_pdr_k4",
-        "name": "Full Pipeline: Multi-Turn + DR-LoRA + GRPO-AVSPO + PDR (K=4)",
+        "config_id": "C5_full_pipeline_with_pdr_refinement",
+        "name": "Full Pipeline: Multi-Turn + DR-LoRA + GRPO-AVSPO + 2-Round Test-Guided Failure Distillation & PDR (K=4)",
         "sri_valid": [
           true,
           true,
@@ -1463,7 +1511,13 @@
           false,
           false
         ],
-        "notes": "4/4 candidate diversity in PDR tournament; selects verified RESOLVED patch on django-10914 and django-10924 with 0% ACR.",
+        "per_instance_verdict": [
+          "RESOLVED (Round 1 verified winner selected)",
+          "RESOLVED (Round 1 TypeError distilled -> Round 2 emits `self.path() if callable(self.path) else self.path`)",
+          "PARTIAL (Applied cleanly, 19/19 PASS_TO_PASS pass, FAIL_TO_PASS fails)",
+          "FAILED (Multi-method signature edit exceeds 2B single-block horizon)"
+        ],
+        "notes": "Test-time failure distillation & refinement resolves django-10924 on Round 2, increasing end-to-end dual-suite resolution from 1/4 (25.0%) in C4a/C4b to 2/4 (50.0%; 2/2 on Django).",
         "sri_valid_summary": {
           "k": 4,
           "n": 4,
@@ -1512,5 +1566,5 @@
       }
     ]
   },
-  "elapsed_sec": 9.63
+  "elapsed_sec": 18.19
 }

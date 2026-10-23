@@ -42,13 +42,37 @@ class RubricProcessRewardModel:
     def __init__(self, criteria: Optional[RubricCriteria] = None):
         self.criteria = criteria or RubricCriteria()
 
+    @staticmethod
+    def extract_observable_files_from_context(context_text: str) -> Set[str]:
+        """Extract candidate repository file paths strictly from observable prompt/tool context.
+
+        Parses `=== File: <path> ===` headers, `view_file` tool calls, and `.py` paths
+        mentioned in the public issue report or reproduction traceback. Never accesses
+        gold solution patches.
+        """
+        candidates: Set[str] = set()
+        for m in re.finditer(r"===\s*(?:Auto-Inspected\s+)?File:\s*([^\s=]+\.py)\s*===", context_text):
+            candidates.add(m.group(1).strip().lstrip("./"))
+        for m in re.finditer(r'path=["\']([^"\']+\.py)["\']', context_text):
+            candidates.add(m.group(1).strip().lstrip("./"))
+        for m in re.finditer(r"\b([a-zA-Z0-9_]+(?:/[a-zA-Z0-9_]+)+\.py)\b", context_text):
+            candidates.add(m.group(1).strip().lstrip("./"))
+        return candidates
+
     def evaluate_trajectory(
         self,
         trajectory_text: str,
         target_files: Optional[Set[str]] = None,
         max_repeated_commands: int = 2,
+        observable_context: Optional[str] = None,
     ) -> PRMScore:
-        """Score an agent trajectory rollout against the process rubric."""
+        """Score an agent trajectory rollout against the process rubric.
+
+        If `target_files` is None and `observable_context` is provided, candidate file
+        paths are extracted strictly from `observable_context` (issue description,
+        reproduction traceback, and `view_file` observations), ensuring zero privileged
+        information from gold benchmark patches.
+        """
         details: Dict[str, str] = {}
 
         # 1. Formatting & SRI Validity Score
@@ -71,15 +95,19 @@ class RubricProcessRewardModel:
                 formatting_score = 0.0
                 details["formatting"] = "No valid code edit blocks identified"
 
-        # 2. Target Localization Score
-        if target_files:
+        # 2. Target Localization Score (Strictly from observable context if target_files not given)
+        effective_targets = target_files
+        if effective_targets is None and observable_context:
+            effective_targets = self.extract_observable_files_from_context(observable_context)
+
+        if effective_targets:
             mentioned = sum(
-                1 for target in target_files if target.lower() in trajectory_text.lower()
+                1 for target in effective_targets if target.lower() in trajectory_text.lower()
             )
-            localization_score = min(1.0, mentioned / max(1, len(target_files)))
-            details["localization"] = f"Mentioned {mentioned}/{len(target_files)} target files"
+            localization_score = min(1.0, mentioned / max(1, len(effective_targets)))
+            details["localization"] = f"Mentioned {mentioned}/{len(effective_targets)} observable context files"
         else:
-            # If target files unknown, check if specific code files were targeted in blocks
+            # If no observable file hints exist, check if specific code files were targeted in blocks
             localization_score = 1.0 if len(blocks) > 0 else 0.5
             details["localization"] = "Target files evaluated by presence of file targets"
 
