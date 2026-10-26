@@ -234,7 +234,9 @@ def run_rlvr(config_path: str, checkpoint_path: Optional[str] = None, steps: int
         console.print(f"[green]Generated {len(rollouts)} rollouts successfully.[/green]")
 
         # Evaluate rollouts against Rubric PRM and verifiable test
-        process_scores = [prm.evaluate_trajectory(r).total_score for r in rollouts]
+        process_scores = [
+            prm.evaluate_trajectory(r, observable_context=prompt).total_score for r in rollouts
+        ]
 
         # Evaluate rollouts using verifiable rewards
         test_rewards = []
