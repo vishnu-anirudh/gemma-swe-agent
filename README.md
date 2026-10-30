@@ -1,8 +1,9 @@
 # Autonomous SWE Gemma: Post-Training & Test-Time Scaling on Apple Silicon
 
-[![CI / Unit Tests](https://img.shields.io/badge/tests-25%20passed-brightgreen.svg)](tests/)
+[![CI / Unit Tests](https://img.shields.io/badge/tests-38%20passed-brightgreen.svg)](tests/)
 [![Platform](https://img.shields.io/badge/hardware-Apple%20Silicon%20(M2%20Max%2064GB)-black.svg)](#hardware-acceleration)
 [![Model](https://img.shields.io/badge/model-Google%20Gemma--2--2B--it-blue.svg)](https://huggingface.co/google/gemma-2-2b-it)
+[![Studio](https://img.shields.io/badge/studio-RepoGraph%20Doctor-blueviolet.svg)](#-application-spotlight-reporun-doctor-visual-code-graph-blast-radius-studio)
 [![Evaluation](https://img.shields.io/badge/benchmark-SWE--bench%20Lite%20%26%20Verified-purple.svg)](https://www.swebench.com/)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
@@ -190,6 +191,28 @@ uv run python -m src.train --mode eval --config configs/swe_bench_eval_quick.yam
 2. **Computes Structural Node Embeddings & Blast Radius**: Calculates graph distance and topological centrality to identify all broken downstream callers across files.
 3. **Autonomous SRI Synthesis**: Synthesizes localized Search-and-Replace (SRI) diffs using the sub-3B model and applies them via our 6-tier fuzzy AST patch applicator.
 4. **Verifies Invariant Preservation**: Executes regression test suites in local sandboxes to ensure zero side effects.
+
+### Interactive Studio Walkthrough & Visual Demos
+
+#### 1. Autonomous SRI Synthesis & Colorized Unified Diffs
+When an API signature changes, RepoGraph Doctor traces downstream callers and uses the post-trained Gemma-2-2B agent to synthesize exact **Search-and-Replace Identifier (SRI)** blocks applied via our 6-tier fuzzy AST patch applicator:
+
+![RepoGraph Doctor SRI Patches & Diffs](assets/img/reporun_doctor_sri_diffs.png)
+
+#### 2. Dual-Suite Sandbox Verification
+Ensures that generated repairs fix the target call sites without introducing subtle regressions in upstream invariants or callers:
+
+![RepoGraph Doctor Dual-Suite Sandbox Verification](assets/img/reporun_doctor_dual_suite.png)
+
+#### 3. Pydantic v1 to v2 Deprecation Migration Studio
+Handles framework-level AST deprecations (such as replacing `.dict()` with `.model_dump()`) across distributed controllers, background workers, and storage mappers:
+
+![Pydantic v1 to v2 Migration Studio](assets/img/reporun_doctor_pydantic_migration.png)
+
+#### 4. Blast-Radius Mapping & Dependency Call Diagnostics
+Visualizes topological distance, arity mismatches, and call-site severity (`CRITICAL`, `WARNING`, `SAFE`):
+
+![Blast Radius Caller Diagnostics](assets/img/reporun_doctor_blast_radius.png)
 
 ### Launch the Interactive Web Studio
 Experience the real-time force-directed graph canvas, interactive node inspector, and live diff viewer:
