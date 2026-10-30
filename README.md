@@ -16,26 +16,26 @@ An end-to-end framework for turning **Google Gemma 2** into autonomous, reposito
 ```mermaid
 flowchart TD
     subgraph SFT["Phase 1: Supervised Fine-Tuning (SFT)"]
-        D[Curriculum Trajectories<br>Easy → Medium → Hard] --> M[Step-Level Error Masker<br>Masks exploration blunders to -100]
-        M --> DRL[Dynamic Rank LoRA<br>Saliency-driven rank reallocation]
-        DRL --> CKPT[(Fine-Tuned Adapter Checkpoint<br>adapter_model.pt)]
+        D["Curriculum Trajectories<br>Easy → Medium → Hard"] --> M["Step-Level Error Masker<br>Masks exploration blunders to -100"]
+        M --> DRL["Dynamic Rank LoRA<br>Saliency-driven rank reallocation"]
+        DRL --> CKPT[("Fine-Tuned Adapter Checkpoint<br>adapter_model.pt")]
     end
 
     subgraph RLVR["Phase 2: Reinforcement Learning (RLVR)"]
-        CKPT --> POL[Gemma Policy Model]
-        POL --> ROLL[K Rollout Trajectories]
-        ROLL --> DUAL[Dual-Suite Verifier<br>FAIL_TO_PASS + PASS_TO_PASS]
-        ROLL --> PRM[Rubric Process Reward Model<br>Trajectory discipline & SRI format]
-        DUAL & PRM --> AVSPO[AVSPO Advantage Normalization<br>Neutralizes zero-variance collapse]
-        AVSPO --> GRPO[Critic-Free GRPO Loss<br>Memory-efficient on Unified RAM]
+        CKPT --> POL["Gemma Policy Model"]
+        POL --> ROLL["K Rollout Trajectories"]
+        ROLL --> DUAL["Dual-Suite Verifier<br>FAIL_TO_PASS + PASS_TO_PASS"]
+        ROLL --> PRM["Rubric Process Reward Model<br>Trajectory discipline & SRI format"]
+        DUAL & PRM --> AVSPO["AVSPO Advantage Normalization<br>Neutralizes zero-variance collapse"]
+        AVSPO --> GRPO["Critic-Free GRPO Loss<br>Memory-efficient on Unified RAM"]
         GRPO -.->|Policy Updates| POL
     end
 
     subgraph TTS["Phase 3: Test-Time Scaling (PDR & Agent)"]
-        POL --> AGENT[Multi-Turn Agent Loop<br>RepoTools: search, view, patch]
-        POL --> PDR[Parallel-Distill-Refine (PDR)<br>K Parallel Candidates + Tournament Voting]
-        AGENT & PDR --> WT[Docker & Git Worktree Sandboxes<br>Containerized or zero-copy ephemeral checkouts]
-        WT --> SWE[SWE-bench Grader<br>Pass@1 & Pass@K Resolution]
+        POL --> AGENT["Multi-Turn Agent Loop<br>RepoTools: search, view, patch"]
+        POL --> PDR["Parallel-Distill-Refine (PDR)<br>K Parallel Candidates + Tournament Voting"]
+        AGENT & PDR --> WT["Docker & Git Worktree Sandboxes<br>Containerized or zero-copy ephemeral checkouts"]
+        WT --> SWE["SWE-bench Grader<br>Pass@1 & Pass@K Resolution"]
     end
 ```
 
