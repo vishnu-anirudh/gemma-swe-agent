@@ -183,6 +183,33 @@ uv run python -m src.train --mode eval --config configs/swe_bench_eval_quick.yam
 
 ---
 
+## 🩺 Application Spotlight: RepoGraph Doctor (Visual Code-Graph Blast-Radius Studio)
+
+**RepoGraph Doctor** is an interactive visual studio and developer CLI tool powered by our sub-3B Gemma post-training pipeline. It solves a ubiquitous software engineering bottleneck: **refactoring blast radius**. When a developer changes an internal API, function signature, or data model, RepoGraph Doctor:
+1. **Parses the Repository Code-Graph**: Extracts an AST dependency DAG (Classes, Functions, Methods, and `CALLS`/`IMPORTS` relationships) using NetworkX.
+2. **Computes Structural Node Embeddings & Blast Radius**: Calculates graph distance and topological centrality to identify all broken downstream callers across files.
+3. **Autonomous SRI Synthesis**: Synthesizes localized Search-and-Replace (SRI) diffs using the sub-3B model and applies them via our 6-tier fuzzy AST patch applicator.
+4. **Verifies Invariant Preservation**: Executes regression test suites in local sandboxes to ensure zero side effects.
+
+### Launch the Interactive Web Studio
+Experience the real-time force-directed graph canvas, interactive node inspector, and live diff viewer:
+```bash
+PYTHONPATH=. uv run python -m src.doctor.server 8765
+```
+Open **`http://127.0.0.1:8765`** in your browser to explore pre-packaged scenarios (Payment API Signature Refactoring, Pydantic v1 $\to$ v2 Migration, Django 10914 Security Fixes) or analyze your own codebase.
+
+### Run via Command-Line / Pre-Commit Hook
+Run headless blast-radius analysis and autonomous repair directly from your terminal or CI/CD pipeline:
+```bash
+# Run pre-configured scenario
+PYTHONPATH=. uv run python -m src.doctor.cli --scenario scenario_1
+
+# Scan a local codebase and compute blast radius for a symbol
+PYTHONPATH=. uv run python -m src.doctor.cli --dir ./src --target process_payment
+```
+
+---
+
 ## 💻 Hardware Acceleration (Apple Silicon)
 
 This repository is optimized for Apple Silicon (M-Series processors) with PyTorch Metal Performance Shaders (`mps`):
