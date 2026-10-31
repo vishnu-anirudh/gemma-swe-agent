@@ -276,26 +276,29 @@ def run_eval(
     k: int = 4,
     use_docker: bool = False,
     instance_filter: Optional[str] = None,
+    limit: Optional[int] = None,
+    output_file: Optional[str] = None,
 ) -> None:
     """Execute SWE-bench Evaluation on Lite/Verified instances."""
     cfg = load_yaml(config_path)
     device = get_device()
     model_name = cfg["model"]["name_or_path"]
     dataset_name = cfg["benchmark"]["dataset_name"]
-    limit = cfg["benchmark"].get("limit", 5)
+    limit_val = limit if (limit is not None and limit > 0) else cfg["benchmark"].get("limit")
+    limit_label = str(limit_val) if limit_val else "All (unlimited)"
 
     mode_label = "Agentic Multi-Turn" if agentic else ("Parallel-Distill-Refine (TTS)" if tts else "Single-Turn")
     console.print(
-        f"[bold magenta]Starting SWE-bench Evaluation ({mode_label})[/bold magenta] on {dataset_name} (limit={limit})"
+        f"[bold magenta]Starting SWE-bench Evaluation ({mode_label})[/bold magenta] on {dataset_name} (limit={limit_label})"
     )
     if instance_filter:
-        all_instances = SWEBenchLoader.load_from_huggingface(dataset_name=dataset_name, limit=100)
+        all_instances = SWEBenchLoader.load_from_huggingface(dataset_name=dataset_name, limit=None)
         instances = [i for i in all_instances if instance_filter in i.instance_id]
         if not instances:
             console.print(f"[bold red]No instance matching '{instance_filter}' found.[/bold red]")
             return
     else:
-        instances = SWEBenchLoader.load_from_huggingface(dataset_name=dataset_name, limit=limit)
+        instances = SWEBenchLoader.load_from_huggingface(dataset_name=dataset_name, limit=limit_val)
     console.print(f"Loaded {len(instances)} instances from {dataset_name}.")
 
     model, tokenizer = load_model_and_tokenizer(model_name, device)
@@ -474,6 +477,35 @@ def run_eval(
     summary = MetricsCalculator.compute_summary(results)
     summary.print_summary()
 
+    out_path = output_file or cfg.get("benchmark", {}).get("output_file")
+    if out_path:
+        os.makedirs(os.path.dirname(out_path) or ".", exist_ok=True)
+        summary_dict = {
+            "dataset": dataset_name,
+            "mode": mode_label,
+            "total_instances": summary.total_instances,
+            "resolved_instances": summary.resolved_instances,
+            "unresolved_instances": summary.unresolved_instances,
+            "pass_at_1": summary.pass_at_1,
+            "patch_application_rate": summary.patch_application_rate,
+            "results": [
+                {
+                    "instance_id": r.instance_id,
+                    "resolved": r.resolved,
+                    "patch_applied": r.patch_applied,
+                    "format_type": r.format_type,
+                    "fail_to_pass_passed": r.fail_to_pass_passed,
+                    "pass_to_pass_passed": r.pass_to_pass_passed,
+                    "execution_time_seconds": round(r.execution_time_seconds, 2),
+                    "error_message": r.error_message,
+                }
+                for r in results
+            ],
+        }
+        with open(out_path, "w", encoding="utf-8") as f:
+            json.dump(summary_dict, f, indent=2)
+        console.print(f"[bold green]Saved evaluation report to {out_path}[/bold green]")
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Gemma Autonomous SWE Pipeline")
@@ -550,6 +582,18 @@ def main() -> None:
         default=None,
         help="Target a specific SWE-bench instance ID or substring",
     )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="Max instances to evaluate (omit or 0 for all instances)",
+    )
+    parser.add_argument(
+        "--output",
+        type=str,
+        default=None,
+        help="Path to save evaluation JSON results",
+    )
 
     args = parser.parse_args()
 
@@ -576,6 +620,8 @@ def main() -> None:
             k=args.k,
             use_docker=args.docker,
             instance_filter=args.instance,
+            limit=args.limit,
+            output_file=args.output,
         )
 
 

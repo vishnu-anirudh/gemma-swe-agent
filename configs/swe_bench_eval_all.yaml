@@ -1,0 +1,20 @@
+# SWE-bench Full Evaluation Configuration (300 instances on SWE-bench Lite)
+benchmark:
+  dataset_name: "princeton-nlp/SWE-bench_Lite"
+  split: "test"
+  limit: null               # null or 0 evaluates all 300 instances
+  timeout_seconds: 120
+  output_file: "./results/swe_bench_lite_all_results.json"
+
+model:
+  name_or_path: "google/gemma-2-2b-it"
+  adapter_path: "./checkpoints/sft_dr_lora/adapter_model.pt"
+  max_new_tokens: 1024
+  temperature: 0.0          # Greedy decoding for deterministic Pass@1
+  use_sri_format: true
+
+agent:
+  max_turns: 4
+
+tts:
+  k: 4
