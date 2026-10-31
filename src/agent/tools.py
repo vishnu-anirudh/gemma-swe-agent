@@ -200,3 +200,76 @@ class RepoTools:
             return f"Error: Test execution timed out after {timeout} seconds."
         except Exception as e:
             return f"Execution error: {e}"
+
+    @classmethod
+    def get_graph_context(cls, repo_dir: str, query: str, max_symbols: int = 5) -> str:
+        """Query the AST code graph for symbols, callers, callees, and definition locations."""
+        if not query or not query.strip():
+            return "Error: query cannot be empty. Please provide a symbol or identifier to look up."
+
+        try:
+            from src.doctor.graph_engine import CodeGraphEngine
+
+            engine = CodeGraphEngine()
+            repo_path = Path(repo_dir)
+
+            # Discover Python files in repo (prioritizing src/ or package directories)
+            candidates: List[Path] = []
+            for sub in ["src", "lib", "."]:
+                target_dir = repo_path / sub
+                if target_dir.exists():
+                    for p in target_dir.rglob("*.py"):
+                        parts = p.parts
+                        if not any(part.startswith((".", "__pycache__", "tests", "docs")) for part in parts):
+                            candidates.append(p)
+                        if len(candidates) >= 80:
+                            break
+                if candidates:
+                    break
+
+            for cf in candidates:
+                rel = str(cf.relative_to(repo_path)).replace("\\", "/")
+                try:
+                    engine.add_file(rel, cf.read_text(encoding="utf-8", errors="replace"))
+                except Exception:
+                    pass
+
+            # Search nodes matching query
+            clean_q = query.lower().strip()
+            matches = []
+            for nid, node in engine.nodes.items():
+                if node.node_type == "module":
+                    continue
+                score = 0
+                node_lower = node.name.lower()
+                if clean_q == node_lower:
+                    score += 10
+                elif clean_q in node_lower:
+                    score += 5
+                elif clean_q in node.file_path.lower():
+                    score += 2
+
+                if score > 0:
+                    matches.append((score, node))
+
+            matches.sort(key=lambda x: -x[0])
+            if not matches:
+                return f"No code-graph symbols matching '{query}' found."
+
+            lines = [f"=== Code Graph Context for '{query}' ==="]
+            for _, node in matches[:max_symbols]:
+                callers = engine.get_callers(node.id)
+                callees = engine.get_callees(node.id)
+                caller_str = ", ".join(callers[:3]) if callers else "none"
+                callee_str = ", ".join(callees[:3]) if callees else "none"
+                sig = f"def {node.name}{node.signature}" if node.node_type in ("function", "method") else f"class {node.name}"
+                lines.append(
+                    f"• [{node.node_type.upper()}] {node.id} (Lines {node.line_start}-{node.line_end})\n"
+                    f"  File: {node.file_path}\n"
+                    f"  Signature: {sig}\n"
+                    f"  Callers ({len(callers)}): {caller_str}\n"
+                    f"  Callees ({len(callees)}): {callee_str}"
+                )
+            return "\n".join(lines)
+        except Exception as e:
+            return f"Code graph query note: {e}"

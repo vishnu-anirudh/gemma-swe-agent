@@ -66,15 +66,28 @@ class ParallelDistillRefine:
 
             reason = "Syntax/Formatting: No valid SRI search-and-replace block found."
             if cand.sri_blocks:
-                if cand.test_stderr:
-                    # Extract last 2 lines of stderr (e.g. AssertionError or Exception)
-                    lines = [ln.strip() for ln in cand.test_stderr.strip().split("\n") if ln.strip()]
-                    err_msg = " | ".join(lines[-2:]) if lines else "Non-zero exit code."
+                combined_output = ""
+                if cand.test_stderr and cand.test_stderr.strip():
+                    combined_output += cand.test_stderr + "\n"
+                if cand.test_stdout and cand.test_stdout.strip():
+                    combined_output += cand.test_stdout + "\n"
+
+                if combined_output:
+                    lines = [ln.strip() for ln in combined_output.splitlines() if ln.strip()]
+                    # Look for explicit failure clues from pytest / unittest
+                    failure_clues = [
+                        ln for ln in lines
+                        if any(k in ln for k in ["FAILED", "ERROR", "AssertionError", "TypeError", "ValueError", "IndexError", "AttributeError", "E   "])
+                    ]
+                    if failure_clues:
+                        err_msg = " | ".join(failure_clues[-3:])
+                    else:
+                        err_msg = " | ".join(lines[-2:]) if lines else "Non-zero exit code."
                     reason = f"Test Failure: {err_msg}"
                 elif cand.error_summary:
                     reason = cand.error_summary
                 else:
-                    reason = "Test suite failed."
+                    reason = "Test suite failed with non-zero exit code."
 
             failures.append(f"• Candidate #{cand.candidate_id}: {reason}")
 

@@ -26,6 +26,13 @@ def test_repo_tools_view_and_list():
         list_out = RepoTools.list_dir(str(repo))
         assert "sample.py" in list_out
 
+        # Test get_graph_context
+        calc_file = repo / "calc.py"
+        calc_file.write_text("def calculate_total(items):\n    return sum(items)\n", encoding="utf-8")
+        graph_out = RepoTools.get_graph_context(str(repo), "calculate_total")
+        assert "calculate_total" in graph_out
+        assert "calc.py" in graph_out
+
 
 def test_multi_turn_agent_tool_calling_and_patch():
     with tempfile.TemporaryDirectory() as tmp_dir:

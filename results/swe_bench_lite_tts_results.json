@@ -1,0 +1,3016 @@
+{
+  "dataset": "princeton-nlp/SWE-bench_Lite",
+  "mode": "tts",
+  "model_name": "google/gemma-2-2b-it",
+  "checkpoint": "checkpoints/sft_dr_lora/adapter_model.pt",
+  "last_updated_utc": "2026-10-31T04:12:24Z",
+  "total_instances_target": 300,
+  "evaluated_instances": 300,
+  "resolved_instances": 3,
+  "unresolved_instances": 297,
+  "pass_at_1": 0.01,
+  "patch_application_rate": 0.7666666666666667,
+  "syntactic_sri_validity_rate": 1.0,
+  "results": [
+    {
+      "instance_id": "astropy__astropy-12907",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.91,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "astropy__astropy-14182",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.85,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "astropy__astropy-14365",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.84,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "astropy__astropy-14995",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.77,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "astropy__astropy-6938",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.95,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "astropy__astropy-7746",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1 for 'astropy/wcs/docstrings.py' failed: Search string matched 7 locations (must match exactly once). | Search: 'InconsistentAxisTypesError'"
+    },
+    {
+      "instance_id": "django__django-10914",
+      "resolved": true,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": true,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.14,
+      "error_message": null
+    },
+    {
+      "instance_id": "django__django-10924",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.63,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11001",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.77,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11019",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.95,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11039",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.65,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11049",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.53,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11099",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.64,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11133",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.53,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11179",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.1,
+      "error_message": "Patch application failed: Block 1 for 'django/db/models/deletion.py' failed: Search string not found in target file. | Search: 'def delete(self, *args, **kwargs):'"
+    },
+    {
+      "instance_id": "django__django-11283",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.61,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11422",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.78,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11564",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.22,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11583",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.78,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11620",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.57,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11630",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.67,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11742",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.1,
+      "error_message": "Patch application failed: Block 1 for 'tests/migrations/faulty_migrations/file.py' failed: Search string not found in target file. | Search: \"choices = [\\n            'value1',\\n            'value2',\\n            'value3',\\n            'value4',\\n        ]\""
+    },
+    {
+      "instance_id": "django__django-11797",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.67,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11815",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.73,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11848",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.72,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11905",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.65,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11910",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.8,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11964",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.05,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-11999",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.08,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12113",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.7,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12125",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.82,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12184",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.87,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12284",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.8,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12286",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.71,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12308",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.82,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12453",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.74,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12470",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.04,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12497",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.84,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12589",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.88,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12700",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.82,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12708",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.94,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12747",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.04,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12856",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.91,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12908",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.9,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12915",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.68,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-12983",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.1,
+      "error_message": "Patch application failed: Block 1 for 'django/utils/text.py' failed: Search string not found in target file. | Search: 'def slugify(value):\\n    return slugify(value)'"
+    },
+    {
+      "instance_id": "django__django-13028",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.95,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-13033",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.04,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-13158",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.05,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-13220",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.7,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-13230",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.1,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/django/views/syndication/feed.py' does not exist in repo."
+    },
+    {
+      "instance_id": "django__django-13265",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.89,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-13315",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.88,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-13321",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.91,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-13401",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.8,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-13447",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.1,
+      "error_message": "Patch application failed: Block 1 for 'tests/generic_views/views.py' failed: Search string not found in target file. | Search: \"def _build_app_dict(self, request):\\n    app_list = self.get_apps()\\n    \\n    return {'app_list': app_list}\""
+    },
+    {
+      "instance_id": "django__django-13448",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.1,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-13551",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.01,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-13590",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.0,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-13658",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.74,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-13660",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.82,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-13710",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.1,
+      "error_message": "Patch application failed: Block 1 for 'django/contrib/syndication/views.py' failed: Search string not found in target file. | Search: 'def admin_view(request, pk):'"
+    },
+    {
+      "instance_id": "django__django-13757",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.91,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-13768",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.1,
+      "error_message": "Patch application failed: Block 1 for 'django/core/signals.py' failed: Search string not found in target file. | Search: '```python\\n    def send_robust(self, dispatch_context, **kwargs):\\n        try:\\n            return self.get_dispatch_resul'"
+    },
+    {
+      "instance_id": "django__django-13925",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.93,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-13933",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.0,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-13964",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.14,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14016",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.92,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14017",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.96,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14155",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.84,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14238",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.86,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14382",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.9,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14411",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.81,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14534",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.65,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14580",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.81,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14608",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.33,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14667",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.88,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14672",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.91,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14730",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.78,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14752",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.18,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14787",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.89,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14855",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.29,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14915",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.99,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14997",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.22,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-14999",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.95,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15061",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.84,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15202",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.98,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15213",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.94,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15252",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.65,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15320",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.04,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15347",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.99,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15388",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.1,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15400",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.86,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15498",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.1,
+      "error_message": "Patch application failed: Block 1 for 'tests/migrations/faulty_migrations/file.py' failed: Search string not found in target file. | Search: \"def get_file_modified_time(request):\\n    if 'If-Modified-Since' in request.headers:\\n        try:\\n            modified_ti\""
+    },
+    {
+      "instance_id": "django__django-15695",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.5,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15738",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.22,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15781",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.89,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15789",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.96,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15790",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.91,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15814",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.97,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15819",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.05,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15851",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.73,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15902",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.51,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-15996",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.93,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-16041",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.4,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-16046",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.93,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-16139",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.3,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-16229",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.57,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-16255",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.18,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-16379",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.66,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-16400",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.15,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-16408",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.92,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-16527",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1 for 'django/contrib/admin/templatetags/admin_modify.py' failed: Search string not found in target file. | Search: 'if not is_popup:'"
+    },
+    {
+      "instance_id": "django__django-16595",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.13,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-16816",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.9,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-16820",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.1,
+      "error_message": "Patch application failed: Block 1 for 'tests/migrations/faulty_migrations/file.py' failed: Search string not found in target file. | Search: 'from django.db import migrations, models\\n\\nclass Migration(migrations.Migration):\\n\\n    def migrate(self, schema_editor):\\n'"
+    },
+    {
+      "instance_id": "django__django-16873",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.11,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-16910",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.09,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-17051",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.17,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "django__django-17087",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 3.09,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-18869",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-22711",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.65,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-22835",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.75,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-23299",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.65,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-23314",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.62,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-23476",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.63,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-23562",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.64,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-23563",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.64,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-23913",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1 for 'lib/matplotlib/legend.py' failed: Search string not found in target file. | Search: \"if hasattr(self, 'ax') and hasattr(self.ax, 'legend'):\\n        self.ax.legend.set_draggable(False)\""
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-23964",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.68,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-23987",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.59,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-24149",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1 for 'lib/matplotlib/_type1font.py' failed: Search string matched 3 locations (must match exactly once). | Search: 'except StopIteration:'"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-24265",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.67,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-24334",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'matplotlib/matplotlib/axes.py' does not exist in repo."
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-24970",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.67,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-25079",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.73,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-25311",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.8,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-25332",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.74,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-25433",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.65,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-25442",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.65,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-25498",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.77,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-26011",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1 for 'lib/matplotlib/axes/_base.py' failed: Search string not found in target file. | Search: \"```python\\n    if emit:\\n        self.callbacks.process('xlim_changed', self)\\n        # Call all of the other x-axes that \""
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-26020",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.71,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "mwaskom__seaborn-2848",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.83,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "mwaskom__seaborn-3010",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.93,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "mwaskom__seaborn-3190",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.92,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "mwaskom__seaborn-3407",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.02,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pallets__flask-4045",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1: File 'pallets/flask/blueprint.py' does not exist in repo."
+    },
+    {
+      "instance_id": "pallets__flask-4992",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.57,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pallets__flask-5063",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.56,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "psf__requests-1963",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.67,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "psf__requests-2148",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.72,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "psf__requests-2317",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.75,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "psf__requests-2674",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.7,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "psf__requests-3362",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "psf__requests-863",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/requests/src/requests/adapters/ssl_adapter.py' does not exist in repo."
+    },
+    {
+      "instance_id": "pydata__xarray-3364",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.97,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pydata__xarray-4094",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.65,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pydata__xarray-4248",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "pydata__xarray-4493",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1 for 'asv_bench/benchmarks/dataset_io.py' failed: Search string matched 2 locations (must match exactly once). | Search: 'def time_write_dataset_netcdf4(self):'"
+    },
+    {
+      "instance_id": "pydata__xarray-5131",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.68,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pylint-dev__pylint-5859",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.06,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pylint-dev__pylint-6506",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.22,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pylint-dev__pylint-7080",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.46,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pylint-dev__pylint-7114",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.4,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pylint-dev__pylint-7228",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.38,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pylint-dev__pylint-7993",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.43,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-11143",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": true,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 1.19,
+      "error_message": "Regression detected in PASS_TO_PASS test suite"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-11148",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.89,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-5103",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.63,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-5221",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/pytest/tests/pytest_fixtures.py' does not exist in repo."
+    },
+    {
+      "instance_id": "pytest-dev__pytest-5227",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.64,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-5413",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.74,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-5495",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.81,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-5692",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.75,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-6116",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1 for 'testing/example_scripts/collect/package_infinite_recursion/tests/__init__.py' failed: Search string not found in target file. | Search: 'def pytest_addoption(parser):\\n    parser.addoption('"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-7168",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.71,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-7220",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.63,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-7373",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.64,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-7432",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.63,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-7490",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.62,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-8365",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.74,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "pytest-dev__pytest-8906",
+      "resolved": true,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": true,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.25,
+      "error_message": null
+    },
+    {
+      "instance_id": "pytest-dev__pytest-9359",
+      "resolved": true,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": true,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.06,
+      "error_message": null
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-10297",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.89,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-10508",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.89,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-10949",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.97,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-11040",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.91,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-11281",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-12471",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.91,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-13142",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.97,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-13241",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.93,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-13439",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.91,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-13496",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.01,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-13497",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-13584",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.12,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-13779",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.81,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-14087",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.88,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-14092",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.89,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-14894",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.87,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-14983",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.9,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-15512",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.93,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-15535",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.91,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-25500",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.09,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-25570",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.87,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-25638",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.98,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "scikit-learn__scikit-learn-25747",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.89,
+      "error_message": "FAIL_TO_PASS test failed with exit code 1"
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-10325",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.02,
+      "error_message": "Patch application failed: Block 1 for 'tests/roots/test-build-html-translator/conf.py' failed: Search string not found in target file. | Search: 'from sphinx.util.osutil import is_module_file'"
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-10451",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.02,
+      "error_message": "Patch application failed: Block 1 for 'tests/roots/test-build-html-translator/conf.py' failed: Search string not found in target file. | Search: 'from sphinx.application import Sphinx'"
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-11445",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.02,
+      "error_message": "Patch application failed: Block 1 for 'tests/roots/test-build-html-translator/conf.py' failed: Search string not found in target file. | Search: 'from sphinx.application import Sphinx'"
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-7686",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1 for 'sphinx/ext/autosummary/templates/autosummary/module.rst' failed: Search string matched 5 locations (must match exactly once). | Search: '.. autosummary::'"
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-7738",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.92,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-7975",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.98,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-8273",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.02,
+      "error_message": "Patch application failed: Block 1 for 'tests/roots/test-ext-inheritance_diagram/example/sphinx.py' failed: Search string not found in target file. | Search: \"```python\\n    if not os.path.exists(os.path.join(BUILD_DIR, 'man')):\\n        os.makedirs(os.path.join(BUILD_DIR, 'man'))\""
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-8282",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1 for 'tests/roots/test-build-html-translator/conf.py' failed: Search string not found in target file. | Search: \"autodoc_typehints = 'none'\""
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-8435",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.9,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-8474",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.91,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-8506",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.91,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-8595",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.94,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-8627",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-8713",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.04,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-8721",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.94,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sphinx-doc__sphinx-8801",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.92,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-11400",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-11870",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-11897",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1 for 'sympy/core/numbers.py' failed: Search string matched 9 locations (must match exactly once). | Search: 'def _latex(self, printer):'"
+    },
+    {
+      "instance_id": "sympy__sympy-12171",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'sympy/sympy/src/sympy/core/comp.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-12236",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'sympy/sympy/sympy/parsing/polys.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-12419",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.98,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-12454",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.97,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-12481",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.95,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-13031",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-13043",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1 for 'sympy/functions/special/polynomials.py' failed: Search string not found in target file. | Search: 'def decompose(self, sep=True):'"
+    },
+    {
+      "instance_id": "sympy__sympy-13146",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-13177",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-13437",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-13471",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.03,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-13480",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.27,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-13647",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-13773",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.98,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-13895",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-13915",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-13971",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.33,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-14024",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-14308",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.03,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-14317",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 0.98,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-14396",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.03,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-14774",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.04,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-14817",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1 for 'sympy/assumptions/handlers/matrices.py' failed: Search string matched 10 locations (must match exactly once). | Search: 'def MatAdd(expr, assumptions):'"
+    },
+    {
+      "instance_id": "sympy__sympy-15011",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1 for 'sympy/assumptions/handlers/matrices.py' failed: Search string matched 8 locations (must match exactly once). | Search: 'def MatrixSymbol(expr, assumptions):'"
+    },
+    {
+      "instance_id": "sympy__sympy-15308",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.05,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-15345",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-15346",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1 for 'sympy/functions/special/polynomials.py' failed: Search string not found in target file. | Search: 'def simplify(self, *args):'"
+    },
+    {
+      "instance_id": "sympy__sympy-15609",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.09,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-15678",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.05,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-16106",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.81,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-16281",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1 for 'sympy/core/mul.py' failed: Search string not found in target file. | Search: 'def _pprint(self, **kwargs):'"
+    },
+    {
+      "instance_id": "sympy__sympy-16503",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-16792",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1 for 'sympy/assumptions/handlers/matrices.py' failed: Search string matched 8 locations (must match exactly once). | Search: 'def MatrixSymbol(expr, assumptions):'"
+    },
+    {
+      "instance_id": "sympy__sympy-16988",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.86,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-17022",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1 for 'sympy/assumptions/handlers/matrices.py' failed: Search string matched 8 locations (must match exactly once). | Search: 'def MatrixSymbol(expr, assumptions):'"
+    },
+    {
+      "instance_id": "sympy__sympy-17139",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.86,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-17630",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.65,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-17655",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.95,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-18057",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.89,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-18087",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1 for 'sympy/core/sympify.py' failed: Search string not found in target file. | Search: 'def trigsimp(expr, complex_only=False):\\n  if isinstance(expr, (complex, complex_number)):\\n    return simplify(expr)\\n  if'"
+    },
+    {
+      "instance_id": "sympy__sympy-18189",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1 for 'sympy/solvers/tests/test_diophantine.py' failed: Search string not found in target file. | Search: '```python\\nfrom sympy import diophantine\\nimport unittest\\n\\nclass TestDiophantine(unittest.TestCase):\\n    def test_permute_'"
+    },
+    {
+      "instance_id": "sympy__sympy-18199",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-18532",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-18621",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.96,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-18698",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-18835",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.85,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-19007",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.64,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-19254",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-19487",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1 for 'sympy/core/sympify.py' failed: Search string not found in target file. | Search: 'def sign(z):\\n    return z / Abs(z)'"
+    },
+    {
+      "instance_id": "sympy__sympy-20049",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.89,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-20154",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1 for 'sympy/combinatorics/partitions.py' failed: Search string not found in target file. | Search: 'def partitions(n):\\n  \"\"\"\\n  Partitions a number into sets of prime factors.\\n  \"\"\"\\n  if n == 0:\\n    return []\\n  \\n  partiti'"
+    },
+    {
+      "instance_id": "sympy__sympy-20212",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.92,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-20322",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'sympy/sympy/sympy.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-20442",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-20590",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.99,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-20639",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.98,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-21055",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-21171",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.98,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-21379",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.05,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-21612",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1 for 'sympy/printing/latex.py' failed: Search string not found in target file. | Search: 'def parse_latex(latex_expr):'"
+    },
+    {
+      "instance_id": "sympy__sympy-21614",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1 for 'sympy/stats/random_matrix_models.py' failed: Search string matched 3 locations (must match exactly once). | Search: \"H = RandomMatrixSymbol('H', n, n, pspace=h_pspace)\""
+    },
+    {
+      "instance_id": "sympy__sympy-21627",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.94,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-21847",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    },
+    {
+      "instance_id": "sympy__sympy-22005",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.04,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-22714",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.02,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-22840",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.0,
+      "error_message": "Patch application failed: Block 1 for 'sympy/stats/random_matrix_models.py' failed: Search string matched 3 locations (must match exactly once). | Search: \"H = RandomMatrixSymbol('H', n, n, pspace=h_pspace)\""
+    },
+    {
+      "instance_id": "sympy__sympy-23117",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.0,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-23191",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.22,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-23262",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.91,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-24066",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.04,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-24102",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.94,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-24152",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 2.0,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-24213",
+      "resolved": false,
+      "patch_applied": true,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": true,
+      "execution_time_seconds": 1.97,
+      "error_message": "FAIL_TO_PASS test failed with exit code 4"
+    },
+    {
+      "instance_id": "sympy__sympy-24909",
+      "resolved": false,
+      "patch_applied": false,
+      "format_type": "sri",
+      "fail_to_pass_passed": false,
+      "pass_to_pass_passed": false,
+      "execution_time_seconds": 0.01,
+      "error_message": "Patch application failed: Block 1: File 'relative/path/to/file.py' does not exist in repo."
+    }
+  ]
+}

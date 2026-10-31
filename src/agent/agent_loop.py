@@ -49,6 +49,8 @@ class MultiTurnAgent:
         "   Example: ```tool_call\nlist_dir path=\"src/\"\n```\n\n"
         "4. run_test: Execute test suite\n"
         "   Example: ```tool_call\nrun_test command=\"pytest tests/test_calc.py\"\n```\n\n"
+        "5. get_graph_context: Query AST code graph for symbol definitions, callers, callees, and file locations\n"
+        "   Example: ```tool_call\nget_graph_context query=\"symbol_or_function_name\"\n```\n\n"
         "When you have identified the fix, submit it in Search-and-Replace Infilling (SRI) format:\n"
         "<submit_patch>\n"
         "<<<<<<< SEARCH: relative/path/to/file.py\n"
@@ -100,7 +102,7 @@ class MultiTurnAgent:
         # 2. Markdown code blocks (```tool_call, ```python, ```sh, etc.)
         for block_match in re.finditer(r'```(?:tool_call|python|bash|sh)?\s*\n?(.*?)\n?```', text, re.DOTALL):
             block_content = block_match.group(1).strip()
-            m = re.search(r'\b(search_code|view_file|list_dir|run_test)\b\s*\(?([^)\n]*)\)?', block_content)
+            m = re.search(r'\b(search_code|view_file|list_dir|run_test|get_graph_context)\b\s*\(?([^)\n]*)\)?', block_content)
             if m:
                 t_name = m.group(1).strip()
                 attrs = _extract_attrs(t_name, m.group(2))
@@ -109,7 +111,7 @@ class MultiTurnAgent:
 
         # 3. Line-anchored tool calls (starting at beginning of a line)
         line_match = re.search(
-            r'^\s*(?:`{1,3})?\s*(search_code|view_file|list_dir|run_test)\b\s*\(?([^)\n]*)\)?',
+            r'^\s*(?:`{1,3})?\s*(search_code|view_file|list_dir|run_test|get_graph_context)\b\s*\(?([^)\n]*)\)?',
             text,
             re.MULTILINE,
         )
@@ -120,7 +122,7 @@ class MultiTurnAgent:
                 return t_name, attrs
 
         # 4. Fallback search across free text, only if attributes are present
-        for m in re.finditer(r'\b(search_code|view_file|list_dir|run_test)\b\s*\(?([^)\n]*)\)?', text):
+        for m in re.finditer(r'\b(search_code|view_file|list_dir|run_test|get_graph_context)\b\s*\(?([^)\n]*)\)?', text):
             t_name = m.group(1).strip()
             attrs = _extract_attrs(t_name, m.group(2))
             if attrs:
@@ -565,6 +567,8 @@ class MultiTurnAgent:
                     observation = RepoTools.search_code(repo_dir, query)
                 elif tool_name == "run_test":
                     observation = RepoTools.run_test(repo_dir, command)
+                elif tool_name == "get_graph_context":
+                    observation = RepoTools.get_graph_context(repo_dir, query or path)
                 else:
                     observation = f"Error: Unknown tool '{tool_name}'."
 

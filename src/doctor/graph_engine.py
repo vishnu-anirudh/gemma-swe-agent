@@ -267,6 +267,24 @@ class CodeGraphEngine:
             norm = math.sqrt(sum(x * x for x in raw_vec)) or 1.0
             node.embedding = [round(x / norm, 4) for x in raw_vec]
 
+    def get_callers(self, node_id: str) -> List[str]:
+        """Return list of node IDs that call or depend on node_id."""
+        if not self.graph.has_node(node_id):
+            return []
+        return [
+            u for u, v, data in self.graph.in_edges(node_id, data=True)
+            if data.get("relation") in ("CALLS", "IMPORTS", "INHERITS_FROM")
+        ]
+
+    def get_callees(self, node_id: str) -> List[str]:
+        """Return list of node IDs that node_id calls or references."""
+        if not self.graph.has_node(node_id):
+            return []
+        return [
+            v for u, v, data in self.graph.out_edges(node_id, data=True)
+            if data.get("relation") in ("CALLS", "IMPORTS", "INHERITS_FROM")
+        ]
+
     def compute_blast_radius(
         self,
         modified_node_name_or_id: str,

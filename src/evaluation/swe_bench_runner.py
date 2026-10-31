@@ -335,6 +335,28 @@ class SWEBenchRunner:
                     prefill_part = f"<<<<<<< SEARCH: {m_path}\n{m_code}\n=======\n"
                     prompt = f"<start_of_turn>user\n{user_part}<end_of_turn>\n<start_of_turn>model\n{prefill_part}"
                     break
+
+            # Fallback: Query AST CodeGraphEngine for symbol locations if direct grep didn't find a match
+            if "<<<<<<< SEARCH:" not in prompt:
+                for sym in dict.fromkeys(symbols[:3]):
+                    graph_obs = RepoTools.get_graph_context(repo_dir, sym, max_symbols=2)
+                    if "=== Code Graph Context" in graph_obs:
+                        f_match = re.search(r"File:\s*([a-zA-Z0-9_\-\./]+\.py)", graph_obs)
+                        l_match = re.search(r"Lines\s*(\d+)-(\d+)", graph_obs)
+                        if f_match and l_match:
+                            m_path = f_match.group(1)
+                            s_line = max(1, int(l_match.group(1)))
+                            snippet = RepoTools.view_file(repo_dir, m_path, s_line, min(s_line + 25, int(l_match.group(2)) + 5))
+                            user_part = (
+                                f"{self.SYSTEM_PROMPT}\n\n"
+                                f"Repository: {instance.repo}\n"
+                                f"Base Commit: {instance.base_commit}\n"
+                                f"Problem Statement:\n{instance.problem_statement}\n\n"
+                                f"Target File Context (AST Code Graph):\n{snippet}\n\n"
+                                f"Please provide your fix for {m_path} in SRI format:"
+                            )
+                            prompt = f"<start_of_turn>user\n{user_part}<end_of_turn>\n<start_of_turn>model\n"
+                            break
         except Exception:
             pass
 
