@@ -1,0 +1,17 @@
+name: root_coder
+description: Autonomous software engineering agent for repository navigation, bug localization, repair, and verification.
+model: gemma-4-31b-it-qat-w4a16-ct
+adapter: main_lora
+instruction: !include prompts/system.md
+tools:
+  - run_command
+  - submit_patch
+  - get_status
+  - read_file
+  - edit_file
+  - write_file
+  - search_similar_code
+  - get_code_neighbors
+  - get_code_subgraph
+  - agent_tool: !include sub_agents/code_analyzer.yaml
+generation_config: !include configs/sampling.yaml

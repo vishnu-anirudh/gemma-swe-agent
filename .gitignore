@@ -16,6 +16,7 @@ checkpoints/*.bin
 
 # Evaluation artifacts
 eval_results/
+submission.zip
 tmp/
 
 # Python cache & build artifacts
