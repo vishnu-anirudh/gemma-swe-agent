@@ -62,10 +62,32 @@ class CompetitionHarnessContext:
         self.patch_submitted = False
         self.submitted_patch = ""
 
+    def _resolve_file_path(self, filepath: str) -> Optional[Path]:
+        clean = filepath.strip().lstrip("/")
+        target = self.workspace_dir / clean
+        if target.exists() and target.is_file():
+            return target
+
+        # Candidate 1: replace dots with slashes + .py
+        as_path = clean.replace(".", "/")
+        cand = self.workspace_dir / f"{as_path}.py"
+        if cand.exists() and cand.is_file():
+            return cand
+
+        # Candidate 2: strip trailing symbol from dot-path (e.g. tests.module.symbol -> tests/module.py)
+        parts = clean.split(".")
+        for i in range(len(parts) - 1, 0, -1):
+            sub_path = "/".join(parts[:i])
+            cand = self.workspace_dir / f"{sub_path}.py"
+            if cand.exists() and cand.is_file():
+                return cand
+
+        return None
+
     def read_file(self, filepath: str, start_line: Optional[int] = None, end_line: Optional[int] = None) -> str:
         self.tool_calls_used += 1
-        target = self.workspace_dir / filepath.lstrip("/")
-        if not target.exists() or not target.is_file():
+        target = self._resolve_file_path(filepath)
+        if not target:
             return json.dumps({"status": "error", "error": f"File '{filepath}' not found"})
 
         try:
@@ -76,7 +98,7 @@ class CompetitionHarnessContext:
             content = "\n".join(lines[s_idx:e_idx])
             return json.dumps({
                 "status": "ok",
-                "filepath": filepath,
+                "filepath": str(target.relative_to(self.workspace_dir)),
                 "content": content,
                 "start_line": s_idx + 1,
                 "end_line": e_idx,
@@ -87,8 +109,8 @@ class CompetitionHarnessContext:
 
     def edit_file(self, filepath: str, old_string: str, new_string: str, allow_multiple: bool = False) -> str:
         self.tool_calls_used += 1
-        target = self.workspace_dir / filepath.lstrip("/")
-        if not target.exists():
+        target = self._resolve_file_path(filepath)
+        if not target:
             return json.dumps({"status": "error", "error": f"File '{filepath}' not found"})
 
         try:
@@ -191,9 +213,22 @@ class CompetitionHarnessContext:
         except Exception as e:
             return json.dumps({"status": "error", "error": str(e)})
 
+    def _get_normalized_nodes(self) -> Dict[str, Dict[str, Any]]:
+        raw_nodes = self.graph_data.get("nodes", {})
+        if isinstance(raw_nodes, dict):
+            return raw_nodes
+        elif isinstance(raw_nodes, list):
+            norm = {}
+            for item in raw_nodes:
+                if isinstance(item, dict):
+                    nid = item.get("id") or item.get("name") or str(len(norm))
+                    norm[nid] = item
+            return norm
+        return {}
+
     def get_code_neighbors(self, node: str, edge_type: Optional[str] = None, max_neighbors: int = 20) -> str:
         self.tool_calls_used += 1
-        nodes = self.graph_data.get("nodes", {})
+        nodes = self._get_normalized_nodes()
         edges = self.graph_data.get("edges", [])
 
         # Match symbol
@@ -208,28 +243,31 @@ class CompetitionHarnessContext:
 
         neighbors = []
         for e in edges:
-            if e.get("from") == matched_id or e.get("to") == matched_id:
-                other = e.get("to") if e.get("from") == matched_id else e.get("from")
+            src = e.get("source") or e.get("from")
+            dst = e.get("target") or e.get("to")
+            if src == matched_id or dst == matched_id:
+                other = dst if src == matched_id else src
                 if edge_type and e.get("type", "").lower() != edge_type.lower():
                     continue
-                neighbors.append(other)
+                if other:
+                    neighbors.append(other)
 
         neighbors = list(dict.fromkeys(neighbors))[:max_neighbors]
         return json.dumps({"status": "ok", "node": matched_id, "neighbors": neighbors, "count": len(neighbors)})
 
     def search_similar_code(self, query: str, k: int = 5) -> str:
         self.tool_calls_used += 1
-        nodes = self.graph_data.get("nodes", {})
+        nodes = self._get_normalized_nodes()
         results = []
         clean_q = query.lower().strip()
 
         for nid, ndata in nodes.items():
             name = ndata.get("name", "")
-            code_snip = ndata.get("code", "")[:200]
+            code_snip = (ndata.get("text") or ndata.get("code") or "")[:200]
             score = 0.0
-            if clean_q == name.lower():
+            if clean_q == name.lower() or clean_q == nid.lower():
                 score = 1.0
-            elif clean_q in name.lower():
+            elif clean_q in name.lower() or clean_q in nid.lower():
                 score = 0.8
             elif clean_q in code_snip.lower():
                 score = 0.5
@@ -244,9 +282,13 @@ class CompetitionHarnessContext:
         self.tool_calls_used += 1
         all_edges = self.graph_data.get("edges", [])
         node_set = set(nodes)
-        sub_edges = [
-            e for e in all_edges if e.get("from") in node_set and e.get("to") in node_set
-        ]
+        sub_edges = []
+        for e in all_edges:
+            src = e.get("source") or e.get("from")
+            dst = e.get("target") or e.get("to")
+            if src in node_set and dst in node_set:
+                sub_edges.append(e)
+
         return json.dumps({
             "status": "ok",
             "nodes": list(node_set),
@@ -352,9 +394,9 @@ def run_simulation(
         with torch.no_grad():
             outputs = model.generate(
                 **inputs,
-                max_new_tokens=384,
-                temperature=0.7,
-                do_sample=True,
+                max_new_tokens=256,
+                temperature=0.1,
+                do_sample=False,
                 pad_token_id=tokenizer.pad_token_id or tokenizer.eos_token_id,
             )
         prompt_len = inputs["input_ids"].shape[1]
@@ -362,21 +404,24 @@ def run_simulation(
 
     # 6. Execute multi-turn simulation
     console.print(f"\n[bold green]Starting Agent Exploration (Max Turns: {max_turns})...[/bold green]")
-    history = [
-        f"You are an autonomous SWE agent fixing a bug in {repo}.\n"
-        f"Issue Description:\n{problem[:600]}\n"
-        "Explore the repository with read_file, search_similar_code, or run_command, "
-        "and when ready, output your fix using Search-and-Replace Infilling (SRI) format or submit_patch()."
+    system_prompt = (
+        "You are an expert autonomous software engineer assigned to resolve an issue in a repository efficiently and decisively.\n"
+        "Use the provided tools (search_similar_code, get_code_neighbors, read_file, edit_file, run_command, submit_patch) to localize, repair, verify, and submit your patch."
+    )
+    dialogue: List[str] = [
+        f"{system_prompt}\n\nRepository: {repo}\nIssue Description:\n{problem[:600]}\n"
     ]
 
     for turn in range(1, max_turns + 1):
         console.print(f"\n[bold]Turn {turn}/{max_turns}:[/bold] Generating agent response...")
-        prompt_text = "\n\n".join(history)
+        prompt_text = "\n".join(dialogue) + "\n<action>\n"
         response = generate_fn(prompt_text)
-        console.print(f"[dim]Agent Response:[/dim]\n{response[:300]}...")
+        # Strip trailing </action> if present in model generation
+        clean_resp = response.split("</action>")[0].strip()
+        console.print(f"[dim]Agent Action:[/dim]\n{clean_resp[:300]}...")
 
         # Check for tool call
-        tool_call = MultiTurnAgent.parse_tool_call(response)
+        tool_call = MultiTurnAgent.parse_tool_call(clean_resp)
         if tool_call:
             tname, targs = tool_call
             console.print(f"[bold cyan]Tool Call Detected:[/bold cyan] {tname}({targs})")
@@ -392,16 +437,24 @@ def run_simulation(
                 obs = harness.get_code_neighbors(targs.get("node", ""), targs.get("edge_type"))
             elif tname == "search_similar_code":
                 obs = harness.search_similar_code(targs.get("query", ""))
+            elif tname == "get_code_subgraph":
+                nodes = [n.strip() for n in (targs.get("nodes", "")).split(",") if n.strip()]
+                obs = harness.get_code_subgraph(nodes)
+            elif tname == "get_status":
+                obs = harness.get_status()
             elif tname == "submit_patch":
                 obs = harness.submit_patch()
+                dialogue.append(f"<action>\n<tool_call name=\"submit_patch\" />\n</action>")
+                dialogue.append(f"<observation>\n{obs}\n</observation>")
+                break
             else:
                 obs = json.dumps({"status": "error", "error": f"Unknown tool '{tname}'"})
 
-            history.append(f"Action: <tool_call name=\"{tname}\" />")
-            history.append(f"Observation: {obs[:500]}")
+            dialogue.append(f"<action>\n{clean_resp}\n</action>")
+            dialogue.append(f"<observation>\n{obs[:500]}\n</observation>")
         else:
             # Check for SRI block or patch submission
-            sri_blocks = SRIFormatter.parse(response)
+            sri_blocks = SRIFormatter.parse(clean_resp)
             if sri_blocks:
                 console.print(f"[bold green]Detected {len(sri_blocks)} SRI replacement block(s)![/bold green]")
                 for b in sri_blocks:
@@ -409,11 +462,11 @@ def run_simulation(
                 harness.submit_patch()
                 break
 
-            if "submit_patch" in response:
+            if "submit_patch" in clean_resp:
                 harness.submit_patch()
                 break
 
-            history.append(response)
+            dialogue.append(f"<action>\n{clean_resp}\n</action>")
 
     # 7. Collect results
     if not harness.patch_submitted:

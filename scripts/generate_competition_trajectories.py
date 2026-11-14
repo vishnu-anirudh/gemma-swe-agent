@@ -108,10 +108,14 @@ def build_trajectory_for_task(task: Dict[str, Any], task_idx: int) -> Optional[D
     else:
         difficulty = "hard"
 
+    problem = task.get("problem_statement", "").strip()
+    problem_summary = problem[:500] if len(problem) > 500 else problem
     system_prompt = (
         "You are an expert autonomous software engineer assigned to resolve an issue in a repository efficiently and decisively.\n"
         "Use the provided tools (search_similar_code, get_code_neighbors, read_file, edit_file, run_command, submit_patch) "
-        "to localize, repair, verify, and submit your patch."
+        "to localize, repair, verify, and submit your patch.\n\n"
+        f"Repository: {task.get('repo', '')}\n"
+        f"Issue Description:\n{problem_summary}\n"
     )
 
     symbol_name = Path(target_file).stem

@@ -78,6 +78,12 @@ class MultiTurnAgent:
         self.tokenizer = tokenizer
         self.max_turns = max_turns
 
+    ALL_TOOLS = (
+        "search_code|view_file|list_dir|run_test|get_graph_context|"
+        "read_file|edit_file|write_file|run_command|get_status|"
+        "submit_patch|get_code_neighbors|search_similar_code|get_code_subgraph"
+    )
+
     @classmethod
     def parse_tool_call(cls, text: str) -> Optional[Tuple[str, Dict[str, Any]]]:
         """Extract tool call across XML tags, Markdown blocks, and CLI styles."""
@@ -89,43 +95,53 @@ class MultiTurnAgent:
             attrs = dict(re.findall(r'(\w+)="([^"]*)"', attrs_str))
             return tool_name, attrs
 
+        # 2. Block XML style: <tool>name</tool> with child tags
+        xml_block = re.search(r'<tool>([a-zA-Z0-9_]+)</tool>(.*?)(?:</action>|<action>|$)', text, re.DOTALL)
+        if xml_block:
+            tool_name = xml_block.group(1).strip()
+            body = xml_block.group(2)
+            attrs = {}
+            for tag in ["query", "node", "filepath", "path", "start_line", "end_line", "command", "cmd", "old_string", "new_string", "content", "k"]:
+                val_m = re.search(rf'<{tag}>([^<]*)</{tag}>', body, re.DOTALL)
+                if val_m:
+                    attrs[tag] = val_m.group(1).strip()
+            return tool_name, attrs
+
         def _extract_attrs(tool_str: str, args_str: str) -> Dict[str, Any]:
             clean_attrs = {}
             for m in re.finditer(r'(\w+)=(?:"([^"]*)"|\'([^\']*)\'|([^\s\)]+))', args_str):
                 k = m.group(1)
                 v = m.group(2) or m.group(3) or m.group(4) or ""
                 clean_attrs[k] = v
-            if tool_str == "search_code" and "name" in clean_attrs and "query" not in clean_attrs:
+            if tool_str in ("search_code", "search_similar_code") and "name" in clean_attrs and "query" not in clean_attrs:
                 clean_attrs["query"] = clean_attrs["name"]
             return clean_attrs
 
-        # 2. Markdown code blocks (```tool_call, ```python, ```sh, etc.)
+        # 3. Markdown code blocks (```tool_call, ```python, ```sh, etc.)
         for block_match in re.finditer(r'```(?:tool_call|python|bash|sh)?\s*\n?(.*?)\n?```', text, re.DOTALL):
             block_content = block_match.group(1).strip()
-            m = re.search(r'\b(search_code|view_file|list_dir|run_test|get_graph_context)\b\s*\(?([^)\n]*)\)?', block_content)
+            m = re.search(rf'\b({cls.ALL_TOOLS})\b\s*\(?([^)\n]*)\)?', block_content)
             if m:
                 t_name = m.group(1).strip()
                 attrs = _extract_attrs(t_name, m.group(2))
-                if attrs:
-                    return t_name, attrs
+                return t_name, attrs
 
-        # 3. Line-anchored tool calls (starting at beginning of a line)
+        # 4. Line-anchored tool calls (starting at beginning of a line)
         line_match = re.search(
-            r'^\s*(?:`{1,3})?\s*(search_code|view_file|list_dir|run_test|get_graph_context)\b\s*\(?([^)\n]*)\)?',
+            rf'^\s*(?:`{1,3})?\s*({cls.ALL_TOOLS})\b\s*\(?([^)\n]*)\)?',
             text,
             re.MULTILINE,
         )
         if line_match:
             t_name = line_match.group(1).strip()
             attrs = _extract_attrs(t_name, line_match.group(2))
-            if attrs:
-                return t_name, attrs
+            return t_name, attrs
 
-        # 4. Fallback search across free text, only if attributes are present
-        for m in re.finditer(r'\b(search_code|view_file|list_dir|run_test|get_graph_context)\b\s*\(?([^)\n]*)\)?', text):
+        # 5. Fallback search across free text
+        for m in re.finditer(rf'\b({cls.ALL_TOOLS})\b\s*\(?([^)\n]*)\)?', text):
             t_name = m.group(1).strip()
             attrs = _extract_attrs(t_name, m.group(2))
-            if attrs:
+            if attrs or t_name in ("submit_patch", "get_status"):
                 return t_name, attrs
 
         return None
