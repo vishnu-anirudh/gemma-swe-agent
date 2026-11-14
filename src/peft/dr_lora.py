@@ -71,8 +71,8 @@ class DRLoRALinear(nn.Module):
         # x: (..., in_features)
         # active_A: (active_rank, in_features)
         # active_B: (out_features, active_rank)
-        active_A = self.lora_A[: self.active_rank, :]
-        active_B = self.lora_B[:, : self.active_rank]
+        active_A = self.lora_A[: self.active_rank, :].contiguous()
+        active_B = self.lora_B[:, : self.active_rank].contiguous()
 
         dropped_x = self.dropout(x)
         lora_out = F.linear(dropped_x, active_A)  # (..., active_rank)
@@ -139,16 +139,24 @@ class DRLoRAManager:
         layer_scores = {}
         for name in self.adapted_layers:
             matched_scores = [
-                score for key, score in scores.items() if name in key
+                score for key, score in scores.items() if name in key and not (math.isnan(score) or math.isinf(score))
             ]
             layer_scores[name] = max(matched_scores) if matched_scores else 0.5
 
         # Normalize scores to allocate ranks proportionally
-        total_score = sum(layer_scores.values()) or 1.0
+        total_score = sum(layer_scores.values())
+        if math.isnan(total_score) or math.isinf(total_score) or total_score <= 0.0:
+            total_score = float(num_layers) or 1.0
+
         new_ranks: Dict[str, int] = {}
 
         for name, layer in self.adapted_layers.items():
-            proportion = layer_scores[name] / total_score
+            score_val = layer_scores.get(name, 0.5)
+            if math.isnan(score_val) or math.isinf(score_val):
+                score_val = 0.5
+            proportion = score_val / total_score
+            if math.isnan(proportion) or math.isinf(proportion):
+                proportion = 1.0 / num_layers
             target_allocated = int(round(proportion * budget))
 
             # Apply TV / EMA smoothing with previous active rank:

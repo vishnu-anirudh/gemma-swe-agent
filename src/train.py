@@ -83,12 +83,21 @@ def run_sft(
     resume_checkpoint: Optional[str] = None,
 ) -> None:
     """Execute multi-tier curriculum SFT with Dynamic Rank LoRA and Step-Level Error Masking."""
+    if torch.backends.mps.is_available():
+        os.environ["PYTORCH_MPS_HIGH_WATERMARK_RATIO"] = "0.0"
+
     cfg = load_yaml(config_path)
     device = get_device()
     model_name = cfg["model"]["name_or_path"]
 
     console.print(f"[bold green]Starting SFT with DR-LoRA[/bold green] on {model_name}")
     model, tokenizer = load_model_and_tokenizer(model_name, device)
+
+    # Enable gradient checkpointing to conserve unified memory on MPS / CUDA
+    if hasattr(model, "gradient_checkpointing_enable"):
+        model.gradient_checkpointing_enable()
+    if hasattr(model, "enable_input_require_grads"):
+        model.enable_input_require_grads()
 
     # 1. Inject or Resume Dynamic Rank LoRA
     if resume_checkpoint and os.path.exists(resume_checkpoint):
@@ -116,11 +125,14 @@ def run_sft(
     optimizer = torch.optim.AdamW(
         [p for p in model.parameters() if p.requires_grad],
         lr=float(cfg["training"]["learning_rate"]),
+        eps=1e-6,
     )
+
+    max_length = int(cfg["training"].get("max_length", 1024))
 
     # 3. Setup Multi-Tier Curriculum Dataset (Easy -> Medium -> Hard)
     if dataset_path:
-        curriculum = CurriculumTrajectoryDataset.from_jsonl(dataset_path, masker)
+        curriculum = CurriculumTrajectoryDataset.from_jsonl(dataset_path, masker, max_length=max_length)
         tier_label = f"external dataset '{dataset_path}'"
     elif expanded_curriculum:
         curriculum = CurriculumTrajectoryDataset.generate_expanded_curriculum(masker)
@@ -130,7 +142,7 @@ def run_sft(
         tier_label = "standard curriculum"
 
     console.print(
-        f"[cyan]Loaded {tier_label} with {len(curriculum)} multi-tier trajectories (Easy -> Medium -> Hard).[/cyan]"
+        f"[cyan]Loaded {tier_label} with {len(curriculum)} multi-tier trajectories (max_len={max_length}).[/cyan]"
     )
 
     trainable_params = [p for p in model.parameters() if p.requires_grad]
@@ -145,16 +157,38 @@ def run_sft(
 
             outputs = model(input_ids=input_ids, labels=labels)
             loss = outputs.loss
+            loss_val = loss.item()
+
+            if torch.isnan(loss) or torch.isinf(loss):
+                console.print(f"  [yellow]Step {idx + 1}/{len(curriculum)}: Skipping non-finite loss[/yellow]")
+                del outputs, loss, input_ids, labels
+                continue
+
             (loss / grad_accum).backward()
 
-            # Track module saliency from parameter gradients
-            manager.saliency_tracker.update_from_model(model)
             if (idx + 1) % grad_accum == 0 or (idx + 1) == len(curriculum):
-                torch.nn.utils.clip_grad_norm_(trainable_params, max_norm=1.0)
-                optimizer.step()
-                optimizer.zero_grad()
+                grad_norm = torch.nn.utils.clip_grad_norm_(trainable_params, max_norm=1.0)
+                if torch.isnan(grad_norm) or torch.isinf(grad_norm):
+                    console.print(
+                        f"  [yellow]Step {idx + 1}/{len(curriculum)}: Skipping optimizer step due to non-finite grad_norm ({grad_norm})[/yellow]"
+                    )
+                    optimizer.zero_grad()
+                else:
+                    optimizer.step()
+                    manager.saliency_tracker.update_from_model(model)
+                    optimizer.zero_grad()
 
-            epoch_loss += loss.item()
+                if torch.backends.mps.is_available():
+                    torch.mps.empty_cache()
+
+            epoch_loss += loss_val
+            del outputs, loss, input_ids, labels
+
+            if (idx + 1) % 10 == 0 or (idx + 1) == len(curriculum):
+                console.print(
+                    f"  [cyan]Step {idx + 1}/{len(curriculum)}[/cyan] | "
+                    f"Batch Loss: {loss_val:.4f} | Running Avg: {epoch_loss / (idx + 1):.4f}"
+                )
 
         # Dynamic rank reallocation with TV/EMA smoothing after curriculum pass
         new_ranks = manager.reallocate_ranks()
@@ -167,6 +201,7 @@ def run_sft(
             console.print(f"  • {mod_name}: rank {r}")
 
     # 4. Save fine-tuned checkpoint and metadata
+    os.makedirs(os.path.dirname(save_checkpoint) or ".", exist_ok=True)
     manager.save_adapters(save_checkpoint)
     console.print(f"[bold green]Saved fine-tuned DR-LoRA checkpoint to {save_checkpoint}[/bold green]")
 

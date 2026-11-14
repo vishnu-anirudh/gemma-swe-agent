@@ -6,6 +6,7 @@ and gradient magnitude (Frobenius norm).
 
 from __future__ import annotations
 
+import math
 from typing import Dict, List, Optional
 import torch
 import torch.nn as nn
@@ -44,7 +45,8 @@ class ModuleSaliencyTracker:
         for name, param in model.named_parameters():
             if param.requires_grad and param.grad is not None:
                 norm = torch.linalg.norm(param.grad.detach()).item()
-                self.gradient_norms[name] = norm
+                if not (torch.isnan(param.grad).any() or math.isnan(norm) or math.isinf(norm)):
+                    self.gradient_norms[name] = norm
 
     def compute_saliency_scores(self) -> Dict[str, float]:
         """Normalize statistics and calculate the final saliency score:
@@ -62,7 +64,10 @@ class ModuleSaliencyTracker:
         for key in all_keys:
             norm_freq = self.activation_counts.get(key, 0) / max(max_freq, 1.0)
             norm_grad = self.gradient_norms.get(key, 0.0) / max(max_grad, 1e-8)
-            scores[key] = (self.alpha * norm_freq) + (self.beta * norm_grad)
+            score = (self.alpha * norm_freq) + (self.beta * norm_grad)
+            if math.isnan(score) or math.isinf(score):
+                score = 0.5
+            scores[key] = score
 
         return scores
 
