@@ -88,11 +88,24 @@ class MultiTurnAgent:
     def parse_tool_call(cls, text: str) -> Optional[Tuple[str, Dict[str, Any]]]:
         """Extract tool call across XML tags, Markdown blocks, and CLI styles."""
         # 1. XML style: <tool_call name="..." ... />
-        xml_match = re.search(r'<tool_call\s+name="([^"]+)"([^>]*)/?>', text)
+        xml_match = re.search(r'<tool_call\s+name="([^"]+)"([^>]*)/?>', text, re.DOTALL)
         if xml_match:
             tool_name = xml_match.group(1).strip()
             attrs_str = xml_match.group(2)
-            attrs = dict(re.findall(r'(\w+)="([^"]*)"', attrs_str))
+            known_keys = [
+                "filepath", "path", "old_string", "new_string", "query",
+                "node", "node_name", "command", "cmd", "k", "start_line",
+                "end_line", "patch", "allow_multiple"
+            ]
+            key_pattern = "|".join(known_keys)
+            pattern = rf'({key_pattern})\s*=\s*(?:\"(.*?)\"|\x27(.*?)\x27)(?=\s*(?:,\s*)?(?:{key_pattern})\s*=|\s*/>|\s*$)'
+            matches = re.findall(pattern, attrs_str, re.DOTALL)
+            attrs = {}
+            for k, v1, v2 in matches:
+                val = v1 if v1 != "" else v2
+                attrs[k] = val.replace('\\"', '"').replace("\\'", "'").replace('\\n', '\n')
+            if not attrs:
+                attrs = dict(re.findall(r'(\w+)="([^"]*)"', attrs_str))
             return tool_name, attrs
 
         # 2. Block XML style: <tool>name</tool> with child tags
