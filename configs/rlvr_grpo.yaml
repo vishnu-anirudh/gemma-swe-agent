@@ -5,11 +5,11 @@ model:
   device: "mps"
 
 grpo:
-  group_size: 8             # G: Scaled from 4 to 8 candidate rollouts per issue
+  group_size: 4             # G: 4 candidate rollouts per issue
   epsilon_clip: 0.2         # Clipped surrogate objective bound
   kl_beta: 0.03             # KL penalty factor against reference policy
   learning_rate: 1.0e-5
-  max_new_tokens: 512
+  max_new_tokens: 256
   temperature: 0.85         # Higher exploration temperature for candidate diversity
   top_p: 0.95
 

@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -206,8 +208,17 @@ def run_sft(
     console.print(f"[bold green]Saved fine-tuned DR-LoRA checkpoint to {save_checkpoint}[/bold green]")
 
 
-def run_rlvr(config_path: str, checkpoint_path: Optional[str] = None, steps: int = 1) -> None:
+def run_rlvr(
+    config_path: str,
+    checkpoint_path: Optional[str] = None,
+    save_checkpoint: Optional[str] = None,
+    steps: int = 1,
+    dataset_path: Optional[str] = None,
+) -> None:
     """Execute RLVR with Critic-Free GRPO + AVSPO Anti-Advantage Collapse."""
+    if torch.backends.mps.is_available():
+        os.environ["PYTORCH_MPS_HIGH_WATERMARK_RATIO"] = "0.0"
+
     cfg = load_yaml(config_path)
     device = get_device()
     model_name = cfg["model"]["name_or_path"]
@@ -228,7 +239,7 @@ def run_rlvr(config_path: str, checkpoint_path: Optional[str] = None, steps: int
         epsilon_clip=cfg["grpo"]["epsilon_clip"],
         kl_beta=cfg["grpo"]["kl_beta"],
         learning_rate=float(cfg["grpo"]["learning_rate"]),
-        max_new_tokens=cfg["grpo"].get("max_new_tokens", 512),
+        max_new_tokens=cfg["grpo"].get("max_new_tokens", 256),
         temperature=float(cfg["grpo"].get("temperature", 0.85)),
         top_p=float(cfg["grpo"].get("top_p", 0.95)),
     )
@@ -241,20 +252,42 @@ def run_rlvr(config_path: str, checkpoint_path: Optional[str] = None, steps: int
     )
     prm = RubricProcessRewardModel()
 
-    tasks = [
-        (
-            "Function divide(a, b) raises ZeroDivisionError when b == 0. Return float('inf') instead.",
-            ["float('inf')", "b == 0", "return"],
-        ),
-        (
-            "Function get_element(lst, idx) raises IndexError when idx >= len(lst). Return None instead.",
-            ["None", "idx >= len", "len(lst)"],
-        ),
-        (
-            "Function parse_int(s) raises ValueError when given non-digits. Return 0 instead.",
-            ["0", "ValueError", "isdigit"],
-        ),
-    ]
+    tasks = []
+    if dataset_path and os.path.exists(dataset_path):
+        console.print(f"[cyan]Loading RLVR task specifications from {dataset_path}...[/cyan]")
+        with open(dataset_path, "r", encoding="utf-8") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                d = json.loads(line)
+                inst_id = d.get("instance_id", "task")
+                patch_str = d.get("final_patch", "")
+                blocks = SRIFormatter.parse(patch_str)
+                keywords = []
+                for b in blocks:
+                    kws = re.findall(r"\b[A-Za-z_][A-Za-z0-9_]{3,}\b", b.replace_content)
+                    keywords.extend([k for k in kws if k.lower() not in {"self", "none", "true", "false", "return"}])
+                if not keywords:
+                    keywords = ["def ", "class ", "return"]
+                task_desc = f"Resolve issue for {inst_id}. Context: {d.get('system_prompt', '')[:160]}"
+                tasks.append((task_desc, keywords[:4]))
+        console.print(f"[green]Loaded {len(tasks)} repository tasks for RLVR.[/green]")
+
+    if not tasks:
+        tasks = [
+            (
+                "Function divide(a, b) raises ZeroDivisionError when b == 0. Return float('inf') instead.",
+                ["float('inf')", "b == 0", "return"],
+            ),
+            (
+                "Function get_element(lst, idx) raises IndexError when idx >= len(lst). Return None instead.",
+                ["None", "idx >= len", "len(lst)"],
+            ),
+            (
+                "Function parse_int(s) raises ValueError when given non-digits. Return 0 instead.",
+                ["0", "ValueError", "isdigit"],
+            ),
+        ]
 
     for step_idx in range(steps):
         task_desc, keywords = tasks[step_idx % len(tasks)]
@@ -298,9 +331,11 @@ def run_rlvr(config_path: str, checkpoint_path: Optional[str] = None, steps: int
         console.print(f"  • Advantage Collapse Neutralized: {bool(metrics['was_collapsed'])}")
         console.print(f"  • Advantage Collapse Rate (ACR): {metrics['advantage_collapse_rate']:.2%}")
 
-    if manager is not None and adapter_checkpoint:
-        manager.save_adapters(adapter_checkpoint)
-        console.print(f"[bold green]Updated DR-LoRA checkpoint saved to {adapter_checkpoint}[/bold green]")
+    out_checkpoint = save_checkpoint or checkpoint_path or "./checkpoints/rlvr_competition/adapter_model.pt"
+    if manager is not None:
+        os.makedirs(os.path.dirname(out_checkpoint) or ".", exist_ok=True)
+        manager.save_adapters(out_checkpoint)
+        console.print(f"[bold green]Updated DR-LoRA checkpoint saved to {out_checkpoint}[/bold green]")
 
 
 def run_eval(
@@ -644,8 +679,15 @@ def main() -> None:
             resume_checkpoint=resume_path,
         )
     elif args.mode == "rlvr":
-        ckpt = args.checkpoint or "./checkpoints/sft_dr_lora/adapter_model.pt"
-        run_rlvr(args.config, checkpoint_path=ckpt, steps=args.steps)
+        ckpt = args.checkpoint or "./checkpoints/sft_competition/adapter_model.pt"
+        save_ckpt = "./checkpoints/rlvr_competition/adapter_model.pt"
+        run_rlvr(
+            args.config,
+            checkpoint_path=ckpt,
+            save_checkpoint=save_ckpt,
+            steps=args.steps,
+            dataset_path=args.dataset or "data/competition_sft_trajectories.jsonl",
+        )
     elif args.mode == "eval":
         run_eval(
             args.config,

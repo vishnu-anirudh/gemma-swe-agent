@@ -64,6 +64,7 @@ class GRPOTrainer:
         self.optimizer = optimizer or torch.optim.AdamW(
             [p for p in self.model.parameters() if p.requires_grad],
             lr=self.config.learning_rate,
+            eps=1e-6,
         )
 
     def _format_prompt(self, prompt_text: str) -> str:
@@ -227,12 +228,18 @@ class GRPOTrainer:
             # Backprop per sample to conserve peak memory on Apple Silicon
             (total_sample_loss / G).backward()
 
-        grad_norm = float(
-            torch.nn.utils.clip_grad_norm_(
-                [p for p in self.model.parameters() if p.requires_grad], max_norm=1.0
-            ).item()
-        )
-        self.optimizer.step()
+        trainable_params = [p for p in self.model.parameters() if p.requires_grad]
+        grad_norm_t = torch.nn.utils.clip_grad_norm_(trainable_params, max_norm=1.0)
+        if torch.isnan(grad_norm_t) or torch.isinf(grad_norm_t):
+            self.optimizer.zero_grad()
+            grad_norm = 0.0
+        else:
+            self.optimizer.step()
+            self.optimizer.zero_grad()
+            grad_norm = float(grad_norm_t.item())
+
+        if torch.backends.mps.is_available():
+            torch.mps.empty_cache()
 
         stats = self.avspo.get_stats()
         return {
