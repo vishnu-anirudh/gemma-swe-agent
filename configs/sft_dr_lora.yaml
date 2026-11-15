@@ -6,10 +6,10 @@ model:
 
 peft:
   type: "dr_lora"
-  initial_rank: 8
+  initial_rank: 16
   max_rank: 64
-  min_rank: 2
-  lora_alpha: 16.0
+  min_rank: 4
+  lora_alpha: 32.0
   lora_dropout: 0.05
   target_modules:
     - "q_proj"
